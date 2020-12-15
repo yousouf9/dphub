@@ -1,0 +1,95 @@
+doctype html
+html
+  head   
+    meta(charset='utf-8')
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    title= title
+
+    link(href='https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500&display=swap' rel='stylesheet')
+    //Bootstrap CSS
+    link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css', integrity='sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2', crossorigin='anonymous')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    //Fonts awesomes
+    script(src='https://use.fontawesome.com/b5c31f66c4.js')
+    script(src='https://kit.fontawesome.com/618b4b277c.js' crossorigin='anonymous')
+
+  body
+    nav.navbar.navbar-dark.sticky-top.header.flex-md-nowrap.p-1.shadow
+      a.navbar-brand.col-md-3.col-lg-2.mr-0.px-3(href='/') DPHUB
+      button.navbar-toggler.position-absolute.d-md-none.collapsed(type='button' data-toggle='collapse' data-target='#sidebarMenu' aria-controls='sidebarMenu' aria-expanded='false' aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      input.form-control.form-control-dark.w-100(type='text' placeholder='Search' aria-label='Search')
+      ul.navbar-nav.px-3
+        if(user)
+          li.nav-item.text-nowrap
+            a.nav-link(href='#') Logout 
+    .container-fluid
+      .row
+        nav#sidebarMenu.col-md-3.col-lg-2.d-md-block.bg-light.sidebar.collapse
+          if(user)
+            .div.border-bottom.text-center
+              .div.mb-3.mx-auto
+                img.rounded-circle(src=`/images/uploads/users/${user.profile_image}` alt="" width="110")
+              .h4.mb-2 #{user.name}
+          .sidebar-sticky.pt-3
+            ul.nav.flex-column
+              li.nav-item
+                a.nav-link(href='/administrator' class=`${title === 'Home'? 'active' : '' }`)
+                  i(class='fas fa-home')
+                  |               Home
+                  span.sr-only (current)
+              li.nav-item
+                a.nav-link(href='/administrator/about' class=`${title === 'About'? 'active' : '' }`)
+                  i(class='fas fa-address-card')
+                  |               About
+              li.nav-item
+                a.nav-link(href='/administrator/what_we_do' class=`${title === 'Services'? 'active' : '' }`)
+                  i(class='fas fa-calendar-plus')
+                  |               WHat We do
+              li.nav-item
+                a.nav-link(href='/administrator/get_involved' class=`${title === 'Cars'? 'active' : '' }`)
+                  i(class='fas fa-users')
+                  |               Get Involved
+              li.nav-item
+                a.nav-link(href='/administrator/resources' class=`${title === 'Contact'? 'active' : '' }`)
+                  i(class='fas fa-cubes')
+                  |               Resources
+              li.nav-item
+                a.nav-link(href='/administrator/contact' class=`${title === 'Contact'? 'active' : '' }`)
+                  i(class='fas fa-phone')
+                  |               Contact Us
+              li.nav-item
+                  a.nav-link(href='/user/profile' class=`${title === 'Profile'? 'active' : '' }`)
+                    i(class='fas fa-user')
+                    |               My Profile
+              li.nav-item
+                a.nav-link(href='/user/register' class=`${title === 'Register'? 'active' : '' }`)
+                  i(class='fas fa-user-plus')
+                  |               Register
+              li.nav-item
+                a.nav-link(href='/administrator/general' class=`${title === 'General'? 'active' : '' }`)
+                  i(class='fas fa-user-plus')
+                  |               General
+        main.col-md-9.ml-sm-auto.col-lg-10.px-md-4(role='main', style="background: #fff")
+            .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center.pt-3
+            != messages()
+            block content
+   
+   
+                footer
+                    p  #{moment().format("YYYY")} DPHUB. All rights reserved
+          
+
+
+
+  
+    
+
+    script(src='https://code.jquery.com/jquery-3.5.1.slim.min.js', integrity='sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj', crossorigin='anonymous')
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js', integrity='sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx', crossorigin='anonymous')
+    script(src="/javascripts/main.js")
+    script(src='https://cdn.ckeditor.com/4.15.1/standard/ckeditor.js')
+    script
+        | CKEDITOR.replace('description');
+    script
+        | CKEDITOR.replace('body');

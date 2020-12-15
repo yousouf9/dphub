@@ -1,0 +1,47 @@
+extends ../admin_layout
+
+block content
+    .container-fluid
+        h2 Team Member Details
+        form(method='post', action='/administrator/upload/team', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="photo")
+                    label.custom-file-label(for='slider') Choose file
+            .form-row
+                .form-group.col-md-6
+                    label(for='name') Team member Details
+                    input.form-control(type="text" name="name" placeholder="Jacob")
+                .form-group.col-md-6
+                    label(for='surname') surname
+                    input.form-control(type="text" name="surname"  placeholder="Kalid")
+            .form-group
+                label(for='position') Position
+                input.form-control(type="text" name="position"  placeholder="CEO")
+            .form-group
+                label(for='body') Team member Bio Detail
+                textarea.form-control(name='body' rows='3')
+
+            .form-row
+                .form-group.col-md-6
+                    label(for='facebook') facebook
+                    input.form-control(type="url" name="facebook"  placeholder="https://www.facebook.com/jacob_kalid123")
+                .form-group.col-md-6
+                    label(for='twitter') twitter
+                    input.form-control(type="url" name="twitter"  placeholder="https://www.twitter.com/jacob_kalid123")
+            .form-row
+                .form-group.col-md-6
+                    label(for='linkin') linkin
+                    input.form-control(type="url" name="linkin"  placeholder="https://www.linkin.com/jacob_kalid123")
+                .form-group.col-md-6
+                    label(for='google_plus') google plus
+                    input.form-control(type="url" name="google"  placeholder="https://www.google_plus.com/jacob_kalid123")
+            .form-row
+                .form-group.col-md-6
+                    label(for='instagram') instagram
+                    input.form-control(type="url" name="instagram"  placeholder="https://www.instagram.com/jacob_kalid123")
+                .form-group.col-md-6
+                    label(for='whatsapp') whatsapp
+                    input.form-control(type="url" name="whatsapp"  placeholder="https://www.whatsapp.com/jacob_kalid123")
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+    

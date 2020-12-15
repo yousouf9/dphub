@@ -1,0 +1,71 @@
+extends ../admin_layout
+
+block content
+    .container-fluid
+        .border-bottom.pt-3.pb-2.mb-3
+            h2 upload home page slider images
+        form(method='post', action='/administrator/upload/slider', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="photo")
+                    label.custom-file-label(for='slider') Choose file
+            .form-group
+                label(for='description') Description
+                textarea.form-control(name='description' rows='3')
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        .table-responsive
+            table.table.table-hover
+                thead
+                    tr
+                        th(scope='col') URL
+                        th(scope='col') Discription
+                        th(scope='col')
+                        th(scope='col')
+                tbody
+                    tr
+                        td url
+                        td description
+                        td
+                            // Button trigger modal
+                            button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target='#exampleModalCenter')
+                                | View
+                            // Modal
+                            #exampleModalCenter.modal.fade(tabindex='-1' role='dialog' aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                .modal-dialog.modal-dialog-centered(role='document')
+                                    .modal-content
+                                        .modal-header
+                                            button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                span(aria-hidden='true') &times;
+                                        .modal-body
+                                            img(src='#' width='200')
+                                            .border-top.text-mutted
+                                                p  sample text 
+                        td
+                            a.btn.btn-sm.btn-danger(href='#') Remove
+        h2 Story Details
+        form(method='post', action='/administrator/upload/story', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="photo")
+                    label.custom-file-label(for='slider') Choose file
+            .form-group
+                label(for='title') Story's title
+                input.form-control(type="text" name="title")
+            .form-group
+                label(for='description') Short description
+                input.form-control(type="text" name="description")
+            .form-group
+                label(for='body') Description
+                textarea.form-control(name='body' rows='3')
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+       
+        h2 Partner's Details
+        form(method='post', action='/administrator/upload/partner', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="photo")
+                    label.custom-file-label(for='slider') Choose file
+            .form-group
+                label(for='description') Description
+                input.form-control(type="text" name="name" placeholder="Partner's name")
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")

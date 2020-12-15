@@ -1,0 +1,6 @@
+{
+    "App name": "DPHUB",
+    "hostname":"dphub_remote_server",
+    "jwtPrivate": "dphub_jwtPrivateKey"
+
+}

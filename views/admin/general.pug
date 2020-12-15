@@ -1,0 +1,15 @@
+extends ../admin_layout
+
+block content
+    .container-fluid
+        .border-bottom.pt-3.pb-2.mb-3
+            h2 Upload page header image
+        form(method='post', action='/administrator/upload/header', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="photo")
+                    label.custom-file-label(for='slider') Choose file
+            .form-group
+                label(for='name') Page name (NOTE: This is important)
+                input.form-control(type="text" name="name" placeholder="e.g whoweare")
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
