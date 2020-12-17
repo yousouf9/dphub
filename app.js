@@ -1,5 +1,7 @@
 const createError = require('http-errors');
                     require('express-async-errors');
+const winston   = require('winston');
+                  require('winston-mongodb');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -9,6 +11,7 @@ const Joi = require('joi');
 const session = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
+const config = require('config')
 
 require('./startup/db');
 
@@ -17,10 +20,37 @@ const userRouter = require('./routes/users');
 const homeRouter = require('./routes/home/index');
 const aboutRouter = require('./routes/about/index');
 const getInvolvedRouter = require('./routes/getinvolved/index');
+const whatwedoRouter = require('./routes/whatwedo/index');
+const contactRouter = require('./routes/contact/index');
 const generalRouter = require('./routes/general/index');
-
-
 const app = express();
+
+
+
+  process.on('uncaughtException', (ex)=>{
+    console.log('A FATAL ERROR UNCAUGHTEXCEPTION', ex)
+    winston.error(ex.message, ex)
+    process.exit(1)
+  })
+
+  process.on('unhandledRejection',  (ex)=>{
+
+  console.log('A FATAL ERROR UNHANDLEEXCEPTION')
+  winston.error(ex.message, ex)
+  process.exit(1)
+
+  })
+
+
+  winston.add(new winston.transports.File({filename: 'logfile.log'}));
+  winston.add(new winston.transports.MongoDB({db: config.get('hostname')}));
+
+  //checking for Jsonwebtoken key
+  if(!config.get("jwtPrivate")){
+    serverDebug('A FATAL ERROR jwtPrivate is requires', config.get('jwtPrivate'));
+    process.exit(1);
+  }
+
 app.locals.moment = require('moment');
 
 // view engine setup
@@ -64,7 +94,9 @@ app.use('/user', userRouter);
 app.use('/', homeRouter);
 app.use('/', aboutRouter);
 app.use('/', getInvolvedRouter);
+app.use('/', whatwedoRouter);
 app.use('/', generalRouter);
+app.use('/', contactRouter);
 
 
 

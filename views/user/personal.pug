@@ -1,0 +1,44 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0(style="background:#e6e9ec ")
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section
+                form.p-4(method='post' name="userPersonal")
+                    header.p-2.text-white(style="background:#092944")
+                        | PERSONAL INFORMATION
+                    .form-group
+                        label.m-0.required(for='sex') Sex
+                        select.form-control.form-control-sm.required(name="sex")
+                            option Male
+                    .form-group
+                        label.m-0.required(for='dob') Date of Birth
+                        input.form-control.form-control-sm.required(type='date'  name="dob" required)
+                    .form-group
+                        label.m-0.required(for='marital_status') Marital Status
+                        select.form-control.form-control-sm.required(name="marital_status")
+                            option Single
+                    .form-group
+                        label.m-0.required(for='number_children') Number of Children
+                        input.form-control.form-control-sm(type='number' name="number_children")
+                    .form-group
+                        label.m-0.required(for='state') State
+                        select.form-control.form-control-sm.required(name="state")
+                            option Nasarawa
+                    .form-group
+                        label.m-0.required(for='state') LGA
+                        select.form-control.form-control-sm.required(name="lga")
+                            option LAfia
+                    .form-group
+                        label.m-0.required(for='home_town') Home Town
+                        input.form-control.form-control-sm.required(type='text' name="home_town"  required)
+                    .form-group
+                        label.m-0.required(for='nationality') Nationality
+                        select.form-control.form-control-sm.required(name="nationality")
+                            option Nigeria
+                    .d-flex.bd-highlight
+                        .flex-grow-1.bd-highlight 
+                            a.btn.btn-sm.btn-primary.px-4(href="#") Back
+                        .bd-highlight
+                            input.btn.btn-sm.btn-primary.px-4(type='submit'  value='Next')
+

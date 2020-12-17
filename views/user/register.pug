@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0(style="background:#e6e9ec ")
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section
+                form.p-4(method='post' name="userRegister")
+                    header.p-2.text-white(style="background:#092944")
+                        | CREATE ACCOUNT
+                    .form-group
+                        label.m-0.required(for='username' ) useranme
+                        input.form-control.form-control-sm.required(type='text'  name="username" value= `${data ? data.username: ''}` required)
+                    .form-group
+                        label.m-0.required(for='name' ) Name (surname first)
+                        input.form-control.form-control-sm.required(type='text'  name="name" value= `${data ? data.name: ''}` required)
+                    .form-group
+                        label.m-0(for='whatsapp' ) WhatsApp 
+                        input.form-control.form-control-sm(type='text'  name="whatsapp" value= `${data ? data.whatsapp: ''}`)
+                    .form-group
+                        label.m-0.required(for='email') Email
+                        input.form-control.form-control-sm.required(type='email' name="email" value= `${data ? data.email: ''}` required)
+                    .form-group
+                        label.m-0.required(for='password') Password
+                        input.form-control.form-control-sm.required(type='password' name="password"  required)
+                    .form-group
+                        label.m-0.required(for='confirm_password') confirm Password
+                        input.form-control.form-control-sm.required(type='password' name="confirm_password"  required)
+                    .text-center
+                        input.btn.btn-md.btn-primary(type='submit'  value='Register' )

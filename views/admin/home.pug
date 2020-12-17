@@ -58,7 +58,26 @@ block content
                 label(for='body') Description
                 textarea.form-control(name='body' rows='3')
             input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
-       
+
+        h2 Location  Update
+        form(method='post', action='/administrator/location')
+            .form-group
+                label(for='name') Location title
+                input.form-control(type="text" name="name")
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        h2 Engagement  Update
+        form(method='post', action='/administrator/engagement')
+            .form-group
+                label(for='name') Engagement title
+                input.form-control(type="text" name="name")
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        h2 Upload Skill/Talent 
+        form(method='post', action='/administrator/upload/skill_talent', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="photo")
+                    label.custom-file-label(for='slider') Choose file
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
         h2 Partner's Details
         form(method='post', action='/administrator/upload/partner', enctype='multipart/form-data')
             .input-group.mb-3

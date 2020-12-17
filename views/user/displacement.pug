@@ -1,0 +1,42 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0(style="background:#e6e9ec ")
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section
+                form.p-4(method='post' name="userDisplacement")
+                    header.p-2.text-white(style="background:#092944")
+                        | DISPLACEMENT INFORMATION
+                    .form-group
+                        label.m-0.required(for='yod') Year of Displacement
+                        input.form-control.form-control-sm.required(type='date'  name="yod" required)
+                    .form-group.m-0
+                        label.m-0.required Cause of Displacement
+                    .form-check.form-check-inline
+                        label.form-check-label.pr-2(for='inlineCheckbox1') Boko Haram
+                        input#inlineCheckbox1.form-check-input(type='checkbox' value='option1')
+                    .form-check.form-check-inline
+                        label.form-check-label.pr-2(for='inlineCheckbox1') Bandit
+                        input#inlineCheckbox1.form-check-input(type='checkbox' value='option1')
+                    .form-check.form-check-inline
+                        label.form-check-label.pr-2(for='inlineCheckbox1') Flood
+                        input#inlineCheckbox1.form-check-input(type='checkbox' value='option1')
+                    .form-check.form-check-inline
+                        label.form-check-label.pr-2(for='inlineCheckbox1') Communal Crisis
+                        input#inlineCheckbox1.form-check-input(type='checkbox' value='option1')
+                    .form-check.form-check-inline
+                        label.form-check-label.pr-2(for='inlineCheckbox1') Other
+                        input#inlineCheckbox1.form-check-input(type='checkbox' value='option1')
+                    .form-group.mt-2
+                        label.m-0.required(for='state') State of Residence
+                        select.form-control.form-control-sm.required(name="state")
+                            option Nasarawa
+                    .form-group
+                        label.m-0.required(for='place_residence') Place/Camp of Residence
+                        input.form-control.form-control-sm.required(type='text' name="place_residence"  required)
+                    .d-flex.bd-highlight
+                        .flex-grow-1.bd-highlight 
+                            a.btn.btn-md.btn-primary.px-4(href="#") Back
+                        .bd-highlight
+                            input.btn.btn-md.btn-primary.px-4(type='submit'  value='Next')
+

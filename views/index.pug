@@ -24,7 +24,7 @@ block content
   .section
     .d-flex.justify-content-center.p-3
       .px-4.text-white.font-weight-bold.text-center
-        h2.p-0.m-0 4
+        h2.p-0.m-0 #{location}
         p.p-0.m-0 LOCATIONS
       .px-4.text-white.font-weight-bold.text-center
         h2.p-0.m-0 100
@@ -33,7 +33,55 @@ block content
         h2.p-0.m-0 500
         p.p-0.m-0 TALENTS
       .px-4.text-white.font-weight-bold.text-center
-        h2.p-0.m-0 20
+        h2.p-0.m-0 #{engagement}
+        p.p-0.m-0 ENGAGEMENTS
+  //Skills and Talent section
+  .container.px-4
+    .d-flex.justify-content-center
+    if(items)
+        #skill-carousel.carousel.slide(data-ride='carousel')
+          .carousel-inner
+            if(items.first)
+                .carousel-item.active.skill-containter
+                  .row
+                    each item, i in items.first
+                      .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`)   
+            if(items.second)
+                .carousel-item.skill-containter
+                  .row
+                    each item, i in items.second
+                        .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`)  
+            if(items.third)
+                .carousel-item.skill-containter
+                  .row
+                    each item, i in items.third
+                        .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`) 
+            if(items.fourth)
+                .carousel-item.skill-containter
+                  .row
+                    each item, i in items.fourth
+                        .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`) 
+ 
+          a.carousel-control-prev(href='#skill-carousel' role='button' data-slide='prev')
+            span.carousel-control-prev-icon(aria-hidden='true')
+            span.sr-only Previous
+          a.carousel-control-next(href='#skill-carousel' role='button' data-slide='next')
+            span.carousel-control-next-icon(aria-hidden='true')
+            span.sr-only Next
+  //Nigeria's displacement statistics
+  .displacement_statistics
+    .d-flex.justify-content-center.p-3
+      .px-4.text-white.font-weight-bold.text-center
+        h2.p-0.m-0 #{location}
+        p.p-0.m-0 LOCATIONS
+      .px-4.text-white.font-weight-bold.text-center
+        h2.p-0.m-0 100
+        p.p-0.m-0 SKILLS
+      .px-4.text-white.font-weight-bold.text-center
+        h2.p-0.m-0 500
+        p.p-0.m-0 TALENTS
+      .px-4.text-white.font-weight-bold.text-center
+        h2.p-0.m-0 #{engagement}
         p.p-0.m-0 ENGAGEMENTS
   //Story section 
   .container.py-5.story
@@ -78,5 +126,6 @@ block content
             a.carousel-control-next(href='#partner-carousel' role='button' data-slide='next')
               span.carousel-control-next-icon(aria-hidden='true')
               span.sr-only Next
+      
       
     

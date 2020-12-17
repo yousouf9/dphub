@@ -40,10 +40,10 @@ html(lang="en")
             a#navbarDropdown.nav-link.dropdown-toggle(href='#',  class=`${title === 'WhatWeDo'? 'active' : '' }` role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
               | WHAT WE DO
             .dropdown-menu(aria-labelledby='navbarDropdown')
-              a.dropdown-item(href='#') SKILLS PROFILING
-              a.dropdown-item(href='#') TALENTS PROFILING
-              a.dropdown-item(href='#') DP COMPLAIN
-              a.dropdown-item(href='#') DISPLACEMENT MONITOR
+              a.dropdown-item(href='/whatwedo/skill_profile' class=`${title === 'WhatWeDo'? 'active' : '' }`) SKILLS PROFILING
+              a.dropdown-item(href='/whatwedo/talent_profile' class=`${title === 'WhatWeDo'? 'active' : '' }`) TALENTS PROFILING
+              a.dropdown-item(href='/whatwedo/dp_complain' class=`${title === 'WhatWeDo'? 'active' : '' }`) DP COMPLAIN
+              a.dropdown-item(href='/whatwedo/displace_monitor' class=`${title === 'WhatWeDo'? 'active' : '' }`) DISPLACEMENT MONITOR
           li.nav-item
             a.nav-link(href='/getinvolved' class=`${title === 'GetInvolved'? 'active' : '' }`)
               | GET INVOLVED
@@ -55,7 +55,7 @@ html(lang="en")
               a.dropdown-item(href='#') REPORT
               a.dropdown-item(href='#') BLOG
           li.nav-item
-            a.nav-link(href='#' class=`${title === 'Contact'? 'active' : '' }`)
+            a.nav-link(href='/contact' class=`${title === 'Contact'? 'active' : '' }`)
               | CONTACT
 
         ul.my-2.my-lg-0

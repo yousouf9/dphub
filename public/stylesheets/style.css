@@ -1,6 +1,6 @@
 body {
 
-  background-color:  #092944;
+  background-color: /**  #fff*/  #092944;
 }
 
 /**Header section*/
@@ -88,6 +88,17 @@ body {
   height: 150px !important;
   padding: 0;
 }
+.carousel-item.skill-containter .col, .col-sm, .col-md{
+   
+     margin: 8px;
+     height: 320px;
+     background-size: cover;
+     background-position: center center;
+
+}
+.active.skill-containter{
+  background-color: transparent !important;
+}
 .home_slider{
   background-size: cover !important;
   background-position: center !important;
@@ -114,7 +125,25 @@ body {
 
 }
 
+/**displacement statistics*/
+.displacement_statistics{
+  position: relative;
+  background-image: url('/images/world.jpg');
+  background-size: cover;
+  background-position: center center;
+}
 
+.displacement_statistics::before{
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  background-color: rgba(60, 136, 200, .6);
+  z-index: 2;
+}
+.displacement_statistics div{
+  z-index: 5;
+}
 /**Inner page header*/
 .page-header{
   background-size: cover !important;
@@ -208,6 +237,12 @@ footer i{
   background-color: #092944 ;
   height: 100vh;
 }
+
+.verify-message{
+  background-color: #fff ;
+  height: 100vh;
+}
+
 
 /**Form error messages*/
 .required::after{

@@ -1,0 +1,35 @@
+extends ../layout
+
+block content
+    .container-fluid.p-4
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section(style='background-color:#eef2f9;')
+                h5.font-weight-light.pt-3(style='color:#3c88c8; width: 400px; margin:0 auto;') PROMOTION/SPONSORSHIP INTERST FORM
+                .d-flex.bd-highlight.px-md-4
+                    .bd-highlight 
+                        .form-check
+                            label.form-check-label.pr-4(for='organisation')
+                                | Organisation
+                            input.form-check-input(type='checkbox' name="organisation" checked)
+                    .bd-highlight 
+                        .form-check
+                            label.form-check-label.pr-4(for='policy')
+                                | Individual
+                            input.form-check-input(type='checkbox' name="policy" value='7')
+                form.px-md-4(method='post' name="internship")
+                    .form-group
+                        label.m-0.required(for='name') Name (surname first)
+                        input.form-control.form-control-sm.required(type='text'  name="name" required)
+                    .form-group
+                        label.m-0.required(for='phone') Phone
+                        input.form-control.form-control-sm.required(type='number' name="phone"  required)
+                    .form-group
+                        label.m-0(for='whatsapp') WhatsApp 
+                        input.form-control.form-control-sm(type='text'  name="whatsapp")
+                    .form-group
+                        label.m-0.required(for='email') Email
+                        input.form-control.form-control-sm.required(type='email' name="email"  required)
+                    .form-group
+                        label.m-0.required(for='sex') Sex
+                        select.form-control.form-control-sm.required(name="sex")
+                            option Male
