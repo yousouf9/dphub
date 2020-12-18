@@ -55,5 +55,10 @@ function init(){
     }
 
   console.log(isvalidForm);
+
+
+  //Clear alert messages 
+
+  
 }
 

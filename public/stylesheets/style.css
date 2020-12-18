@@ -144,6 +144,39 @@ body {
 .displacement_statistics div{
   z-index: 5;
 }
+
+.contact_address{
+  position: relative;
+  background-image: url('/images/NYSC.jpg');
+  background-size: cover;
+  background-position: center center;
+}
+.contact_address::before{
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, .9);
+  z-index: 2;
+}
+
+.contact_address div.contact_address_inner{
+  position: relative;
+  z-index: 10;
+}
+
+.contact_address div.contact_address_inner h2{
+  color: #3c88c8;
+}
+
+
+.contact_address div.contact_address_inner p{
+  font-size: 20px;
+}
+
+.contact_address div.contact_address_inner div{
+   margin: 30px 0;
+}
 /**Inner page header*/
 .page-header{
   background-size: cover !important;
@@ -255,3 +288,31 @@ footer i{
  display: none;
  color: #e61321;
 }
+
+
+#messages{
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  z-index: 200;
+}
+#messages ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#messages ul.error li{
+  background-color: #e61321;
+  color: #fff;
+  padding: 10px;
+}
+
+#messages ul.success li{
+  background-color: #5cb85c;
+  color: #fff;
+  padding: 10px;
+}
+
+label{
+ color: #3c88c8 ;
+ }

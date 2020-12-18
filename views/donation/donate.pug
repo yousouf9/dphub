@@ -1,0 +1,56 @@
+extends ../layout
+
+block content
+    .container-fluid.p-4
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section.text-center(style='background-color:#eef2f9;')
+                h4.font-weight-light.pt-3(style='color:#3c88c8;') SUPPORT DPHUB
+                .info.text-center
+                    p.p-0.m-0 Displaced persons never chose to be victims
+                    p.p-0.m-0 but conflicts and disaster forced it on them.
+                    p.p-0.m-0 You and I can make a difference in their lives.
+                    p.p-0.m-0 Let's restore their dignity and hope
+                    p.p-0.m-0 By making a donation today
+                form.px-md-4(method='post' name="internship")
+                    .p-3.bg-white.rounded
+                        .form-group
+                            label.m-0.required(for="first_name") 
+                            input.form-control.form-control-sm.required(type='text'  name="first_name" placeholder="FIRST NANE" required)
+                        .form-group
+                            label.m-0.required(for="last_name") 
+                            input.form-control.form-control-sm.required(type='text'  name="last_name" placeholder="LAST NAME" required)
+                        .form-group
+                            label.m-0.required(for="address") 
+                            input.form-control.form-control-sm.required(type='text'  name="address" placeholder="ADDRESS" required)
+                        .form-group
+                            label.m-0.required(for="city") 
+                            input.form-control.form-control-sm.required(type='text'  name="city" placeholder="CITY" required)
+                        .form-group
+                            label.m-0.required(for="state") 
+                            input.form-control.form-control-sm.required(type='text'  name="state" placeholder="STATE" required)
+                        .form-group
+                            label.m-0.required(for="zip") 
+                            input.form-control.form-control-sm.required(type='number'  name="zip" placeholder="ZIP" required)
+                        .form-group
+                            label.m-0.required(for="country") 
+                            input.form-control.form-control-sm.required(type='text'  name="country" placeholder="COUNTRY" required)
+                        .form-group
+                            label.m-0.required(for="phone") 
+                            input.form-control.form-control-sm.required(type='text'  name="phone" placeholder="PHONE NUMBER" required)
+                        .form-group
+                            label.m-0.required(for="email") 
+                            input.form-control.form-control-sm.required(type='email'  name="email" placeholder="EMAIL" required)
+                        .form-group
+                            label.m-0.required(for="program_name") 
+                            input.form-control.form-control-sm.required(type='text'  name="program_name" placeholder="NAME OF PROGRAM ( IF APPLICABLE)")
+                        .form-group
+                            label.m-0.required(for="comment") 
+                            input.form-control.form-control-sm.required(type='text'  name="comment" placeholder="COMMENT")
+                        .form-group
+                            label.m-0.required(for="volunteer_name") 
+                            input.form-control.form-control-sm.required(type='text'  name="volunteer_name" placeholder="NAME OF VOLUNTEER IN WHOSE HONOR YOU ARE DONATING" required)
+                        .form-group
+                            label.m-0.required(for="anonymours") 
+                            input.form-control.form-control-sm.required(type='text'  name="anonymours" placeholder="ANONYMOURS DONATION" required)
+                    .px-3
+                        input.btn.btn-block.btn-success.m-3(type='submit' name="submit" value='Donate' )

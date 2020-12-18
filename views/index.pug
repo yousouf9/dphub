@@ -42,22 +42,22 @@ block content
         #skill-carousel.carousel.slide(data-ride='carousel')
           .carousel-inner
             if(items.first)
-                .carousel-item.active.skill-containter
+                .carousel-item.active.skill-containter(data-interval="10000")
                   .row
                     each item, i in items.first
                       .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`)   
             if(items.second)
-                .carousel-item.skill-containter
+                .carousel-item.skill-containter(data-interval="10000")
                   .row
                     each item, i in items.second
                         .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`)  
             if(items.third)
-                .carousel-item.skill-containter
+                .carousel-item.skill-containter(data-interval="10000")
                   .row
                     each item, i in items.third
                         .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`) 
             if(items.fourth)
-                .carousel-item.skill-containter
+                .carousel-item.skill-containter(data-interval="10000")
                   .row
                     each item, i in items.fourth
                         .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`) 

@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const SALT = 10;
+const config = require('config')
 
 
 const userSchema = new mongoose.Schema({
@@ -29,7 +30,6 @@ const userSchema = new mongoose.Schema({
     },
     phone:{
         type: String,
-        required: true,
         minlength: 11,
         maxlength: 16
     },
@@ -66,21 +66,18 @@ const userSchema = new mongoose.Schema({
 
 
 
-const  User =  mongoose.model('User', userSchema);
-
-
 
 userSchema.statics.encryptPassword = async (password) => {
 
-    const salt = await bycrypt.genSalt(SALT);
-    return   await bycrypt.hash(password, salt)
+    const salt = await bcrypt.genSalt(SALT);
+    return   await bcrypt.hash(password, salt)
   
   };
 
 
   userSchema.statics.validatePassword =async (password, hash) => {
 
-    return await bycrypt.compare(password, hash);
+    return await bcrypt.compare(password, hash);
   
 };
 
@@ -110,6 +107,8 @@ userSchema.statics.verifyEmailToken = (emailToken) => {
   
       return emailToken = jwt.verify(emailToken, config.get('jwtPrivate')); 
 };
+
+const  User =  mongoose.model('User', userSchema);
 
 const  validateUser =(userInputs)=>{
     const schema =  Joi.object({

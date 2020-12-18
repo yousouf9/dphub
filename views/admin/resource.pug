@@ -1,0 +1,24 @@
+extends ../admin_layout
+
+block content
+    .container-fluid
+        .border-bottom.pt-3.pb-2.mb-3
+            h2 DPHUB PRESS RELEASES
+        form(method='post', action='/administrator/upload/press', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="photo")
+                    label.custom-file-label(for='slider') Choose file
+            .form-group
+                label(for='title') Story's title
+                input.form-control(type="text" name="title")
+                a(href="https://twitter.com/intent/tweet?text=Creating+social+sharing+links+without+third-party+JavaScript&url=https%3A%2F%2Fstevenwestmoreland.com%2F2018%2F07%2Fcreating-social-sharing-links-without-javascript.html&via=swestmoreland" rel="noopener" target="_blank")
+                 | Share to twitter
+
+            .form-group
+                label(for='description') Short description
+                input.form-control(type="text" name="description")
+            .form-group
+                label(for='body') Description
+                textarea.form-control(name='body' rows='3')
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")

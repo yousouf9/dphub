@@ -51,9 +51,9 @@ html(lang="en")
             a#navbarDropdown.nav-link.dropdown-toggle(href='#', class=`${title === 'Resources'? 'active' : '' }` role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
               | RESOURCES
             .dropdown-menu(aria-labelledby='navbarDropdown')
-              a.dropdown-item(href='#') PRESS RELEASES
-              a.dropdown-item(href='#') REPORT
-              a.dropdown-item(href='#') BLOG
+              a.dropdown-item(href='/resource/press') PRESS RELEASES
+              a.dropdown-item(href='/resource/report') REPORT
+              a.dropdown-item(href='/resource/blog') BLOG
           li.nav-item
             a.nav-link(href='/contact' class=`${title === 'Contact'? 'active' : '' }`)
               | CONTACT
@@ -62,9 +62,9 @@ html(lang="en")
           li.nav-item(style="list-style:none")
             a.nav-link(href='/donate' class=`donate`)
               | Donate
-
+    != messages()
     block content
-    //!= messages()
+   
     footer
       .d-flex.bd-highlight.text-white
         .p-2.flex-grow-1.bd-highlight.pl-5  © DISPLACED PERSONS HUB

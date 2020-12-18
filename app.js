@@ -21,7 +21,9 @@ const homeRouter = require('./routes/home/index');
 const aboutRouter = require('./routes/about/index');
 const getInvolvedRouter = require('./routes/getinvolved/index');
 const whatwedoRouter = require('./routes/whatwedo/index');
+const resourceRouter = require('./routes/resource/index');
 const contactRouter = require('./routes/contact/index');
+const donateRouter = require('./routes/donate/index');
 const generalRouter = require('./routes/general/index');
 const app = express();
 
@@ -97,7 +99,8 @@ app.use('/', getInvolvedRouter);
 app.use('/', whatwedoRouter);
 app.use('/', generalRouter);
 app.use('/', contactRouter);
-
+app.use('/', donateRouter);
+app.use('/', resourceRouter)
 
 
 // catch 404 and forward to error handler

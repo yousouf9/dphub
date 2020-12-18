@@ -1,0 +1,19 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0
+        header.p-0.m-0
+            #{header.photo}
+            if(header)
+                each head, i in header
+                    if(head.name=="report")
+                        .page-header(style=`background: url(${head.photo})`)
+        .container-fluid.px-4(style="background:#e6e9ec ")
+            .d-flex.mb-3
+                .p-2
+                    .card.border
+                        p nkdmndnndndkdkjdkjkj
+                .ml-auto.p-2
+                    p djdkjdddkdkdkl
+                    p kjdjdkkjddkjdjkkjdj
+                    p jkdkkdkjddkj

@@ -1,6 +1,7 @@
 const express = require('express');
+const {sendMail} = require('../utility/sendMail')
 
-const { User, validateInput } = require('../model/user/user');
+const { User, validateUser } = require('../model/user/user');
 const winston = require('winston');
 const config= require('config');
 
@@ -70,7 +71,7 @@ router.get('/email_verification_message', function(req, res, next) {
 
 router.post('/register', async (req, res)=>{
 
-    const {error}  = validateInput(req.body);
+    const {error}  = validateUser(req.body);
     
     if(typeof error !== 'undefined'){
        
@@ -86,7 +87,7 @@ router.post('/register', async (req, res)=>{
     
     if(isEmailAvailable){
        req.flash('error', "User with email already exist!")
-       res.status(400).render('user/register', {
+      return res.status(400).render('user/register', {
        data: req.body
      })
     }
@@ -103,7 +104,7 @@ router.post('/register', async (req, res)=>{
 
    if(!user) {
         req.flash('error', "Failed to create user")
-        res.status(400).render('user/register', {
+       return res.status(400).render('user/register', {
         data: req.body
       })
     }
@@ -116,7 +117,7 @@ router.post('/register', async (req, res)=>{
    }) */
   
     
-   const verificationToken = User.sendEmailToken(user._id);
+   const verificationToken = await User.sendEmailToken(user._id);
      //update user account verification token  
      //hash user password  
      user.token= verificationToken;
@@ -128,7 +129,7 @@ router.post('/register', async (req, res)=>{
  
 
 
-   const mailto = `${req.protocol}://${req.headers.host}/api/verify-me/${verificationToken}`;
+   const mailto = `${req.protocol}://${req.headers.host}/user/verify-me/${verificationToken}`;
    const message = `<div>
                         <h2>Welcome to DPHUB</h2>
                         <p>In order to continue your registration please confirm your email below</p>
@@ -141,12 +142,14 @@ router.post('/register', async (req, res)=>{
    
 
     {
-        if (error) {
-          console.log(error);
-          winston.error(error.message, error);
-          res.status(400).json({
-              message:'Verification email fail to send',
-              error: error
+
+
+          if(error) {
+            console.log(error);
+            winston.error(error.message, error);
+            req.flash('error', error.message)
+          return  res.status(400).render('user/register', {
+            data: req.body
           })
   
 
@@ -155,11 +158,11 @@ router.post('/register', async (req, res)=>{
 
           if(!result) {
                req.flash('error', "Failed to create user")
-               res.status(400).render('user/register', {
+            return   res.status(400).render('user/register', {
                data: req.body
              })
            }
-
+           req.flash('success', "Account Successfully created")
            res.location('/user/email_verification_message');
            res.redirect('/user/email_verification_message');
 
@@ -168,7 +171,38 @@ router.post('/register', async (req, res)=>{
 
    }); 
    
+})
 
+
+//Verify email
+router.get('/verify-me/:token', async (req, res)=>{
+
+  let token = req.params.token;
+
+  const emailToken =User.verifyEmailToken(token);
+
+  if(!emailToken) {
+    req.flash('error', "Invalid token")
+   return res.status(400).render('/')
+  }
+
+
+  let user = null;
+  if(mongoose.Types.ObjectId.isValid(emailTokens)){
+   user = await User.findById(emailTokens)
+  }else{
+      throw new Error('Not a valid object ID')
+  }
+  
+  if(!user) {
+    req.flash('error', "User account does not exist")
+   return res.status(400).render('/')
+  }
+
+   user.isVerified = true;
+   await user.save();
+
+   
 
 })
 
