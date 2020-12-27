@@ -22,14 +22,17 @@ block content
                                 form.px-md-4(method='post' name="education")
                                     .form-group
                                         label.m-0.required(for='highest_education') Highest level of education
-                                        input.form-control.form-control-sm.required(type='text'  name="highest_education" value= `${data ? data.highest_education: ''}` required)
+                                        input.form-control.form-control-sm(type='text'  name="highest_education" value= `${data ? data.highest_education: ''}` required)
+                                        label.error-message
                                     .form-row
                                         .form-group.col-md-6
                                             label.required(for='specialization') Specialization
                                             input.form-control.form-control-sm(type='text' name="specialization" value= `${data ? data.specialization: ''}`)
+                                            label.error-message
                                         .form-group.col-md-6
                                             label(for='institution') Institutions
                                             input.form-control.form-control-sm(type='text' name="institution" value= `${data ? data.institution: ''}`)
+                                            label.error-message
                                     .form-row
                                         .form-group.col-md-6
                                             label(for='duration') Duration

@@ -8,22 +8,27 @@ block content
                     header.p-2.text-white(style="background:#092944")
                         | CREATE ACCOUNT
                     .form-group
-                        label.m-0.required(for='username' ) useranme
-                        input.form-control.form-control-sm.required(type='text'  name="username" value= `${data ? data.username: ''}` required)
+                        label.m-0.required(for='username' ) username
+                        input.form-control.form-control-sm(type='text'  name="username" id="username" value= `${data ? data.username: ''}` required)
+                        label.error-message
                     .form-group
                         label.m-0.required(for='name' ) Name (surname first)
-                        input.form-control.form-control-sm.required(type='text'  name="name" value= `${data ? data.name: ''}` required)
+                        input.form-control.form-control-sm(type='text'  name="name" id="name" value= `${data ? data.name: ''}` required)
+                        label.error-message
                     .form-group
                         label.m-0(for='whatsapp' ) WhatsApp 
-                        input.form-control.form-control-sm(type='text'  name="whatsapp" value= `${data ? data.whatsapp: ''}`)
+                        input.form-control.form-control-sm(type='text'  name="whatsapp" id="whatsapp" value= `${data ? data.whatsapp: ''}`)
                     .form-group
                         label.m-0.required(for='email') Email
-                        input.form-control.form-control-sm.required(type='email' name="email" value= `${data ? data.email: ''}` required)
+                        input.form-control.form-control-sm(type='email' name="email" id="email" value= `${data ? data.email: ''}` required)
+                        label.error-message
                     .form-group
                         label.m-0.required(for='password') Password
-                        input.form-control.form-control-sm.required(type='password' name="password"  required)
+                        input.form-control.form-control-sm(type='password' name="password" id="password"  required)
+                        label.error-message
                     .form-group
                         label.m-0.required(for='confirm_password') confirm Password
-                        input.form-control.form-control-sm.required(type='password' name="confirm_password"  required)
+                        input.form-control.form-control-sm(type='password' name="confirm_password" id="confirm_password"  required)
+                        label.error-message
                     .text-center
                         input.btn.btn-md.btn-primary(type='submit'  value='Register' )

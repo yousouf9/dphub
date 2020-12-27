@@ -13,10 +13,34 @@ const pressSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    pressBody:{
+    articleBody:{
         type: String,
         required: true,
-    }
+    },
+    url:{
+        type: String,
+        required: true, 
+    },
+    comments:[
+        
+        {  name:{
+                type: String, 
+                required: true
+            },
+            commentBody:{
+                type: String, 
+                required: true 
+            },
+            email:{
+                type: String,
+                required: true 
+            },
+            date:{
+                type: Date,
+                default: Date.now()
+            }
+        }
+    ]
 
 }, {timestamps: true});
 
@@ -26,8 +50,13 @@ const  validateInput =(userInputs)=>{
     const schema =  Joi.object({
         title: Joi.string().required(),
         photo: Joi.string().required(),
-        pressBody: Joi.string().required(),
-        submit: Joi.allow(null)
+        articleBody: Joi.string().required(),
+        comments:{
+            name:Joi.string().required(),
+            commentBody:Joi.string().required(),
+            email: Joi.string().email().required(),
+            commentid: Joi.objectId()
+        },
     }) 
 
 

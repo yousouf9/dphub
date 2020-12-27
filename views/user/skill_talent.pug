@@ -22,11 +22,12 @@ block content
                                 form.px-md-4(method='post' name="skill_talent")
                                     .form-group
                                         label.m-0.required(for='skill') Main skills/talent
-                                        input.form-control.form-control-sm.required(type='text'  name="skill" value= `${data ? data.skill: ''}` required)
+                                        input.form-control.form-control-sm.required(type='text'  name="skill" id="skill" value= `${data ? data.skill: ''}` required)
+                                        label.error-message
                                     .form-row
                                         .form-group.col-md-6
                                             label.required(for='yoe') Years of experience
-                                            input.form-control.form-control-sm.required(type='number' name="yoe" value= `${data ? data.yoe: ''}`)
+                                            input.form-control.form-control-sm.required(type='number' name="yoe" value= `${data ? data.yoe: ''}` required)
                                         .form-group.col-md-6
                                             label(for='name_company') Name of Company
                                             input.form-control.form-control-sm(type='text' name="name_company" value= `${data ? data.name_company: ''}`)
@@ -50,11 +51,11 @@ block content
                                             label(for="") Contract Type
                                             .form-check.pl-0
                                                 label.form-check-label.pr-4(for='full_time') Full Time
-                                                input#full_time.form-check-input(type='radio' name='contract_type' value='1' checked='')
+                                                input#full_time.form-check-input(type='radio' name='contract_type' value='Full Time' checked='')
 
                                             .form-check.pl-0
                                                 label.form-check-label.pr-4(for='part_time') Part Time
-                                                input#part_time.form-check-input(type='radio' name='contract_type' value='2')
+                                                input#part_time.form-check-input(type='radio' name='contract_type' value='Part Time')
                                         .col-md-6
                                             label(for="") Employment Type
                                             .form-check.pl-0

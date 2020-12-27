@@ -7,7 +7,7 @@ block content
         form(method='post', action='/administrator/upload/slider', enctype='multipart/form-data')
             .input-group.mb-3
                 .custom-file
-                    input.custom-file-input(type='file' name="photo")
+                    input#home_slider.custom-file-input(type='file' name="photo")
                     label.custom-file-label(for='slider') Choose file
             .form-group
                 label(for='description') Description
@@ -46,7 +46,7 @@ block content
         form(method='post', action='/administrator/upload/story', enctype='multipart/form-data')
             .input-group.mb-3
                 .custom-file
-                    input.custom-file-input(type='file' name="photo")
+                    input#story_detail.custom-file-input(type='file' name="photo")
                     label.custom-file-label(for='slider') Choose file
             .form-group
                 label(for='title') Story's title
@@ -75,14 +75,14 @@ block content
         form(method='post', action='/administrator/upload/skill_talent', enctype='multipart/form-data')
             .input-group.mb-3
                 .custom-file
-                    input.custom-file-input(type='file' name="photo")
+                    input#skill.custom-file-input(type='file' name="photo")
                     label.custom-file-label(for='slider') Choose file
             input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
         h2 Partner's Details
         form(method='post', action='/administrator/upload/partner', enctype='multipart/form-data')
             .input-group.mb-3
                 .custom-file
-                    input.custom-file-input(type='file' name="photo")
+                    input#partners.custom-file-input(type='file' name="photo")
                     label.custom-file-label(for='slider') Choose file
             .form-group
                 label(for='description') Description

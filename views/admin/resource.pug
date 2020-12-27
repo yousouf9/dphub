@@ -10,15 +10,38 @@ block content
                     input.custom-file-input(type='file' name="photo")
                     label.custom-file-label(for='slider') Choose file
             .form-group
-                label(for='title') Story's title
+                label(for='title') Press title
                 input.form-control(type="text" name="title")
-                a(href="https://twitter.com/intent/tweet?text=Creating+social+sharing+links+without+third-party+JavaScript&url=https%3A%2F%2Fstevenwestmoreland.com%2F2018%2F07%2Fcreating-social-sharing-links-without-javascript.html&via=swestmoreland" rel="noopener" target="_blank")
-                 | Share to twitter
-
             .form-group
-                label(for='description') Short description
-                input.form-control(type="text" name="description")
-            .form-group
-                label(for='body') Description
-                textarea.form-control(name='body' rows='3')
+                label(for='articleBody') Press Body
+                textarea.form-control(name='articleBody' rows='3')
             input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        h2 DPHUB REPORTS
+        form(method='post', action='/administrator/upload/report', enctype='multipart/form-data')
+            label Upload Report cover page
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="photo" accept=".jpg,.jpeg,.png" required)
+                    label.custom-file-label Choose file
+            label() Upload Report PDF FILE
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="filename" accept=".pdf,.doc" required)
+                    label.custom-file-label Choose file
+            .form-group
+                label(for='title') Report Title
+                input.form-control(type="text" name="title" required)
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        h2 DPHUB BLOG ARTICLE
+        form(method='post', action='/administrator/upload/blog', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="photo")
+                    label.custom-file-label(for='slider') Choose file
+            .form-group
+                label(for='title') Blog title
+                input.form-control(type="text" name="title")
+            .form-group
+                label(for='articleBody') Blog Body
+                textarea.form-control(name='articleBody' rows='3')
+            input.btn.btn-md.btn-success.mb-2( type="submit" value="save")

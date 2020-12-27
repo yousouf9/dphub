@@ -7,9 +7,19 @@ block content
         form(method='post', action='/administrator/upload/header', enctype='multipart/form-data')
             .input-group.mb-3
                 .custom-file
-                    input.custom-file-input(type='file' name="photo")
+                    input#header.custom-file-input(type='file' name="photo")
                     label.custom-file-label(for='slider') Choose file
             .form-group
                 label(for='name') Page name (NOTE: This is important)
                 input.form-control(type="text" name="name" placeholder="e.g whoweare")
             input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        h2 Add Event
+        form(method='post', action='/administrator/event')
+            .form-group
+                label(for='title') Page name (NOTE: This is important)
+                input.form-control(type="text" name="title" placeholder="e.g Launch of Nigeria’s first DPs need assessment")
+            .form-row
+                .form-group.col-md-6
+                    label(for='date') Event Date
+                    input.form-control.form-control-sm(type='datetime-local' name="date")
+            input.btn.btn-md.btn-success.mb-2( type="submit" value="save")

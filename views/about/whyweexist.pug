@@ -8,21 +8,16 @@ block content
                 each head, i in header
                     if(head.name=="whyweexist")
                         .page-header(style=`background: url(${head.photo})`)
-        .container
-            .d-flex.flex-column.py-5.px-md-5
-                .px-md-5
-                    //Why we exist section
-                    .displacement_statistics
-                        .d-flex.justify-content-center.p-3
-                            .px-4.text-white.font-weight-bold.text-center
-                                h2.p-0.m-0 #{location}
-                                p.p-0.m-0 LOCATIONS
-                            .px-4.text-white.font-weight-bold.text-center
-                                h2.p-0.m-0 100
-                                p.p-0.m-0 SKILLS
-                            .px-4.text-white.font-weight-bold.text-center
-                                h2.p-0.m-0 500
-                                p.p-0.m-0 TALENTS
-                            .px-4.text-white.font-weight-bold.text-center
-                                h2.p-0.m-0 #{engagement}
-                                p.p-0.m-0 ENGAGEMENTS
+        .displacement_statistics.p-0.m-0
+            .row.whyweexist
+                .col-sm-6.text-right.p-3
+                    h4.border-bottom.d-inline-block WHY WE EXIST
+                .col-sm-6.pt-5.text-white
+                    p.d-inline-block.text-center
+                            | 20 %
+                    span.d-inline-block(style="width: 250px; margin:10px 0 0 5px; padding-top:10px line-height:150px") of skilled and talented
+                                     | displaced persons can
+                                     | be self-reliance with
+                                     |  digitized promotion
+            .row
+                

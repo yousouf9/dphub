@@ -10,7 +10,7 @@ block content
                         p In keeping with our vision of promoting self-reliance
                             | among skilled and talented displaced persons, we have
                             | created this platform to aord all willing displaced persons
-                            | the opportunity to create a prole that will capture their
+                            | the opportunity to create a profile that will capture their
                             | skills and talents as well as portfolio thereby increasing the
                             | chances of rebuilding a new life and career. We seek to
                             | reduce over dependence of DPs on aid and donation thus;
@@ -20,21 +20,23 @@ block content
                             | respect human diversity
                 .col-md-6
                     .container.px-md-5.py-md-5
-                        form.p-4.bg-white(method='post' name="userlogin")
+                        form.p-4.bg-white(method='post' action="/user/login" id="userlogin" name="userlogin")
                             .form-group
-                                label.m-0(for='username') useranme
-                                input.form-control.form-control-sm.required(type='text'  name="username" required)
+                                label.m-0(for='username') username
+                                input.form-control.form-control-sm.required(type='text'  name="username" id="username" required)
+                                label.error-message
                             .form-group
                                 label.m-0(for='password') Password
-                                input.form-control.form-control-sm.required(type='password' name="password"  required)
+                                input.form-control.form-control-sm.required(type='password' name="password" id="password"  required)
+                                label.error-message
                             .container.px-md-5.text-center
                                 input.btn.btn-sm.btn-block.btn-outline-secondary(type='submit' name="login" value='Login' )
                                 a.btn.text-primary(href="/forgot") Forgot Password
                             .container.px-md-5.text-center.border-top.py-2
-                                a.btn.btn-sm.btn-block.btn-outline-secondary(href="/forgot") Forgot Password
+                                a.btn.btn-sm.btn-block.btn-outline-secondary(href="/user/register") Register
     .container-fluid.px-5(style="background:#3c88c8")
         .container.px-md-4.py-md-3.text-white
-            p   Register now to build your profile. Information provided will be used to identify employment opportunity match and we will share your skills and or talent prole with interested employers, sponsors
+            p   Register now to build your profile. Information provided will be used to identify employment opportunity match and we will share your skills and or talent profile with interested employers, sponsors
                 | and promoters. Note; no information will be shared without your consent. 
             p.text-center
-                a.btn.btn-sm.btn-primary.my-3(href="/user/register") Register
+                a.btn.btn-sm.btn-primary.my-3.px-5(href="/user/register") Register

@@ -13,7 +13,9 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const config = require('config')
 
+
 require('./startup/db');
+
 
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/users');
@@ -26,7 +28,7 @@ const contactRouter = require('./routes/contact/index');
 const donateRouter = require('./routes/donate/index');
 const generalRouter = require('./routes/general/index');
 const app = express();
-
+ 
 
 
   process.on('uncaughtException', (ex)=>{
@@ -55,6 +57,14 @@ const app = express();
 
 app.locals.moment = require('moment');
 
+app.locals.truncateText = function(text, length){
+  return text.substr(0, length);
+};
+
+app.locals.dateCounter = function() {
+  
+}
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -68,7 +78,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(session({
   secret: 'secret',
   saveUninitialized: true,
-  resave: true
+  resave: true,
+  cookie:{maxAge:10000}
 }));
 
 //Passport
@@ -118,5 +129,40 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+
+
+// var x = setInterval((event)=> counTimer(event) , 1000);
+
+// function counTimer(event) {
+     
+//     let eventDate = new Date("12/28/2020")
+//     // Get today's date and time
+//     var now = new Date().getTime();
+
+//     // Find the distance between now and the count down date
+//     var distance = eventDate - now;
+
+//     // Time calculations for days, hours, minutes and seconds
+//     var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+//     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+//     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+//     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+//     // Display the result in the element with id="demo"
+        
+//            // wrapper.append(template)
+//     // If the count down is finished, write some text
+//     if (distance < 0) {
+//         clearInterval(x);
+      
+//     }
+   
+//     app.locals.daysLeft = days
+//     app.locals.hoursLeft = hours
+//     app.locals.minutesLeft = minutes
+//     app.locals.secondsLeft = seconds
+// }
 
 module.exports = app;

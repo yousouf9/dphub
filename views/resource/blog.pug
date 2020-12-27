@@ -1,0 +1,49 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0
+        header.p-0.m-0
+            if(header)
+                each head, i in header
+                    if(head.name=="blog")
+                        .page-header(style=`background: url(${head.photo})`)
+                            .page-header-title
+                                | DPHUB BLOG
+        .container-fluid.px-4(style="background:#fff")
+            .container.p-md-4 
+                if(blogs)
+                    .row
+                        each blog, i in blogs
+                            .col-md-6.col-lg-4.px-md-2.my-2
+                                .blog-section
+                                    .blog-image.px-md-3(style=`background: url(${blog.photo})`)
+                                        .blog-stats
+                                            h4 #{blog.title}
+                                            .d-flex
+                                                .p-1
+                                                    p.mb-0.social-date-chat
+                                                        span.text-dark 
+                                                            i.fas.fa-calendar-alt.px-1
+                                                            span.px-1 #{moment(blog.createdAt).format(`DD: MM: YYYY`)}
+                                                .p-1
+                                                    p.mb-0.social-date-chat
+                                                        | DPHUB
+                                                        span 
+                                                            i.fas.fa-comment-alt
+                                                            sub.px-1 #{blog.comments.length}
+
+                                    p.mb-0 
+                                    !=truncateText(blog.articleBody, 150)
+                                    .d-flex
+                                        .p-1
+                                            p.mb-0.text-right.read-more.font-weight-bold
+                                                a.pl-0.btn(href=`/resource/blog/${blog._id}`) 
+                                                    span React more
+                                        .ml-auto.p-1
+                                            p.p-1.mb-0.social-team
+                                                a.facebook(href=`#` )
+                                                    i.fab.fa-facebook-f
+                                                a.twitter(href=`#`)
+                                                    i.fab.fa-twitter  
+                                                a.googleplus(href=`#` )                                                
+                                                    i.fab.fa-google-plus-g

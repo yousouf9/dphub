@@ -3,17 +3,111 @@ extends ../layout
 block content
     .container-fluid.p-0
         header.p-0.m-0
-            #{header.photo}
             if(header)
                 each head, i in header
                     if(head.name=="report")
                         .page-header(style=`background: url(${head.photo})`)
+                            .page-header-title
+                                | DPHUB REPORTS
         .container-fluid.px-4(style="background:#e6e9ec ")
-            .d-flex.mb-3
-                .p-2
-                    .card.border
-                        p nkdmndnndndkdkjdkjkj
-                .ml-auto.p-2
-                    p djdkjdddkdkdkl
-                    p kjdjdkkjddkjdjkkjdj
-                    p jkdkkdkjddkj
+            .row
+                .col-md-9
+                    .container.p-md-4 
+                        if(reports)
+                            .row
+                                each report, i in reports
+                                    .col-md-6.col-lg-4.px-md-2.my-2
+                                        .report-section
+                                            .report-image(style=`background: url(${report.photo})`)
+                                            .report-stats.px-md-4
+                                                .d-flex
+                                                    .p-1
+                                                        p.mb-0.social-date-chat
+                                                            span.text-dark 
+                                                                i.fas.fa-calendar-alt.px-1
+                                                                span.px-1 #{moment(report.createdAt).format(`DD: MM: YYYY`)}
+                                                    .ml-auto.p-1
+                                                        p.mb-0.social-date-chat.px-2.text-dark 
+                                                            | DPHUB
+
+                                            .report-download
+                                                a(href=`#` class="download" data-id= `${report._id}`) Download
+
+                .col-6.col-md-3 
+                    form(method="get" action="/resource/report")
+                        .input-group.py-4
+                            input.form-control(type='search' name="search" placeholder='Type and hit enter' aria-label='Search')
+                            .input-group-append
+                                button.input-group-text.btn.my-2.my-sm-0.bg-dark(type='submit')
+                                    i.fas.fa-search.text-white
+                    .press-detail-section
+                        h4 PRESS ENQUIRIES
+                            span
+                        h5.m-0  Michael NWISANE
+                        p.m-0 Communition Officer
+                        p.m-0 
+                            i.fas.fa-mobile-alt
+                            a.px-2(href="tel://+2349090000000") (+234)-909-000-0000
+                        p 
+                            i.fas.fa-envelope
+                            a.px-2(href="mailto:nwisane@dphubng.org") nwisane@dphubng.org
+                    .press-detail-section.py-3
+                        h4 BE IN THE KNOW
+                            span
+                        form(method='post' action="/subscription" name="subscribeFform")
+                            .form-group
+                                span.m-0(for='email') Subscribe to our email list
+                                input.form-control.form-control-sm.required(type='text'  name="email" placeholder="enter your email address" required)
+                            .form-row.pl-4
+                                .form-check.col-md-6
+                                    input.form-check-input(type='checkbox' name="press_release" value='1')
+                                    span.form-check-label
+                                        | Press Release
+                                .form-check.col-md-6
+                                    input.form-check-input(type='checkbox' name="event" value='2')
+                                    span.form-check-label
+                                        | Event
+                            .form-row.pl-4
+                                .form-check.col-md-6
+                                    input.form-check-input(type='checkbox' name="publication" value='3')
+                                    span.form-check-label
+                                        | Publication
+                                .form-check.col-md-6
+                                    input.form-check-input(type='checkbox' name="blogs" value='4')
+                                    span.form-check-label
+                                        | Blogs
+                            .form-row.pl-4
+                                .form-check.col-md-6
+                                    input.form-check-input(type='checkbox' name="multimedia" value='5')
+                                    span.form-check-label
+                                        | Multimedia
+                                .form-check.col-md-6
+                                    input.form-check-input(type='checkbox' name="jobs" value='6')
+                                    span.form-check-label
+                                        | Jobs
+                            input.form-check-input(type='hidden' name="urlpath" value='/resource/report')
+                            input.btn.btn-sm.btn-primary.my-1(type="submit" value="Signup")
+                    .press-detail-section
+                        h4 EVENTS
+                            span
+                        .row.pl-2
+                            .cols.p-2.mr-1
+                                form(method="post" action="/events/1" name="upcoming")
+                                    input.btn.btn-block.btn-primary(type="submit" value="Upcoming")
+                            .cols.p-2
+                                form(method="post" action="/events/5" name="Previous")
+                                    input.btn.btn-block.btn-outline-primary(type="submit" value="Upcoming")
+                        .font-weight-light Launch of Nigeria’s first DPs need assessment            
+                        .d-flex.justify-content-center.text-center
+                            .px-2
+                                h2.p-0.m-0.text-danger 00
+                                p.p-0.m-0 Days
+                            .px-2
+                                h2.p-0.m-0.text-danger 00
+                                p.p-0.m-0 Hours
+                            .px-2
+                                h2.p-0.m-0.text-danger 00
+                                p.p-0.m-0 Minutes
+                            .px-2
+                                h2.p-0.m-0.text-danger 00
+                                p.p-0.m-0 Seconds

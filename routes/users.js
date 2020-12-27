@@ -2,10 +2,26 @@ const express = require('express');
 const {sendMail} = require('../utility/sendMail')
 
 const { User, validateUser } = require('../model/user/user');
+const {Personal} = require('../model/user/personal');
+const {Displacement} = require('../model/user/displacement');
+const {Skill} = require('../model/user/skill');
+const {Education} = require('../model/user/education');
+const {Langauge} = require('../model/user/language');
+const {Qualification} = require('../model/user/qualification');
+const {Upload} = require('../model/user/uploads');
+
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+
 const winston = require('winston');
 const config= require('config');
+const Fawn = require('fawn');
+const mongoose = require('mongoose');
 
 const router = express.Router();
+
+  Fawn.init(mongoose);
 
 /* GET user Login form */
 router.get('/login', function(req, res, next) {
@@ -67,8 +83,6 @@ router.get('/email_verification_message', function(req, res, next) {
 
 
 /** Register a new user */
-
-
 router.post('/register', async (req, res)=>{
 
     const {error}  = validateUser(req.body);
@@ -109,12 +123,6 @@ router.post('/register', async (req, res)=>{
       })
     }
 
-/*    let account = new  Account({
-    user:{
-           id:user._id,
-           name:'account'
-       }
-   }) */
   
     
    const verificationToken = await User.sendEmailToken(user._id);
@@ -123,10 +131,6 @@ router.post('/register', async (req, res)=>{
      user.token= verificationToken;
      user.password =await User.encryptPassword(user.password);
 
-
-
-
- 
 
 
    const mailto = `${req.protocol}://${req.headers.host}/user/verify-me/${verificationToken}`;
@@ -179,31 +183,153 @@ router.get('/verify-me/:token', async (req, res)=>{
 
   let token = req.params.token;
 
-  const emailToken =User.verifyEmailToken(token);
+  const emailToken = await User.verifyEmailToken(token);
 
   if(!emailToken) {
     req.flash('error', "Invalid token")
    return res.status(400).render('/')
   }
 
-
   let user = null;
-  if(mongoose.Types.ObjectId.isValid(emailTokens)){
-   user = await User.findById(emailTokens)
+  if(mongoose.Types.ObjectId.isValid(emailToken.id)){
+   user = await User.findById(emailToken.id)
   }else{
       throw new Error('Not a valid object ID')
   }
+   
   
+
   if(!user) {
     req.flash('error', "User account does not exist")
    return res.status(400).render('/')
   }
 
-   user.isVerified = true;
-   await user.save();
+
+
+      let personal = new Personal({
+        user: user._id
+      })
+      let displacement = new Displacement({
+        user: user._id
+      })
+      
+      let skill = new Skill({
+        user: user._id
+      })
+      
+      let education = new Education({
+        user: user._id
+      })
+
+      
+      let language = new Langauge({
+        user: user._id
+      })
+      
+      let qualifiaction = new Qualification({
+        user: user._id
+      })
+      
+      let upload = new Upload({
+        user: user._id
+      })
+
+      let task = Fawn.Task();
+
+      task.update("users", {_id:user._id}, {isVerified : true, step: 1})
+          .save(personal)
+          .save(skill)
+          .save(displacement)
+          .save(education)
+          .save(language)
+          .save(qualifiaction)
+          .save(upload)
+          .run()
+          .then((results)=>{
+
+            req.flash('success', "Please Login and complete your registration")
+            res.location('/user/login');
+            res.redirect('/user/login');
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
 
    
 
 })
+
+
+
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+ 
+passport.deserializeUser(function(id, done) {
+  User.getUserById(id, function (err, user) {
+    done(err, user);
+  });
+});
+
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+        User.getUserByUsername(username, async function(err, user) {
+          if(err) throw new Error(err);
+          if(!user) {
+            console.log('not a valide user');
+            return done(null, false, {message: 'unknown user'});
+          }
+          
+
+          const isValid =  await User.validatePassword(password, user.password)
+          if(!isValid){
+              console.log('Password did not matched')
+              return done(null, false);
+          } 
+
+          return done(null, user);
+
+       });
+    }
+
+));
+
+router.post('/login',
+ passport.authenticate('local', {failureRedirect:'/user/login', failureFlash:'invalid username or password'}),
+
+  (req, res)=>{
+
+  console.log('user successfully authenticated', req.user);
+  req.flash('success','you are logged in');
+  if(req.user.complete){
+    res.location(`/user/dashboard`)
+    res.redirect(`/user/dashboard`)
+  }else{
+    res.location(`/user/register/${req.user.step}`)
+    res.redirect(`/user/register/${req.user.step}`)
+  }
+  
+})
+
+
+
+
+router.get('/logout', (req, res) =>{
+  req.logout();
+  req.flash('success', 'You have successfully logged out');
+  res.redirect('/user/login');
+
+});
+
+
+const processReg = (step, req, res) =>{
+  switch(step){
+    case 1:
+      break;
+    default:
+      console.log("not a valid registration");
+  }
+}
 
 module.exports = router;

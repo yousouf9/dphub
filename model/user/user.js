@@ -59,7 +59,10 @@ const userSchema = new mongoose.Schema({
     resetPasswordToken: String,
     resetPasswordExpires: Date,
     step:Number,
-    complete: false,
+    complete:{
+        type: Boolean,
+        default:  false
+    },
 
 }, {timestamps: true});
 
@@ -86,7 +89,7 @@ userSchema.methods.validateHashed= function(password, hashedPass){
 }
 
 userSchema.statics.getUserByUsername =  function(email, callback){
-    let query = {email: email};
+    let query = {$or:[{email: email}, {username:email}]};
      const user=  User.findOne(query, callback);
      return user
    

@@ -9,31 +9,35 @@ block content
                         | DISPLACEMENT INFORMATION
                     .form-group
                         label.m-0.required(for='yod') Year of Displacement
-                        input.form-control.form-control-sm.required(type='date'  name="yod" required)
+                        input.form-control.form-control-sm(type='date'  name="yod" value= `${data ? data.yod: ''}` id="yod" required)
+                        label.error-message
                     .form-group.m-0
                         label.m-0.required Cause of Displacement
                     .form-check.form-check-inline
                         label.form-check-label.pr-2(for='inlineCheckbox1') Boko Haram
-                        input#inlineCheckbox1.form-check-input(type='checkbox' value='option1')
+                        input#inlineCheckbox1.form-check-input(type='checkbox' name="boko_haram" value='option1')
                     .form-check.form-check-inline
                         label.form-check-label.pr-2(for='inlineCheckbox1') Bandit
-                        input#inlineCheckbox1.form-check-input(type='checkbox' value='option1')
+                        input#inlineCheckbox1.form-check-input(type='checkbox' name="bandit" value='option1')
                     .form-check.form-check-inline
                         label.form-check-label.pr-2(for='inlineCheckbox1') Flood
-                        input#inlineCheckbox1.form-check-input(type='checkbox' value='option1')
+                        input#inlineCheckbox1.form-check-input(type='checkbox' name="flood" value='option1')
                     .form-check.form-check-inline
                         label.form-check-label.pr-2(for='inlineCheckbox1') Communal Crisis
-                        input#inlineCheckbox1.form-check-input(type='checkbox' value='option1')
+                        input#inlineCheckbox1.form-check-input(type='checkbox' name="communal_crisis" value='option1')
                     .form-check.form-check-inline
                         label.form-check-label.pr-2(for='inlineCheckbox1') Other
-                        input#inlineCheckbox1.form-check-input(type='checkbox' value='option1')
+                        input#inlineCheckbox1.form-check-input(type='checkbox' name="other" value='option1')
+                        label.error-message
                     .form-group.mt-2
                         label.m-0.required(for='state') State of Residence
-                        select.form-control.form-control-sm.required(name="state")
+                        select.form-control.form-control-sm(name="state"  value= `${data ? data.state: ''}` id="state" required)
                             option Nasarawa
+                        label.error-message
                     .form-group
                         label.m-0.required(for='place_residence') Place/Camp of Residence
-                        input.form-control.form-control-sm.required(type='text' name="place_residence"  required)
+                        input.form-control.form-control-sm(type='text' name="place_residence"  id="place_residence" required)
+                        label.error-message
                     .d-flex.bd-highlight
                         .flex-grow-1.bd-highlight 
                             a.btn.btn-md.btn-primary.px-4(href="#") Back
