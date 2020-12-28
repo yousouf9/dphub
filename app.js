@@ -79,7 +79,7 @@ app.use(session({
   secret: 'secret',
   saveUninitialized: true,
   resave: true,
-  cookie:{maxAge:10000}
+  cookie:{maxAge:60000}
 }));
 
 //Passport

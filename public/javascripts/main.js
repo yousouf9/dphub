@@ -109,10 +109,13 @@ $(document).ready(function(){
             let currentId =  $( $this ).attr( 'id' );
             if ( ! $( $this ).val() ) {
             
+            
+
                 $( `#${currentId} + .error-message`).css('display', 'block').html('This field is required')
                 $($this).focus();
             }else{
                 $( `#${currentId} + .error-message`).css('display', 'none')
+
             }
 
 
@@ -120,8 +123,31 @@ $(document).ready(function(){
 
     }
 
+
+    $('#confirm_password').blur(function(){
+        if($('#confirm_password').val() !== $('#password').val()){
+            $( `#confirm_password + .error-message`).css('display', 'block').html('Password does not match')
+        
+        }
+    }) 
+    
+
   });
-  
+  //Registration form 
+  if("#userRegister"){
+      $("#userRegister").submit(function(event){
+           event.preventDefault();
+
+    if($('#confirm_password').val() !== $('#password').val()){
+            $( `#confirm_password + .error-message`).css('display', 'block').html('Password does not match')
+         return false;
+        }else{
+
+            $("#userRegister").submit();
+    }
+
+      })
+  }
 
   const formlga = document.getElementById('lga');
   //State change function
@@ -146,7 +172,7 @@ $(document).ready(function(){
         .then((response)=> {
             $( "#lga #lga_loading" ).html("select lga")
            response.data.result.lgas.forEach((lga)=>{
-            formlga.insertAdjacentHTML('afterbegin', `<option value=${lga}>${lga}</option>`)
+            formlga.insertAdjacentHTML('afterbegin', `<option value="${lga}">${lga}</option>`)
             })
        
 
@@ -186,7 +212,7 @@ $(document).ready(function(){
          
           countries.forEach(country =>{
         
-            formNation.insertAdjacentHTML('afterbegin', `<option value=${country}>${country}</option>`)
+            formNation.insertAdjacentHTML('afterbegin', `<option value="${country}">${country}</option>`)
           })
     
           

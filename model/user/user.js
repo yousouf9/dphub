@@ -55,7 +55,8 @@ const userSchema = new mongoose.Schema({
     },
     isVerified: Boolean,
     token:String,
-  
+    loginToken: String,
+
     resetPasswordToken: String,
     resetPasswordExpires: Date,
     step:Number,
@@ -78,7 +79,7 @@ userSchema.statics.encryptPassword = async (password) => {
   };
 
 
-  userSchema.statics.validatePassword =async (password, hash) => {
+userSchema.statics.validatePassword =async (password, hash) => {
 
     return await bcrypt.compare(password, hash);
   
@@ -110,6 +111,17 @@ userSchema.statics.verifyEmailToken = (emailToken) => {
   
       return emailToken = jwt.verify(emailToken, config.get('jwtPrivate')); 
 };
+
+userSchema.statics.findByToken = (token) =>{
+    //Please un-hash the jwt token 
+   return jwt.verify(token, config.get('jwtPrivate'))
+}
+
+userSchema.methods.deleteToken = async (token) =>{
+      let user = this;
+  return await user.User.findOneAndUpdate({loginToken:token},{$unset:{loginToken: 1}},{new: true, useFindAndModify: false})
+    
+}
 
 const  User =  mongoose.model('User', userSchema);
 

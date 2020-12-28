@@ -9,7 +9,8 @@ const displacementSchema = new mongoose.Schema({
         ref:"User"
     },
     yod: {
-        type: Date
+        type: String,
+        default:""
     },
     boko_haram: {
         type: String,

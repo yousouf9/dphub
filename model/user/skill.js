@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 
-const skillSchema = new mongoose.Schema({
+const Skill_TalentSchema = new mongoose.Schema({
 
     user:{
         type:mongoose.Types.ObjectId,
@@ -43,6 +43,6 @@ const skillSchema = new mongoose.Schema({
 }, {timestamps:true});
 
 
-const  Skill =  mongoose.model('REGSkill', skillSchema);
+const  Skill_Talent =  mongoose.model('Talent', Skill_TalentSchema);
 
-module.exports.Skill = Skill;
+module.exports.Skill_Talent = Skill_Talent;

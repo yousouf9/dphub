@@ -4,11 +4,13 @@ const {sendMail} = require('../utility/sendMail')
 const { User, validateUser } = require('../model/user/user');
 const {Personal} = require('../model/user/personal');
 const {Displacement} = require('../model/user/displacement');
-const {Skill} = require('../model/user/skill');
+const {Skill_Talent} = require('../model/user/skill');
 const {Education} = require('../model/user/education');
 const {Langauge} = require('../model/user/language');
 const {Qualification} = require('../model/user/qualification');
 const {Upload} = require('../model/user/uploads');
+
+const authenticate = require('../middleware/athenticate');
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -36,37 +38,160 @@ router.get('/register', function(req, res, next) {
 
 
 /* GET user personal form */
-router.get('/register/1', function(req, res, next) {
-  res.render('user/personal', { title: 'Register' });
+router.get('/register/1', authenticate,async function(req, res, next) {
+  const personal = await  Personal.findOne({user:req.currentUser._id}); 
+
+  if(!personal){
+     console.log("Personal info not available");
+    return res.status(404).render('user/personal', {
+      title: 'Register',
+     data: req.body
+   })
+  }
+
+  res.render('user/personal', { 
+    title: 'Register',
+    personal
+  
+  });
 });
+
+/* Post user personal form */
+router.post('/register/1', authenticate, async(req, res)=>{
+
+  let step = req.currentUser.step;
+  let personal= null;
+  if(step >= 1){
+
+    personal = await Personal.findOneAndUpdate({user:req.currentUser._id}, {
+        $set:{
+          ...req.body,
+     }
+      }, {new: true, useFindAndModify: false})
+      console.log(personal);
+  }else{
+    personal = await Personal.findOneAndUpdate({user:req.currentUser._id}, {
+      $set:{
+        ...req.body,
+    }
+  }, {new: true,useFindAndModify: false})
+     await User.findOneAndUpdate({_id:req.currentUser._id}, {
+        $set:{
+      step: 1
+ }}) 
+  }
+   
+  req.flash('success', "Personal Information updated")
+  res.location('/user/register/2');
+  res.redirect('/user/register/2');
+
+})
 
 /* GET user displacement form */
-router.get('/register/2', function(req, res, next) {
-  res.render('user/displacement', { title: 'Register' });
+router.get('/register/2', authenticate, async function(req, res, next) {
+
+  const displacement = await  Displacement.findOne({user:req.currentUser._id}); 
+
+ if(!displacement){
+   return res.status(404).render('user/displacement', {
+     title: 'Register',
+    data: req.body
+  })
+ }
+
+  res.render('user/displacement', { title: 'Register', displacement });
+});
+/* Post user personal form */
+
+router.post('/register/2', authenticate, async(req, res)=>{
+
+  let step = req.currentUser.step;
+  let displacement= null;
+  if(step >= 2){
+
+    displacement = await Displacement.findOneAndUpdate({user:req.currentUser._id}, {
+        $set:{
+          ...req.body,
+     }
+      }, {new: true, useFindAndModify: false})
+  }else{
+    displacement = await Displacement.findOneAndUpdate({user:req.currentUser._id}, {
+      $set:{
+        ...req.body,
+    }
+  }, {new: true,useFindAndModify: false})
+     await User.findOneAndUpdate({_id:req.currentUser._id}, {
+        $set:{
+      step: 2
+ }}) 
+  }
+   
+  req.flash('success', "Displacement Information updated")
+  res.location('/user/register/3');
+  res.redirect('/user/register/3');
+
+})
+/* GET user skills and talent form */
+router.get('/register/3', authenticate, async function(req, res, next) {
+  const talent = await  Skill_Talent.find({user:req.currentUser._id}); 
+
+  if(!talent){
+    return res.status(404).render('user/skill_talent', {
+      title: 'Register',
+     data: req.body
+   })
+  }
+
+  res.render('user/skill_talent', { title: 'Register', talents: talent});
 });
 
-/* GET user skills and talent form */
-router.get('/register/3', function(req, res, next) {
-  res.render('user/skill_talent', { title: 'Register' });
-});
+
+router.post('/register/3', authenticate, async(req, res)=>{
+
+  let step = req.currentUser.step;
+  let displacement= null;
+  if(step >= 2){
+
+    displacement = await Displacement.findOneAndUpdate({user:req.currentUser._id}, {
+        $set:{
+          ...req.body,
+     }
+      }, {new: true, useFindAndModify: false})
+  }else{
+    displacement = await Displacement.findOneAndUpdate({user:req.currentUser._id}, {
+      $set:{
+        ...req.body,
+    }
+  }, {new: true,useFindAndModify: false})
+     await User.findOneAndUpdate({_id:req.currentUser._id}, {
+        $set:{
+      step: 2
+ }}) 
+  }
+   
+  req.flash('success', "Displacement Information updated")
+  res.location('/user/register/3');
+  res.redirect('/user/register/3');
+
+})
 
 /* GET user education form */
-router.get('/register/4', function(req, res, next) {
+router.get('/register/4', authenticate, function(req, res, next) {
   res.render('user/education', { title: 'Register' });
 });
 
 /* GET user language form */
-router.get('/register/5', function(req, res, next) {
+router.get('/register/5', authenticate, function(req, res, next) {
   res.render('user/language', { title: 'Register' });
 });
 
 /* GET user qualification form */
-router.get('/register/6', function(req, res, next) {
+router.get('/register/6', authenticate, function(req, res, next) {
   res.render('user/qualification', { title: 'Register' });
 });
 
 /* GET user uploads form */
-router.get('/register/7', function(req, res, next) {
+router.get('/register/7', authenticate, function(req, res, next) {
   res.render('user/uploads', { title: 'Register' });
 });
 router.get('/verify_email', function(req, res, next) {
@@ -166,6 +291,7 @@ router.post('/register', async (req, res)=>{
                data: req.body
              })
            }
+      
            req.flash('success', "Account Successfully created")
            res.location('/user/email_verification_message');
            res.redirect('/user/email_verification_message');
@@ -213,7 +339,7 @@ router.get('/verify-me/:token', async (req, res)=>{
         user: user._id
       })
       
-      let skill = new Skill({
+      let skill = new Skill_Talent({
         user: user._id
       })
       
@@ -237,13 +363,13 @@ router.get('/verify-me/:token', async (req, res)=>{
       let task = Fawn.Task();
 
       task.update("users", {_id:user._id}, {isVerified : true, step: 1})
-          .save(personal)
-          .save(skill)
-          .save(displacement)
-          .save(education)
-          .save(language)
-          .save(qualifiaction)
-          .save(upload)
+          .save("personals", personal)
+          .save("talents", skill)
+          .save("displacements",displacement)
+          .save("educations",education)
+          .save("languages",language)
+          .save("qualifiactions",qualifiaction)
+          .save("uploads",upload)
           .run()
           .then((results)=>{
 
@@ -298,10 +424,19 @@ passport.use(new LocalStrategy(
 router.post('/login',
  passport.authenticate('local', {failureRedirect:'/user/login', failureFlash:'invalid username or password'}),
 
-  (req, res)=>{
+ async(req, res)=>{
 
-  console.log('user successfully authenticated', req.user);
+  const loginToken = await User.sendEmailToken(req.user._id);
+    //update user account verification token  
+    //hash user password  
+   const user = await User.findById(req.user._id); 
+   user.loginToken= loginToken;
+    await user.save();
+
+
   req.flash('success','you are logged in');
+  res.cookie('x-auth',  loginToken);
+
   if(req.user.complete){
     res.location(`/user/dashboard`)
     res.redirect(`/user/dashboard`)
@@ -315,8 +450,14 @@ router.post('/login',
 
 
 
-router.get('/logout', (req, res) =>{
+router.get('/logout', authenticate,  async (req, res) =>{
+
   req.logout();
+
+  const result = await req.currentUser.deleteToken(req.token);
+  if(!result) return res.status(400).send('Failed to logout')
+
+  
   req.flash('success', 'You have successfully logged out');
   res.redirect('/user/login');
 
