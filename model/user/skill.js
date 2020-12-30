@@ -21,8 +21,8 @@ const Skill_TalentSchema = new mongoose.Schema({
         default:""
     },
     job_title: {
-        type: Number,
-        default:0
+        type: String,
+        default:""
     },
     country:{
         type: String,
@@ -38,7 +38,11 @@ const Skill_TalentSchema = new mongoose.Schema({
     contract_type:{
         type: String,
         default:""
-    }
+    },
+    employment_type:{
+        type: String,
+        default:""
+    },
     
 }, {timestamps:true});
 

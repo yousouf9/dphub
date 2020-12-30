@@ -6,6 +6,26 @@ block content
             .container.px-md-5.pb-md-5.form-section
                 header.p-2.text-white(style="background:#092944")
                     | PROFESSIONAL QUALIFICATION
+                .table-responsive
+                    table.table.table-striped.table-hover
+                        thead
+                            tr
+                                th(scope='col') SN
+                                th(scope='col') Certificate
+                                th(scope='col') Institution
+                                th(scope='col') Date of Award
+                                th(scope='col')
+                        tbody
+                            if(qualifications)
+                                each qualification, i in qualifications
+                                        tr
+                                            th(scope='row') #{i+1}
+                                            td #{qualification.cert_name}
+                                            td #{qualification.institution}
+                                            td #{moment(qualification.doa).format("DD/MM/YYYY")}
+                                            td 
+                                                a.btn.btn-sm.btn-danger.remove(href="" data-id=`${qualification._id}` data-submiturl="/user/qualification/" data-rurl="/user/register/6") Delete
+
                 p.text-center.py-4
                     // Button trigger modal
                     button.btn.btn-primary(type='button' data-toggle='modal' data-target='#exampleModal')

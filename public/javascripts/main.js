@@ -232,7 +232,6 @@ if($( 'form#internship, form#organisationForm, form#individualForm')){
 
           $(`#${formId} input[type="submit"]`).val("submitting...")
           $(`#${formId} input[type="submit"]`).prop("disabled", true)
-          console.log( $(`#${formId} input[type="submit"]`));
         //validate fields
         var fail = false;
         var fail_log = '';
@@ -339,4 +338,45 @@ $('input[type=file]').change(function(e){
 setTimeout(function () {
      $('#messages').fadeOut();
 }, 5000)
+
+//Deleting on registration
+$('.remove').click( function(e){
+
+    $(this).text("deleting...")
+    $(this).prop("disabled", true)
+
+    let dataId = $(this).data('id');
+    let returnUrl = $(this).data('rurl');
+    let submitUrl = $(this).data('submiturl');
+
+    console.log("What is wrong here!",submitUrl, "RURL", returnUrl);
+
+
+
+    $.ajax({
+        url: `${submitUrl}${dataId}` ,
+        type: 'DELETE',
+        success:function(){
+            $(this).text("Delete")
+            $(this).prop("disabled", false)
+        },
+        error:function() {
+            $(this).text("Delete")
+            $(this).prop("disabled", false) 
+        }
+    });
+    window.location = returnUrl;
+  });
+
+
+  //Map section
+  var mapboxAccessToken = "pk.eyJ1IjoieW91c291ZjkiLCJhIjoiY2tqYWs5NjVwMGJxODM0bWVxZHA4OG85dyJ9.fHFQxtkS4lomQJ3TKdQ1iw";
+  var map = L.map('map').setView([9.077751, 8.6774567], 6);
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
+    id: 'mapbox/light-v9',
+    attribution: "",
+    tileSize: 512,
+    zoomOffset: -1
+    }).addTo(map);
 }); 

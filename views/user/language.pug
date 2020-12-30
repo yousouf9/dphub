@@ -6,6 +6,23 @@ block content
             .container.px-md-5.pb-md-5.form-section
                 header.p-2.text-white(style="background:#092944")
                     | LANGUAGE
+                .table-responsive
+                    table.table.table-striped.table-hover
+                        thead
+                            tr
+                                th(scope='col') SN
+                                th(scope='col') Speaking
+                                th(scope='col') Writting
+                                th(scope='col')
+                        tbody
+                            if(languages)
+                                each language, i in languages
+                                        tr
+                                            th(scope='row') #{i+1}
+                                            td #{language.language_speaking}
+                                            td #{language.language_writing}
+                                            td 
+                                                a.btn.btn-sm.btn-danger.remove(href="" data-id=`${language._id}` data-submiturl="/user/language/" data-rurl="/user/register/5") Delete
                 p.text-center.py-4
                     // Button trigger modal
                     button.btn.btn-primary(type='button' data-toggle='modal' data-target='#exampleModal')
@@ -19,7 +36,7 @@ block content
                                 button.close(type='button' data-dismiss='modal' aria-label='Close')
                                     span(aria-hidden='true') &times;
                             .modal-body
-                                form.px-md-4(method='post' name="language")
+                                form.px-md-4(method='post' action="/user/register/5" name="language")
                                     .form-group
                                         label.m-0.required(for='language_speaking') English Proficiency (Speaking)
                                         input.form-control.form-control-sm.required(type='text'  name="language_speaking" value= `${data ? data.language_speaking: ''}` required)

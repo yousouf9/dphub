@@ -6,11 +6,14 @@ const {Personal} = require('../model/user/personal');
 const {Displacement} = require('../model/user/displacement');
 const {Skill_Talent} = require('../model/user/skill');
 const {Education} = require('../model/user/education');
-const {Langauge} = require('../model/user/language');
+const {Language} = require('../model/user/language');
 const {Qualification} = require('../model/user/qualification');
 const {Upload} = require('../model/user/uploads');
+const multer = require('multer');
+const upload_report_file = multer({dest : 'public/images/users/upload'});
 
 const authenticate = require('../middleware/athenticate');
+const admin = require('../middleware/admin');
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -68,7 +71,6 @@ router.post('/register/1', authenticate, async(req, res)=>{
           ...req.body,
      }
       }, {new: true, useFindAndModify: false})
-      console.log(personal);
   }else{
     personal = await Personal.findOneAndUpdate({user:req.currentUser._id}, {
       $set:{
@@ -138,7 +140,6 @@ router.get('/register/3', authenticate, async function(req, res, next) {
   if(!talent){
     return res.status(404).render('user/skill_talent', {
       title: 'Register',
-     data: req.body
    })
   }
 
@@ -146,54 +147,278 @@ router.get('/register/3', authenticate, async function(req, res, next) {
 });
 
 
+//Posting to Skills
 router.post('/register/3', authenticate, async(req, res)=>{
 
   let step = req.currentUser.step;
-  let displacement= null;
-  if(step >= 2){
 
-    displacement = await Displacement.findOneAndUpdate({user:req.currentUser._id}, {
-        $set:{
-          ...req.body,
-     }
-      }, {new: true, useFindAndModify: false})
-  }else{
-    displacement = await Displacement.findOneAndUpdate({user:req.currentUser._id}, {
-      $set:{
-        ...req.body,
+ 
+  const talent = new Skill_Talent(req.body);
+        talent.user = req.currentUser._id;
+
+        if(step < 3){
+          await User.findOneAndUpdate({_id:req.currentUser._id}, {
+            $set:{
+               step: 3
+            }}) 
+        }
+
+    const result =   await talent.save();
+    if(!result){
+      req.flash('error', "Failed to save Skills")
+      res.render('user/skill_talent', { title: 'Register', talents: talent});
     }
-  }, {new: true,useFindAndModify: false})
-     await User.findOneAndUpdate({_id:req.currentUser._id}, {
-        $set:{
-      step: 2
- }}) 
-  }
+
    
-  req.flash('success', "Displacement Information updated")
+  req.flash('success', "New Skill Added")
   res.location('/user/register/3');
   res.redirect('/user/register/3');
 
 })
 
+//Deletion for skills/talent
+router.delete('/skill/:id', async(req, res)=>{
+
+const skill = await  Skill_Talent.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+      if(!skill) return res.status(404).render('user/skill_talent')
+
+      req.flash('success', "Skill Deleted")
+      res.location('/user/register/3');
+      res.redirect('/user/register/3');
+})
 /* GET user education form */
-router.get('/register/4', authenticate, function(req, res, next) {
-  res.render('user/education', { title: 'Register' });
+router.get('/register/4', authenticate, async function(req, res, next) {
+  const education = await  Education.find({user:req.currentUser._id}); 
+
+  if(!education){
+    return res.status(404).render('user/education', {
+      title: 'Register',
+   })
+  }
+  res.render('user/education', { title: 'Register', educations: education });
 });
 
+router.post('/register/4', authenticate, async(req, res)=>{
+
+  let step = req.currentUser.step;
+
+ 
+  const education = new Education(req.body);
+        education.user = req.currentUser._id;
+
+        if(step < 4){
+          await User.findOneAndUpdate({_id:req.currentUser._id}, {
+            $set:{
+               step: 4
+            }}) 
+        }
+
+    const result =   await education.save();
+    if(!result){
+      req.flash('error', "Failed to save education")
+      res.render('user/education', { title: 'Register', educations: education});
+    }
+
+   
+  req.flash('success', "New Education added")
+  res.location('/user/register/4');
+  res.redirect('/user/register/4');
+
+})
+
+//Deletion for education
+router.delete('/education/:id', async(req, res)=>{
+
+  const education = await  Education.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+        if(!education) return res.status(404).render('user/education')
+  
+        req.flash('success', "Education Deleted")
+        res.location('/user/register/4');
+        res.redirect('/user/register/4');
+  })
 /* GET user language form */
-router.get('/register/5', authenticate, function(req, res, next) {
-  res.render('user/language', { title: 'Register' });
+router.get('/register/5', authenticate, async function(req, res, next) {
+
+  const language = await  Language.find({user:req.currentUser._id}); 
+  if(!language){
+    return res.status(404).render('user/language', {
+      title: 'Register',
+   })
+  }
+  res.render('user/language', { title: 'Register', languages:language });
 });
+
+//Post Language
+router.post('/register/5', authenticate, async(req, res)=>{
+
+  let step = req.currentUser.step;
+
+ 
+  const language = new Language(req.body);
+      language.user = req.currentUser._id;
+
+        if(step < 5){
+          await User.findOneAndUpdate({_id:req.currentUser._id}, {
+            $set:{
+               step: 5
+            }}) 
+        }
+
+    const result =   await language.save();
+    if(!result){
+      req.flash('error', "Failed to save language")
+      res.render('user/language', { title: 'Register', languages: language});
+    }
+
+   
+  req.flash('success', "New Language Added")
+  res.location('/user/register/5');
+  res.redirect('/user/register/5');
+
+})
+
+//Deletion for language
+router.delete('/language/:id', async(req, res)=>{
+
+  const language = await  Language.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+        if(!language) return res.status(404).render('user/language')
+  
+        req.flash('success', "Language Deleted")
+        res.location('/user/register/5');
+        res.redirect('/user/register/5');
+  })
 
 /* GET user qualification form */
-router.get('/register/6', authenticate, function(req, res, next) {
-  res.render('user/qualification', { title: 'Register' });
+router.get('/register/6', authenticate, async function(req, res, next) {
+  const qualification = await  Qualification.find({user:req.currentUser._id}); 
+  if(!qualification){
+    return res.status(404).render('user/qualification', {
+      title: 'Register',
+   })
+  }
+  res.render('user/qualification', { title: 'Register', qualifications: qualification });
 });
 
+router.post('/register/6', authenticate, async(req, res)=>{
+
+  let step = req.currentUser.step;
+
+ 
+  const qualification = new Qualification(req.body);
+      qualification.user = req.currentUser._id;
+
+        if(step < 6){
+          await User.findOneAndUpdate({_id:req.currentUser._id}, {
+            $set:{
+               step: 6
+            }}) 
+        }
+
+    const result =   await qualification.save();
+    if(!result){
+      req.flash('error', "Failed to save Qualification")
+      res.render('user/qualification', { title: 'Register', qualifications: qualification});
+    }
+
+   
+  req.flash('success', "New Qualification Added")
+  res.location('/user/register/6');
+  res.redirect('/user/register/6');
+
+})
+
+//Deletion for Qualification
+router.delete('/qualification/:id', async(req, res)=>{
+  const qualification = await  Qualification.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+        if(!qualification) return res.status(404).render('user/qualification')
+  
+        req.flash('success', "Qualification Deleted")
+        res.location('/user/register/6');
+        res.redirect('/user/register/6');
+  })
 /* GET user uploads form */
-router.get('/register/7', authenticate, function(req, res, next) {
-  res.render('user/uploads', { title: 'Register' });
+router.get('/register/7', authenticate, async function(req, res, next) {
+
+  const upload = await  Upload.findOne({user:req.currentUser._id}); 
+
+  if(!upload){
+     console.log("Personal info not available");
+    return res.status(404).render('user/personal', {
+      title: 'Register',
+     data: req.body
+   })
+  }
+
+  res.render('user/uploads', { title: 'Register', upload });
 });
+
+
+router.post('/register/7', authenticate,  upload_report_file.fields([{name:'cv', maxCount: 1},{name:'other', maxCount: 1}]), async(req, res, next)=>{
+  
+
+  let  cv, other
+  if(req.files){
+    
+  
+    cv                = req.files.cv ? req.files.cv[0].filename : "";
+    other             = req.files.other ? req.files.other[0].filename : "";
+
+
+  }else{
+   console.log('Not uploading file...');
+  }
+
+
+    //setting the name of the image
+    req.body.cv = `${req.protocol}://${req.headers.host}/images/users/upload/${cv}`;
+    req.body.other = `${req.protocol}://${req.headers.host}/images/users/upload/${other}`; 
+ 
+
+    let step = req.currentUser.step;
+    let upload= null;
+
+    if(step == 6){
+  
+      upload = await Upload.findOneAndUpdate({user:req.currentUser._id}, {
+          $set:{
+            ...req.body,
+       }
+        }, {new: true, useFindAndModify: false})
+
+        await User.findOneAndUpdate({_id:req.currentUser._id}, {
+          $set:{
+        step: 7,
+        complete: true
+     }})
+    }else{
+       req.flash("info", "Uncompleted Form, Please fill out the required fields")
+       res.location(`/user/register/${req.currentUser.step}`)
+       res.redirect(`/user/register/${req.currentUser.step}`)
+    }
+     
+    req.flash('success', "Registration completed")
+    res.location('/user/dashboard');
+    res.redirect('/user/dashboard');
+  
+
+
+})
+
+/* GET USER DASHBOARD */
+router.get('/dashboard', authenticate,  async function(req, res, next) {
+
+  const user = await User.findOne({_id: req.currentUser._id})
+   console.log(user);
+    if(!user) {
+        req.flash('error', "Please login first")
+      return res.status(400).render('/user/login', {
+      })
+    }
+
+  res.render('user/dashboard', { title: 'Dashboard', user });
+});
+
+
 router.get('/verify_email', function(req, res, next) {
   res.render('forgotpassword', { title: 'verify email' });
 });
@@ -348,11 +573,11 @@ router.get('/verify-me/:token', async (req, res)=>{
       })
 
       
-      let language = new Langauge({
+      let language = new Language({
         user: user._id
       })
       
-      let qualifiaction = new Qualification({
+      let qualification = new Qualification({
         user: user._id
       })
       
@@ -368,7 +593,7 @@ router.get('/verify-me/:token', async (req, res)=>{
           .save("displacements",displacement)
           .save("educations",education)
           .save("languages",language)
-          .save("qualifiactions",qualifiaction)
+          .save("qualifictions",qualification)
           .save("uploads",upload)
           .run()
           .then((results)=>{

@@ -1,8 +1,47 @@
 extends ../layout
 
 block content
-    .container-fluid.p-0.bg-white
+    .container-fluid.p-0.skill_profile_section
         .px-md-5.pt-4
-            h2.font-weight-light(style='color:#3c88c8; width: 350px; margin:0 auto;') HOW TO GET INVOLVE
-            .container.px-md-5.pb-md-5
-                    p hekkd
+            .row
+                .col-md-8.text-white
+                    h4.font-weight-bold SKILL PROFILING
+                    p
+                        | Displaced persons have crazy creative skills that should be harness for
+                        | economic development. You too can help reduce the number of DP wait for
+                        | aid and donations. Checkout their profile and support their hustle – one at
+                        | a time
+                .col-md-4
+                    .d-flex.justify-content-center.align-items-center
+                        a.skill_register(href="/user/register") REGISTER SKILLS
+            .container
+                .skill_profile_search
+                    .row.no-gutters.my-2
+                        .col-sm-4 
+                            form.m-0.p-0(method="get" action="/whatwedo/skill_profile")
+                                .input-group.m-0.p-0
+                                    input.form-control(type='search' name="search" placeholder='SEARCH BY SKILL' aria-label='Search')
+                                    .input-group-append
+                                        button.input-group-text(type='submit') 
+                                            i.fas.fa-search
+                        .col-sm-8
+                            .d-flex.flex-wrap.search-text.pt-1
+                                span FASHION DESIGNER
+                                span GRAPHIC DESIGNER
+                                span NEETING
+                                span CATERER
+                                span DRIVER
+                                span PAINTER
+                                span MECHANIC
+            .container
+                .row.row-cols-1.row-cols-md-4
+                        if(teams)
+                            each team, i in teams
+                                a.col.mb-4.team-card(href=`/about/team/${team._id}`)
+                                    .card.h-100(style="background-color:#1a4980")
+                                        img.card-img-top(src=`${team.photo}` alt=`${team.position}`   height="75%")
+                                        .card-body.p-2
+                                            h5.font-weight-bold.text-light.p-1 #{team.name}
+                                            h3.font-weight-bold.text-light #{team.surname}
+                                            small.text-white-50.p-1 #{team.position}
+

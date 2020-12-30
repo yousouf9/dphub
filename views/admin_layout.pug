@@ -22,54 +22,55 @@ html
       ul.navbar-nav.px-3
         if(user)
           li.nav-item.text-nowrap
-            a.nav-link(href='#') Logout 
+            a.nav-link(href='/user/logout') Logout 
     .container-fluid
       .row
         nav#sidebarMenu.col-md-3.col-lg-2.d-md-block.bg-light.sidebar.collapse
           if(user)
-            .div.border-bottom.text-center
-              .div.mb-3.mx-auto
-                img.rounded-circle(src=`/images/uploads/users/${user.profile_image}` alt="" width="110")
+            .div.border-bottom.text-center.mt-4
+              .div.mb-3.mt-5.mx-auto
+                img.rounded-circle(src=`/images/users/${user.profile_image}` alt="" width="110")
               .h4.mb-2 #{user.name}
           .sidebar-sticky.pt-3
             ul.nav.flex-column
-              li.nav-item
-                a.nav-link(href='/administrator' class=`${title === 'Home'? 'active' : '' }`)
-                  i(class='fas fa-home')
-                  |               Home
-                  span.sr-only (current)
-              li.nav-item
-                a.nav-link(href='/administrator/about' class=`${title === 'About'? 'active' : '' }`)
-                  i(class='fas fa-address-card')
-                  |               About
-              li.nav-item
-                a.nav-link(href='/administrator/what_we_do' class=`${title === 'Services'? 'active' : '' }`)
-                  i(class='fas fa-calendar-plus')
-                  |               WHat We do
-              li.nav-item
-                a.nav-link(href='/administrator/get_involved' class=`${title === 'Cars'? 'active' : '' }`)
-                  i(class='fas fa-users')
-                  |               Get Involved
-              li.nav-item
-                a.nav-link(href='/administrator/resources' class=`${title === 'Contact'? 'active' : '' }`)
-                  i(class='fas fa-cubes')
-                  |               Resources
-              li.nav-item
-                a.nav-link(href='/administrator/contact' class=`${title === 'Contact'? 'active' : '' }`)
-                  i(class='fas fa-phone')
-                  |               Contact Us
+              if(user.admin)
+                li.nav-item
+                  a.nav-link(href='/administrator' class=`${title === 'Home'? 'active' : '' }`)
+                    i(class='fas fa-home')
+                    |               Home
+                    span.sr-only (current)
+                li.nav-item
+                  a.nav-link(href='/administrator/about' class=`${title === 'About'? 'active' : '' }`)
+                    i(class='fas fa-address-card')
+                    |               About
+                li.nav-item
+                  a.nav-link(href='/administrator/what_we_do' class=`${title === 'Services'? 'active' : '' }`)
+                    i(class='fas fa-calendar-plus')
+                    |               WHat We do
+                li.nav-item
+                  a.nav-link(href='/administrator/get_involved' class=`${title === 'Cars'? 'active' : '' }`)
+                    i(class='fas fa-users')
+                    |               Get Involved
+                li.nav-item
+                  a.nav-link(href='/administrator/resources' class=`${title === 'Contact'? 'active' : '' }`)
+                    i(class='fas fa-cubes')
+                    |               Resources
+                li.nav-item
+                  a.nav-link(href='/administrator/contact' class=`${title === 'Contact'? 'active' : '' }`)
+                    i(class='fas fa-phone')
+                    |               Contact Us
+                li.nav-item
+                  a.nav-link(href='/user/register' class=`${title === 'Register'? 'active' : '' }`)
+                    i(class='fas fa-user-plus')
+                    |               Register
+                li.nav-item
+                  a.nav-link(href='/administrator/general' class=`${title === 'General'? 'active' : '' }`)
+                    i(class='fas fa-user-plus')
+                    |               General
               li.nav-item
                   a.nav-link(href='/user/profile' class=`${title === 'Profile'? 'active' : '' }`)
                     i(class='fas fa-user')
                     |               My Profile
-              li.nav-item
-                a.nav-link(href='/user/register' class=`${title === 'Register'? 'active' : '' }`)
-                  i(class='fas fa-user-plus')
-                  |               Register
-              li.nav-item
-                a.nav-link(href='/administrator/general' class=`${title === 'General'? 'active' : '' }`)
-                  i(class='fas fa-user-plus')
-                  |               General
         main.col-md-9.ml-sm-auto.col-lg-10.px-md-4(role='main', style="background: #fff")
             .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center.pt-3
             != messages()

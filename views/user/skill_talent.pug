@@ -6,6 +6,28 @@ block content
             .container.px-md-5.pb-md-5.form-section
                 header.p-2.text-white(style="background:#092944")
                     | SKILLS/TALENTS EXPERIENCE
+                .table-responsive
+                    table.table.table-striped.table-hover
+                        thead
+                            tr
+                                th(scope='col') SN
+                                th(scope='col') Skills
+                                th(scope='col') Duration
+                                th(scope='col') C-Type
+                                th(scope='col') E-Type
+                                th(scope='col')
+                        tbody
+                            if(talents)
+                                each talent, i in talents
+                                        tr
+                                            th(scope='row') #{i+1}
+                                            td #{talent.skill}
+                                            td #{talent.yoe}
+                                            td  #{talent.contract_type}
+                                            td  #{talent.employment_type}
+                                            td 
+                                                a.btn.btn-sm.btn-danger.remove(href="" data-id=`${talent._id}` data-submiturl="/user/skill/" data-rurl="/user/register/3") Delete
+                
                 p.text-center.py-4
                     // Button trigger modal
                     button.btn.btn-primary(type='button' data-toggle='modal' data-target='#exampleModal')
@@ -19,7 +41,7 @@ block content
                                 button.close(type='button' data-dismiss='modal' aria-label='Close')
                                     span(aria-hidden='true') &times;
                             .modal-body
-                                form.px-md-4(method='post' name="skill_talent")
+                                form.px-md-4(method='post' action="/user/register/3" name="skill_talent")
                                     .form-group
                                         label.m-0.required(for='skill') Main skills/talent
                                         input.form-control.form-control-sm.required(type='text'  name="skill" id="skill" value= `${data ? data.skill: ''}` required)
@@ -37,8 +59,8 @@ block content
                                             input.form-control.form-control-sm(type='text' name="job_title" value= `${data ? data.job_title: ''}`)
                                         .form-group.col-md-6
                                             label(for='country') Country
-                                            select.form-control.form-control-sm(name="country" value= `${data ? data.country: ''}`)
-                                                option Nigeria
+                                            select.form-control.form-control-sm(name="country" id="nationality" value= `${data ? data.country: ''}`)
+                                                option Select Country
                                     .form-row
                                         .form-group.col-md-6
                                             label(for='start') Start
@@ -60,11 +82,11 @@ block content
                                             label(for="") Employment Type
                                             .form-check.pl-0
                                                 label.form-check-label.pr-4(for='paid') Paid
-                                                input#paid.form-check-input(type='radio' name='employment_type' value='1' checked='')
+                                                input#paid.form-check-input(type='radio' name='employment_type' value='Paid' checked='')
 
                                             .form-check.pl-0
                                                 label.form-check-label.pr-4(for='volunteer') Volunteer
-                                                input#volunteer.form-check-input(type='radio' name='employment_type' value='2')
+                                                input#volunteer.form-check-input(type='radio' name='employment_type' value='Volunteer')
                                     .form-group.pt-1
                                         label(for='responsibility') Responsibility
                                         textarea.form-control(name='responsibility' rows='3' value= `${data ? data.responsibility: ''}`)

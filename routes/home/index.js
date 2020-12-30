@@ -12,11 +12,25 @@ const upload_partner = multer({dest : 'public/images/uploads/partner'});
 const upload_story = multer({dest : 'public/images/uploads/story'});
 const upload_skill_talent = multer({dest : 'public/images/uploads/skills'});
 
+const { User} = require('../../model/user/user');
+const authenticate = require('../../middleware/athenticate');
+const admin = require('../../middleware/admin');
+
+
 /* GET Administrator home page. */
-router.get('/administrator',  function(req, res, next) {
+router.get('/administrator',  authenticate, admin, async function(req, res, next) {
+
+    const user = await User.findOne({_id: req.currentUser._id})
+
+    if(!user) {
+        req.flash('error', "Please login first")
+       return res.status(400).render('/', {
+      })
+    }
 
       res.render('admin/home', { 
-          title: 'home'
+          title: 'home',
+          user
         });
 });
 

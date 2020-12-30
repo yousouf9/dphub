@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 
-const langaugeSchema = new mongoose.Schema({
+const languageSchema = new mongoose.Schema({
 
     user:{
         type:mongoose.Types.ObjectId,
@@ -19,6 +19,6 @@ const langaugeSchema = new mongoose.Schema({
 }, {timestamps:true});
 
 
-const  Langauge =  mongoose.model('Langauge', langaugeSchema);
+const  Language =  mongoose.model('Language', languageSchema);
 
-module.exports.Langauge = Langauge;
+module.exports.Language = Language;
