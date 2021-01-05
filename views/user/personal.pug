@@ -9,13 +9,13 @@ block content
                         | PERSONAL INFORMATION
                     .form-group
                         label.m-0.required(for='sex') Sex
-                        select.form-control.form-control-sm(name="sex" value= `${data ? data.sex: (personal ? personal.sex: '')}` id="sex" required)
+                        select.form-control.form-control-sm(name="sex" value= `${data ? data.sex: (personal ? personal.sex.value: '')}` id="sex" required)
                             option Male
                             option Female
                         label.error-message
                     .form-group
                         label.m-0.required(for='dob') Date of Birth
-                        input.form-control.form-control-sm(type='date'  name="dob" value= `${data ? data.dob:  (personal ? personal.dob: '')}` id="dob" required)
+                        input.form-control.form-control-sm(type='date'  name="dob" value= `${data ? data.dob:  (personal ? personal.dob.value: '')}` id="dob" required)
                         label.error-message
                     .form-group
                         label.m-0.required(for='marital_status') Marital Status
@@ -24,7 +24,6 @@ block content
                             option Married
                             option Divorced
                             option Widow
-                            option(value= `${data ? data.marital_status: ( personal ? personal.marital_status: '')}` selected) #{`${data ? data.marital_status: ( personal ? personal.marital_status: '')}`}
                         label.error-message
                     .form-group
                         label.m-0.required(for='number_children') Number of Children
@@ -32,7 +31,7 @@ block content
                         label.error-message
                     .form-group
                         label.m-0.required(for='state') State
-                        select.form-control.form-control-sm(name="state" id="state" value= `${data ? data.state: (personal ? personal.state: '')}` required)
+                        select.form-control.form-control-sm(name="state" id="state" value= `${data ? data.state: (personal ? personal.state.value: '')}` required)
                             option select state
                         label.error-message
                     .form-group

@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+    .container-fluid.py-0.px-4(style="background:#e6e9ec ")
+        .d-flex.justify-content-start.p-4
+            .px-md-2.article-detail
+                if(article)
+                    .article-detail-header.mb-3
+                        h4 #{article.title}
+                        p 
+                            span posted on: 
+                            | #{moment(article.createdAt).format('MMMM Do YYYY, h:mm a')}
+                    .article-detail-image(style=`background: url(${article.photo})`)
+                    .article-detail-body
+                     !=article.articleBody
+                    br

@@ -4,7 +4,11 @@ const {Sponsor} = require('../../model/forms/sponsor');
 const { sendMail} = require('../../utility/sendMail')
 const multer = require('multer');
 const upload = multer({dest : 'public/images/uploads/application'});
+const authenticate = require('../../middleware/athenticate');
+const admin = require('../../middleware/admin');
 const router = express.Router();
+
+
 
 /* GET getInvolved page. */
 router.get('/getinvolved',  async function(req, res, next) {
@@ -13,6 +17,8 @@ router.get('/getinvolved',  async function(req, res, next) {
         title: 'GetInvolved'
       });
 });
+
+
 
 /* GET WgetInvolved Intern page. */
 router.get('/getinvolved/intern',  async function(req, res, next) {
@@ -37,7 +43,19 @@ router.post('/application/intern',  upload.single('cv'), async function(req, res
  
     //setting the name of the image
     req.body.cv = `${req.protocol}://${req.headers.host}/images/uploads/application/${FileData}`;
- 
+    
+        for(let key in req.body){
+            if(key === "human_right") req.body.human_right = "Human Right"
+            if(key === "skill") req.body.skill = "Skills/Talent Promotion"
+            if(key === "advocacy") req.body.advocacy = "Advocacy"
+            if(key === "wash") req.body.wash = "WASH"
+            if(key === "dc") req.body.dc = "Development and Communications"
+            if(key === "hr") req.body.hr = "Human Resource"
+            if(key === "policy") req.body.policy = "Policy"
+            if(key === "me") req.body.me = "Monitering and Evaluation"
+            if(key === "cr") req.body.cr = "Conflict Resolution"
+
+        }
    
       req.body.interesArea = {
           human_right: req.body.human_right,
@@ -119,7 +137,7 @@ router.post('/application/intern',  upload.single('cv'), async function(req, res
 });
 
 //Application for Sponsorship
-router.post('/application/sponsor',  async function(req, res, next) {
+router.post('/application/sponsor', authenticate,admin,  async function(req, res, next) {
    
 
     const  sponsor = new Sponsor(req.body);
@@ -178,7 +196,7 @@ router.post('/application/sponsor',  async function(req, res, next) {
 });
 
 /* GET getInvolved promoter page. */
-router.get('/getinvoled/promoter',  async function(req, res, next) {
+router.get('/getinvolved/promoter',  async function(req, res, next) {
    
   res.render('getinvolved/promoter', { 
       title: 'GetInvolved'

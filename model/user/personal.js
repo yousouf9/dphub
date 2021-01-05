@@ -9,24 +9,44 @@ const personalSchema = new mongoose.Schema({
         ref:"User"
     },
     sex: {
-        type: String,
-        default:""
+        value:{ 
+            type: String,
+            default:""},
+        show:{
+            type: Boolean,
+            default: false
+        }
     },
     dob: {
-        type: String,
-        default:""
+        value:{ 
+            type: String,
+            default:""},
+        show:{
+            type: Boolean,
+            default: false
+        }
     },
     marital_status:{
-        type: String,
-        default:""
+        value:{ 
+            type: String,
+            default:""},
+        show:{
+            type: Boolean,
+            default: false
+        }
     },
     number_children: {
         type: Number,
         default:0
     },
     state:{
-        type: String,
-        default:""
+        value:{ 
+            type: String,
+            default:""},
+        show:{
+            type: Boolean,
+            default: false
+        }
     },
     home_town: {
         type: String,

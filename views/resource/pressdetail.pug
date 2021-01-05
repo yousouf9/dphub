@@ -38,6 +38,6 @@ block content
                             input.form-control(name='email', value= `${data ? data.email: ''}` type='email' required)
                         .form-group
                             label(for="commentBody") Body
-                            textarea.form-control(name='commentBody' value= `${data ? data.commentBody: ''}`  required)
+                            textarea.form-control(name='commentBody' id="commentBody" value= `${data ? data.commentBody: ''}`  required)
                         input(name='commentid' type='hidden' value=`${article._id}`)
                         input.btn.btn-primary(type='submit'  value='Add Comment')

@@ -1,0 +1,34 @@
+extends ../layout
+
+block content
+    .container-fluid.p-4
+        .py-4(style="background-color:#29ABE2")
+            P.text-center HIRE ME
+            .container.px-md-5.pb-md-5.form-section(style='background-color:#eef2f9;')
+                p.font-weight-light.pt-3.text-center 
+                    | IF YOU’D LIKE TO HIRE ME, PLEASE FILL THE REQUEST FOR BELOW
+                form.px-md-4(method='post' action="/user/hire/me" name="hire" id ="hire")
+                    .form-group
+                        input.form-control.form-control-sm(type='text'  name="name" id="name" value= `${data ? data.name: ''}` placeholder="NAME" required)
+                        label.error-message
+                    .form-group
+                        input.form-control.form-control-sm(type='text' name="organization" id="organization" value= `${data ? data.organization: ''}` placeholder="ORGANIZATION"  required)
+                        label.error-message
+                    .form-group
+                        input.form-control.form-control-sm(type='text'  name="state_loc" id="state_loc" value= `${data ? data.state_loc: ''}` placeholder="STATE AND LOCATION"  required)
+                        label.error-message    
+                    .form-group
+                        input.form-control.form-control-sm(type='text'  name="area" id="area" value=`${data ? data.area: ''}` placeholder="AREA OF WORK/INDUSTRY"  required)
+                        label.error-message  
+                    .form-group
+                        input.form-control.form-control-sm(type='text'  name="skill" id="skill" value= `${data ? data.skill: ''}` placeholder="SKILLS REQUIRED"  required)
+                        label.error-message                    
+                    .form-group
+                        input.form-control.form-control-sm.required(type='email' name="email"  id="email" value= `${data ? data.email: ''}` placeholder="EMAIL" required)
+                        label.error-message
+                    .form-group
+                        input.form-control.form-control-sm.required(type='text' name="phone"  id="phone" value= `${data ? data.phone: ''}` placeholder="PHONE" required)
+                        label.error-message
+                    input(type="hidden" name="userID" value=`${user._id}`)
+                    p.text-center.px-5
+                        input.btn.btn-block.btn-success.my-3(type='submit' id="intern_submit" value='Submit' )

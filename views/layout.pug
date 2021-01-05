@@ -67,7 +67,8 @@ html(lang="en")
               | Donate
     != messages()
     block content
-   
+    .loader-container
+      .loader
     footer
       .alrt
         span.closebtn(onclick="this.parentElement.style.display='none';") &times;
@@ -87,4 +88,4 @@ html(lang="en")
     script(src='/javascripts/main.js')
     script(src='https://cdn.ckeditor.com/4.15.1/standard/ckeditor.js')
     script
-      | CKEDITOR.replace('commentBody');
+        | CKEDITOR.replace('commentBody');

@@ -1,0 +1,85 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0.bg-white
+        .container-fluid.px-4.py-4
+            h4.text-center.text-white.font-weight-bold.p-3(style="background-color:#29ABE2") #{user.mainSkill.toUpperCase()}
+            .d-flex.flex-column.py-5.px-md-5 
+                .w-100
+                    hr
+                    p.text-center.headline ABOUT ME 
+                .px-md-2
+                    .container.p-0.m-0.pt-3
+                        .row.row-cols-1.row-cols-md-4
+                            .col.mb-4.team-card
+                                .card.h-100(style="background-color:#29ABE2")
+                                    img.card-img-top(src=`${user.profile_image === "noimage.png" ? `/images/users/${user.profile_image}`: `${user.profile_image}`}` alt=`${user.name}`   height="75%")
+                                    .card-body.p-2
+                                        -let profilename =  user.name.split(" ")
+                                        h5.text-light.p-1 #{profilename[0] ?profilename[0]: "" }
+                                        h3.text-light #{profilename[1] ?  profilename[1].toUpperCase() : "" }
+                                        small.text-dark.p-1 #{"Fashion".toUpperCase()}
+                                .row.no-gutters.py-2
+                                    .col-sm-6.pr-1.my-sm-2
+                                        a.customise-links(href=`/user/mygallery/${user._id}`) Gallery
+                                    .col-sm-6.pl-1.my-sm-2 
+                                        a.customise-links(href=`/user/hire/me/${user._id}`) Hire me
+                            .col-md-8.mb-4
+                                .container.py-4.h-100
+                                    .row
+                                        if(personal.dob.show)
+                                            .col-md-6.user-about
+                                                p AGE: #{moment().diff(moment(`${personal.dob.value}`, 'YYYY'),"years")}
+                                        if(personal.marital_status.show)
+                                            .col-md-6.user-about
+                                                p MARITAL STATUS:  #{personal.marital_status.value}
+                                        if(personal.sex.show)
+                                            .col-md-6.user-about
+                                                p SEX:  #{personal.sex.value}
+                                        if(personal.state.show)
+                                            .col-md-6.user-about
+                                                p STATE OF ORIGIN: #{personal.state.value}
+                                        if(displacement.yod.show)
+                                            .col-md-6.user-about
+                                                p YEAR OF DISPLACEMENT:: #{displacement.yod.value}
+                                        if(displacement.place_residence.show)
+                                            .col-md-6.user-about
+                                                p CAMP: #{displacement.place_residence.value}
+                                        if(yoe)
+                                            .col-md-6.user-about
+                                                p YEARS OF EXPERIENCE: #{yoe}
+                                    p.p-1.user-social
+                                        if(user.social)
+                                            span Social Profile
+                                            if(user.social.facebook !== "")
+                                                a(href=`${user.social.facebook ? user.social.facebook : '#'}` target="_blank" )
+                                                    i.fab.fa-facebook-f
+                                            if(user.social.twitter !== "")
+                                                a(href=`${user.social.twitter ? user.social.twitter: '#'}`)
+                                                    i.fab.fa-twitter
+                                            if(user.social.instagram !== "") 
+                                                a(href=`${user.social.instagram ? user.social.instagram : '#'}` )                                                
+                                                    i.fab.fa-instagram
+                                            if(user.social.google !== "")
+                                                a(href=`${user.social.google ? user.social.google :'#'}` )                                                
+                                                    i.fab.fa-google-plus-g
+                                    p
+                                       != user.about
+                .w-100.pt-2
+                    hr
+                    p.text-center.headline EXPRIENCE
+                    .row
+                        if(skills)
+                            each skill, i in skills
+                                .col-md-6.px-3
+                                    table.table.table-sm.table-bordered
+                                        tbody
+                                            tr
+                                                th.skill-yoe Organization
+                                                td #{skill.name_company}
+                                            tr
+                                                th.skill-yoe Position
+                                                td #{skill.job_title}
+                                            tr
+                                                th.skill-yoe Years
+                                                td #{skill.yoe.value}

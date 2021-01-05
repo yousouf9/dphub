@@ -9,8 +9,13 @@ const displacementSchema = new mongoose.Schema({
         ref:"User"
     },
     yod: {
-        type: String,
-        default:""
+        value:{ 
+            type: String,
+            default:""},
+        show:{
+            type: Boolean,
+            default: false
+        }
     },
     boko_haram: {
         type: String,
@@ -38,8 +43,13 @@ const displacementSchema = new mongoose.Schema({
         default:""
     },
     place_residence:{
-        type: String,
-        default:""
+        value:{ 
+            type: String,
+            default:""},
+        show:{
+            type: Boolean,
+            default: false
+        }
     }  
 }, {timestamps:true});
 

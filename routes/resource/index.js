@@ -5,14 +5,17 @@ const {Report} = require('../../model/resource/report');
 const {Blog} = require('../../model/resource/blog');
 const {Subscribe} = require('../../model/General/subscribe');
 const {  DownloaderHelper } = require('node-downloader-helper')
-const router = express.Router();
 const multer = require('multer');
 const upload_ = multer({dest : 'public/images/uploads/general'});
 const upload_press = multer({dest : 'public/images/uploads/press'});
 const upload_report_file = multer({dest : 'public/images/uploads/report'});
 const upload_blog = multer({dest : 'public/images/uploads/blog'});
 const path = require('path')
+const authenticate = require('../../middleware/athenticate');
+const admin = require('../../middleware/admin');
+const {Pagination} = require('../../middleware/pagination');
 
+const router = express.Router();
 
 
 
@@ -21,8 +24,6 @@ router.get('/resource/press',  async function(req, res, next) {
        
 
     let search = req.query.search;
-    console.log("getting error", search);
-
 
     const header = await Header.find()
     if(!header) return res.status(404).send("NO Header image");
@@ -42,11 +43,13 @@ router.get('/resource/press',  async function(req, res, next) {
     if(!press) return res.status(404).send("No Press articles available");
     
 
+    let page =  parseInt(req.query.page) || 1;
+    const pagRes = Pagination(press, page, 5) 
 
     res.render('resource/press', { 
         title: 'Resources',
         header,
-        presses:press
+        presses:pagRes
       });
 });
 
@@ -97,10 +100,13 @@ router.get('/resource/report',  async function(req, res, next) {
   
 
 
+  let page =  parseInt(req.query.page) || 1;
+  const pagRes = Pagination(report, page, 9) 
+
   res.render('resource/report', { 
       title: 'Resources',
       header,
-      reports:report
+      reports:pagRes
     });
 });
 /* GET Resource blog page. */
@@ -113,10 +119,14 @@ router.get('/resource/blog',  async function(req, res, next) {
     const blog = await Blog.find();
     if(!blog) return res.status(404).send("No report available");
 
+
+    let page =  parseInt(req.query.page) || 1;
+    const pagRes = Pagination(blog, page, 9) 
+
     res.render('resource/blog', { 
         title: 'Resources',
         header,
-        blogs:blog
+        blogs:pagRes
       });
 });
 
@@ -181,14 +191,15 @@ router.post('/resource/report/download/:id', async(req, res, next)=>{
 
 /* Administrator section */
 /* GET Administrator Resourcepage. */
-router.get('/administrator/resources',  function(req, res, next) {
+router.get('/administrator/resources', authenticate, admin,  function(req, res, next) {
 
     res.render('admin/resource', { 
-        title: 'Resource'
+        title: 'Resource',
+        user:req.currentUser
       });
 });
 
-router.post('/administrator/upload/press',  upload_press.single('photo'), async(req, res, next)=>{
+router.post('/administrator/upload/press', authenticate, admin,  upload_press.single('photo'), async(req, res, next)=>{
 
   let  mainImageName
   if(req.file){
@@ -220,7 +231,7 @@ router.post('/administrator/upload/press',  upload_press.single('photo'), async(
 })
 
 //Blog post upload
-router.post('/administrator/upload/blog',  upload_blog.single('photo'), async(req, res, next)=>{
+router.post('/administrator/upload/blog', authenticate, admin, upload_blog.single('photo'), async(req, res, next)=>{
 
   let  mainImageName
   if(req.file){
@@ -344,7 +355,7 @@ router.post('/subscription', async(req, res, next)=>{
 });
 
 
-router.post('/administrator/upload/report',  upload_report_file.fields([{name:'filename', maxCount: 1},{name:'photo', maxCount: 1}]), async(req, res, next)=>{
+router.post('/administrator/upload/report', authenticate, admin,  upload_report_file.fields([{name:'filename', maxCount: 1},{name:'photo', maxCount: 1}]), async(req, res, next)=>{
   
 
   let  coverImage, FileData

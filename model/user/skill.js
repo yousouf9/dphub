@@ -13,8 +13,13 @@ const Skill_TalentSchema = new mongoose.Schema({
         default:""
     },
     yoe: {
-        type: Number,
-        default:0
+        value:{ 
+            type: Number,
+            default:0},
+        show:{
+            type: Boolean,
+            default: false
+        }
     },
     name_company:{
         type: String,

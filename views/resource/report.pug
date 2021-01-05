@@ -15,7 +15,7 @@ block content
                     .container.p-md-4 
                         if(reports)
                             .row
-                                each report, i in reports
+                                each report, i in reports.results
                                     .col-md-6.col-lg-4.px-md-2.my-2
                                         .report-section
                                             .report-image(style=`background: url(${report.photo})`)
@@ -32,7 +32,30 @@ block content
 
                                             .report-download
                                                 a(href=`#` class="download" data-id= `${report._id}`) Download
-
+                    .d-flex.justify-content-center.pagination
+                        p.paginateLeft
+                            a.paginate(href="" data-submiturl="/resource/report" data-page="1"  data-rurl="/resource/report?page=1") 
+                                i.fas.fa-angle-double-left
+                        if !isObjectEmpty(reports.previous)
+                            p.paginateLeft 
+                                a.paginate(href=""  data-submiturl="/resource/report"  data-rurl=`/resource/report?page=${reports.previous.page}`)
+                                    i.fas.fa-angle-left
+                        if !isObjectEmpty(reports.first)
+                            p.paginateRight(class =`${reports.first.current ? reports.first.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/resource/report"  data-rurl=`/resource/report?page=${reports.first.value}` ) #{reports.first.value}
+                        if !isObjectEmpty(reports.second)
+                            p.paginateRight(class =`${reports.second.current ? reports.second.current: ""}`) 
+                                a.paginate(href=""  data-submiturl="/resource/report"  data-rurl=`/resource/report?page=${reports.second.value}`) #{reports.second.value}
+                        if !isObjectEmpty(reports.third)
+                            p.paginateRight(class =`${reports.third.current ? reports.third.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/resource/report"  data-rurl=`/resource/report?page=${reports.third.value}`) #{reports.third.value}
+                        if !isObjectEmpty(reports.next)
+                            p.paginateRight
+                                a.paginate(href=""  data-submiturl="/resource/report"  data-rurl=`/resource/report?page=${reports.next.page}`)
+                                    i.fas.fa-angle-right
+                        p.paginateRight 
+                            a.paginate(href=""  data-submiturl="/resource/report" data-page=`${reports.totalPages}` data-rurl=`/resource/report?page=${reports.totalPages}`)
+                                i.fas.fa-angle-double-right
                 .col-6.col-md-3 
                     form(method="get" action="/resource/report")
                         .input-group.py-4

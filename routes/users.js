@@ -9,8 +9,17 @@ const {Education} = require('../model/user/education');
 const {Language} = require('../model/user/language');
 const {Qualification} = require('../model/user/qualification');
 const {Upload} = require('../model/user/uploads');
+const { Gallery} = require('../model/user/gallery');
+const {Hire} = require('../model/user/hire');
 const multer = require('multer');
 const upload_report_file = multer({dest : 'public/images/users/upload'});
+const profileImage = multer({dest: 'public/images/users'})
+const userGallery = multer({dest: 'public/images/users/gallery'})
+
+const fs = require('fs');
+const path = require('path')
+
+
 
 const authenticate = require('../middleware/athenticate');
 const admin = require('../middleware/admin');
@@ -23,6 +32,7 @@ const winston = require('winston');
 const config= require('config');
 const Fawn = require('fawn');
 const mongoose = require('mongoose');
+
 
 const router = express.Router();
 
@@ -66,6 +76,20 @@ router.post('/register/1', authenticate, async(req, res)=>{
   let personal= null;
   if(step >= 1){
 
+    req.body.state ={
+      value: req.body.state
+    }
+    req.body.marital_status={
+      value : req.body.marital_status
+    };
+    req.body.dob ={
+      value: req.body.dob
+    };
+    req.body.sex={
+      value : req.body.sex
+    } 
+    
+  
     personal = await Personal.findOneAndUpdate({user:req.currentUser._id}, {
         $set:{
           ...req.body,
@@ -108,16 +132,36 @@ router.get('/register/2', authenticate, async function(req, res, next) {
 router.post('/register/2', authenticate, async(req, res)=>{
 
   let step = req.currentUser.step;
-  let displacement= null;
+  let displacement= '';
+
+  req.body.place_residence ={
+    value : req.body.place_residence
+  };
+  req.body.yod={
+    value : req.body.yod,
+    show :true
+  };
+
+
+ 
+  for(let key in req.body){
+    if(key === "boko_haram") req.body.boko_haram = "boko haram";
+    if(key === "bandit") req.body.bandit = "Bandit";
+    if(key === "flood") req.body.flood = "Flood";
+    if(key === "communal_crisis") req.body.communal_crisis = "Communal Crisis";
+    if(key === "other") req.body.other = "Other";
+
+  }
+
   if(step >= 2){
 
-    displacement = await Displacement.findOneAndUpdate({user:req.currentUser._id}, {
+    displacement = await Displacement.updateOne({user:req.currentUser._id}, {
         $set:{
           ...req.body,
      }
       }, {new: true, useFindAndModify: false})
   }else{
-    displacement = await Displacement.findOneAndUpdate({user:req.currentUser._id}, {
+    displacement = await Displacement.updateOne({user:req.currentUser._id}, {
       $set:{
         ...req.body,
     }
@@ -128,6 +172,8 @@ router.post('/register/2', authenticate, async(req, res)=>{
  }}) 
   }
    
+  console.log("What the hell", displacement);
+
   req.flash('success', "Displacement Information updated")
   res.location('/user/register/3');
   res.redirect('/user/register/3');
@@ -152,16 +198,22 @@ router.post('/register/3', authenticate, async(req, res)=>{
 
   let step = req.currentUser.step;
 
- 
+   
   const talent = new Skill_Talent(req.body);
         talent.user = req.currentUser._id;
+        talent.yoe.value = req.body.yoe;
+   const user =  await User.findOne({_id:req.currentUser._id})
+  
 
+
+       if(user.mainSkill === ""){
+        user.mainSkill = talent.skill;
+       }
         if(step < 3){
-          await User.findOneAndUpdate({_id:req.currentUser._id}, {
-            $set:{
-               step: 3
-            }}) 
+          user.step = 3; 
         }
+          //save user updates;
+         await user.save();
 
     const result =   await talent.save();
     if(!result){
@@ -408,16 +460,356 @@ router.post('/register/7', authenticate,  upload_report_file.fields([{name:'cv',
 router.get('/dashboard', authenticate,  async function(req, res, next) {
 
   const user = await User.findOne({_id: req.currentUser._id})
-   console.log(user);
+  const gallery = await Gallery.find({user: req.currentUser._id })
+
     if(!user) {
-        req.flash('error', "Please login first")
-      return res.status(400).render('/user/login', {
+        req.flash('error', "Not a valid user")
+      return res.status(400).render('/user/dashboard', {
       })
     }
 
-  res.render('user/dashboard', { title: 'Dashboard', user });
+  res.render('user/dashboard', { 
+    title: 'Dashboard',
+     user,
+      galleries: gallery
+     });
 });
 
+
+/* GET USER profile */
+router.get('/profile', authenticate,  async function(req, res, next) {
+
+  const user = await User.findOne({_id: req.currentUser._id})
+
+    if(!user) {
+        req.flash('error', "Please login first")
+      return res.status(400).render('user/profile', {
+        title: 'Profile', user 
+      })
+    }
+
+  res.render('user/profile', { title: 'Profile', user });
+});
+
+//update profile picture;
+router.post('/profile/image/:id', authenticate, profileImage.single('profile_image'), async (req, res)=>{
+
+
+  let  mainImageName
+  if(req.file){
+      mainImageName                = req.file.filename;
+  }else{
+   console.log('Not uploading photo...');
+   mainImageName = 'noimage.png';
+  }
+
+  //setting the name of the image
+  req.body.profile_image = `${req.protocol}://${req.headers.host}/images/users/${mainImageName}`; 
+
+  
+
+       const user = await User.findOne({_id: req.params.id});
+
+          if(!user) {
+            req.flash('error', "Failed to upload")
+          return res.status(400).render('user/profile', {
+            title: 'Profile', user 
+          })
+        }
+
+       // return
+        if(user.profile_image !== "noimage.png"){
+           
+         let filename = path.basename(user.profile_image);
+      
+          fs.unlink(`public/images/users/${filename}`, function (err) {
+            if (err) throw err;
+            console.log('File deleted!');
+          });
+        }
+
+      await User.findOneAndUpdate({_id:req.params.id}, {
+        $set:{
+          profile_image: req.body.profile_image
+        }}) 
+
+      req.flash('success', 'Profile picture updated');
+      res.location('/user/profile');
+      res.redirect('/user/profile');
+
+})
+
+//update social links;
+router.post('/profile/social/:id', authenticate, async (req, res)=>{
+
+
+  req.body.social={
+    facebook:req.body.facebook,
+    twitter:req.body.twitter,
+    instagram:req.body.instagram,
+    google:req.body.google,
+   }
+
+
+      await User.findOneAndUpdate({_id:req.params.id}, {
+        $set:{
+          social:req.body.social
+        }}) 
+
+      req.flash('success', 'Profile updated');
+      res.location('/user/profile');
+      res.redirect('/user/profile');
+
+})
+
+//Post to user profile hide/show
+
+router.post('/profile/hide/:id', authenticate, async(req, res)=>{
+
+
+  let age, status,sex, origin, camp, yod, yoe
+
+  if(req.body){
+    if(req.body.age === 'on'){ age = true;}else { age = false;}
+    if(req.body.status === 'on'){status = true;}else{status = false;} 
+    if(req.body.sex === 'on') {sex = true;}else{sex = false;}
+    if(req.body.origin === 'on'){origin = true;}else{origin = false;}
+    if(req.body.camp === 'on') {camp = true;}else{camp = false;}
+    if(req.body.yod === 'on') {yod = true;}else{yod = false;}
+    if(req.body.yoe === 'on') {yoe = true;}else{yoe = false;}
+  }
+
+  const user = await User.findOne({_id: req.params.id});
+
+    await Skill_Talent.updateMany({user: user._id}, {
+       $set:{
+         "yoe.show": yoe
+       }
+     })
+
+     await Personal.updateOne({user: user._id}, {
+      $set:{
+        "sex.show": sex,
+        "dob.show": age,
+        "marital_status.show":status,
+        "state.show":origin
+      }
+    })
+
+    await Displacement.updateOne({user: user._id}, {
+      $set:{
+        "place_residence.show": camp,
+        "yod.show": yod
+      }
+    })
+
+  console.log(age, status,sex, origin, camp, yod, yoe);
+
+  req.flash('success', 'Profile updated');
+  res.location('/user/profile');
+  res.redirect('/user/profile');
+
+})
+
+// GET My gallery form
+router.get('/mygallery/:id',  async (req, res, next)=> {
+
+  const gallery = await Gallery.find({user: req.params.id})
+
+  if(!gallery) {
+    req.flash('error', "This user is not available for hire")
+    return res.status(400).render('user/mygallery', {
+    })
+  }
+
+  res.render('user/mygallery', { 
+    title: 'Gallery',
+    galleries: gallery
+     });
+});
+
+//Adding Gallery pictures
+router.post('/gallery', authenticate, userGallery.single('photo'), async (req, res)=>{
+
+
+  let  mainImageName
+  if(req.file){
+      mainImageName                = req.file.filename;
+  }else{
+   console.log('Not uploading photo...');
+   mainImageName = 'noimage.png';
+  }
+
+  //setting the name of the image
+  req.body.photo = `${req.protocol}://${req.headers.host}/images/users/gallery/${mainImageName}`; 
+  //Setting User
+  req.body.user= req.currentUser._id;
+  
+
+       const gallery = new Gallery(req.body);
+
+          if(!gallery) {
+            req.flash('error', "Failed to add photo")
+           return res.status(400).render('user/dashboard', {
+            title: 'dashboard', user 
+          })
+        }
+ 
+            await gallery.save();
+      req.flash('success', 'New Galley Photo Added');
+      res.location('/user/dashboard');
+      res.redirect('/user/dashboard');
+
+})
+
+//Delete Gallery picture
+router.delete('/gallery/:id', async(req, res)=>{
+
+  const gallery = await  Gallery.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+        if(!gallery) return res.status(404).render('user/dashboard')
+
+        if(gallery.photo !== ""){
+           
+          let filename = path.basename(gallery.photo);
+       
+           fs.unlink(`public/images/users/gallery/${filename}`, function (err) {
+             if (err) throw err;
+             console.log('File deleted!');
+           });
+         }
+  
+        req.flash('success', "Gallery Image Deleted")
+        res.location('/user/dashboard');
+        res.redirect('/user/dashboard');
+})
+
+//Get USer details page
+// GET Hire Me Form
+router.get('/about/:id',  async (req, res, next)=> {
+
+  const user = await User.findOne({_id: req.params.id})
+  const skill = await Skill_Talent.find({user: user._id})
+  const personal = await Personal.findOne({user: user._id});
+  const displacement = await Displacement.findOne({user: user._id});
+
+  if(!user) {
+    req.flash('error', "This user does not exist")
+    return res.status(400).render('whatwedo/skill', {
+    })
+  }
+
+
+  const listOFExperience = skill.map((item)=>{
+
+          if(item.yoe.show){
+           
+            return item.yoe.value;
+            
+          }
+         return false
+  })
+  const yoe = listOFExperience.reduce((total, sum)=>{
+      if(total == false){
+         return false
+      }else{
+        
+        return total += sum;
+      }
+  })
+
+
+  res.render('user/about', { 
+    title: 'About Detail',
+      user,
+      skills: skill,
+      personal,
+      displacement,
+      yoe:yoe
+     });
+});
+
+//Get Hire User details
+router.get('/hire',  authenticate, async (req, res, next)=> {
+
+  const user = await User.findOne({_id: req.currentUser._id})
+
+  const hire = await Hire.find({user: user._id})
+  console.log("Hires", hire);
+  if(!user) {
+      req.flash('error', "Not a valid user")
+    return res.status(400).render('/user/hire', {
+    })
+  }
+
+  if(!hire) {
+    req.flash('error', "Failed to fetch hire list")
+  return res.status(400).render('/user/hire', {
+  })
+  }
+
+  res.render('user/hire', { 
+    title: 'Hire',
+      user,
+      hires: hire
+     });
+});
+
+
+//Deletion for hires
+router.delete('/hire/:id', async(req, res)=>{
+  const hire = await  Hire.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+        if(!hire) return res.status(404).render('user/hire')
+  
+        req.flash('success', "Hire request deleted")
+        res.location('/user/hire');
+        res.redirect('/user/hire');
+  })
+// GET Hire Me Form
+router.get('/hire/me/:id',  async (req, res, next)=> {
+
+  const user = await User.findOne({_id: req.params.id})
+                          .select({_id:1})
+
+                          console.log("USer ID", user);
+
+  if(!user) {
+    req.flash('error', "This user is not available for hire")
+    return res.status(400).render('/user/hire_request', {
+    })
+  }
+
+  res.render('user/hire_request', { 
+    title: 'Hire',
+      user
+     });
+});
+
+//POst to hire me
+router.post('/hire/me/',  async (req, res, next)=> {
+
+  const user = await User.findOne({_id: req.body.userID});
+
+  if(!user) {
+    req.flash('error', "Failed Try Again later")
+    return res.status(400).render('/user/hire_request', {
+    })
+  }
+
+  const hire = new Hire(req.body);
+
+        if(!hire) {
+          req.flash('error', "Failed Try Again later")
+          return res.status(400).render('/user/hire_request', {
+          })
+        }
+
+        hire.user = user._id;
+        await hire.save();
+
+  req.flash('success', "User has been notified")
+  res.location('/whatwedo/skill_profile');
+  res.redirect('/whatwedo/skill_profile');
+});
 
 router.get('/verify_email', function(req, res, next) {
   res.render('forgotpassword', { title: 'verify email' });
@@ -439,7 +831,9 @@ router.post('/register', async (req, res)=>{
     
     if(typeof error !== 'undefined'){
        
-       req.flash('error', error.message())
+        console.log(error);
+
+       req.flash('error', error.details[0].message)
        res.status(400).render('user/register', {
         data: req.body
       })
@@ -593,7 +987,7 @@ router.get('/verify-me/:token', async (req, res)=>{
           .save("displacements",displacement)
           .save("educations",education)
           .save("languages",language)
-          .save("qualifictions",qualification)
+          .save("qualifications",qualification)
           .save("uploads",upload)
           .run()
           .then((results)=>{
@@ -687,15 +1081,5 @@ router.get('/logout', authenticate,  async (req, res) =>{
   res.redirect('/user/login');
 
 });
-
-
-const processReg = (step, req, res) =>{
-  switch(step){
-    case 1:
-      break;
-    default:
-      console.log("not a valid registration");
-  }
-}
 
 module.exports = router;

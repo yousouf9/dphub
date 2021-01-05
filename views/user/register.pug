@@ -4,7 +4,7 @@ block content
     .container-fluid.p-0(style="background:#e6e9ec ")
         .px-md-5.pt-4
             .container.px-md-5.pb-md-5.form-section
-                form.p-4(method='post' action="/user/register" name="userRegister")
+                form.p-4(method='post' action="/user/register" name="userRegister" id="userRegister")
                     header.p-2.text-white(style="background:#092944")
                         | CREATE ACCOUNT
                     .form-group
@@ -23,7 +23,7 @@ block content
                         input.form-control.form-control-sm(type='email' name="email" id="email" value= `${data ? data.email: ''}` required)
                         label.error-message
                     .form-group
-                        label.m-0.required(for='password') Password
+                        label.m-0.required(for='password') Password (Atleast 6 characters)
                         input.form-control.form-control-sm(type='password' name="password" id="password"  required)
                         label.error-message
                     .form-group

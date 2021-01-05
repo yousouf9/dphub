@@ -1,34 +1,69 @@
 const express = require('express');
 const {Header} = require('../../model/General/header');
 const {Event} = require('../../model/General/events');
+const {Statistic} = require('../../model/statistics/displacement');
 const router = express.Router();
 const multer = require('multer');
 const upload = multer({dest : 'public/images/uploads/general'});
+const authenticate = require('../../middleware/athenticate');
+const admin = require('../../middleware/admin');
+const {Pagination} = require('../../middleware/pagination');
 
 /* GET Administrator home page. */
-router.get('/administrator/general',  function(req, res, next) {
+router.get('/administrator/general', authenticate,admin,  async function(req, res, next) {
 
+    const stats= await Statistic.find()
+                                .limit(1);
+        let data= null;
+
+        if(stats.length === 1){
+           data = stats[0];
+        }
+  
     res.render('admin/general', { 
-        title: 'about'
+        title: 'General',
+        user:req.currentUser,
+        stats: data.features,
+        ID: data._id
       });
 });
 
 
-/* GET Administrator home page. */
-router.get('/general/events', async  function(req, res, next) {
+/* GET Event page. */
+router.get('/general/events', async function(req, res, next) {
+    const event = await Event.find({show:true})
+                             .sort({_id:-1}) 
 
-    const event = await Event.find()
-                        .sort({_id:-1})
-                        .limit(5);
+    
+ 
 
     if(!event) return res.status(404).send("Events not found"); 
 
-    res.json({events: event})
+    let page =  parseInt(req.query.page) || 1;
+    const Results = Pagination(event, page, 1)
+
+    console.log(Results);
+
+    res.json({events: Results})
 
 });
 
+router.put('/general/events/:id',  async(req,res)=>{
+
+    const event =  await Event.updateOne({_id: req.params.id}, {
+        $set:{
+            show:false
+        }
+    }, {new: true})
+     if(!event)  return res.status(400).send("failed to update");
+
+     req.flash('success', 'Events Date Time up');
+    return null
+
+})
+
 //Uploading Slider information
-router.post('/administrator/upload/header', upload.single('photo'), async(req,res)=>{
+router.post('/administrator/upload/header', authenticate,admin, upload.single('photo'), async(req,res)=>{
 
     let  mainImageName
       if(req.file){
@@ -55,7 +90,7 @@ router.post('/administrator/upload/header', upload.single('photo'), async(req,re
 
 
 //adding now event
-router.post('/administrator/event', upload.single('photo'), async(req,res)=>{
+router.post('/administrator/event', authenticate,admin, upload.single('photo'), async(req,res)=>{
 
      const event = new Event(req.body);
 
@@ -69,4 +104,24 @@ router.post('/administrator/event', upload.single('photo'), async(req,res)=>{
       res.redirect('/administrator/general');
 
 })  
+
+router.post("/administrator/displacement", authenticate,admin, async(req, res)=>{
+
+    const ID  = req.body.statID;
+    const stateID = req.body.stateID;
+    const totalDis = parseInt(req.body.totalDis, 10);
+
+    const stats = await Statistic.updateOne(
+                        {_id:ID, "features":{$elemMatch: {"properties.admin1Pcod": stateID}}},
+                        { $set: {'features.$.properties.totalDis': totalDis} },
+                        {new:true}
+                        );
+
+    if(!stats) return res.status(400)     
+    req.flash('success', 'Displacement stats updated');
+    res.location('/administrator/general');
+    res.redirect('/administrator/general');
+    
+})
+
 module.exports = router

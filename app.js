@@ -12,6 +12,7 @@ const session = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
 const config = require('config')
+const _ = require('lodash');
 
 
 require('./startup/db');
@@ -28,6 +29,7 @@ const contactRouter = require('./routes/contact/index');
 const donateRouter = require('./routes/donate/index');
 const generalRouter = require('./routes/general/index');
 const app = express();
+
  
 
 
@@ -61,6 +63,9 @@ app.locals.truncateText = function(text, length){
   return text.substr(0, length);
 };
 
+app.locals.isObjectEmpty = function(data) {
+   return _.isEmpty(data)
+}
 app.locals.dateCounter = function() {
   
 }

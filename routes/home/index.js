@@ -41,7 +41,7 @@ router.get('/administrator/login', function(req, res, next) {
 
 
 //Uploading Slider information
-router.post('/administrator/upload/slider', upload_slider.single('photo'), async(req,res)=>{
+router.post('/administrator/upload/slider', authenticate, admin, upload_slider.single('photo'), async(req,res)=>{
 
       let  mainImageName
         if(req.file){
@@ -67,7 +67,7 @@ router.post('/administrator/upload/slider', upload_slider.single('photo'), async
 })  
 
 //Uploading Partner information
-router.post('/administrator/upload/partner', upload_partner.single('photo'), async(req,res)=>{
+router.post('/administrator/upload/partner', authenticate, admin, upload_partner.single('photo'), async(req,res)=>{
 
     let  mainImageName
     if(req.file){
@@ -93,7 +93,7 @@ router.post('/administrator/upload/partner', upload_partner.single('photo'), asy
 })
 
 //Uploading Story information
-router.post('/administrator/upload/story', upload_story.single('photo'), async(req,res)=>{
+router.post('/administrator/upload/story', authenticate, admin, upload_story.single('photo'), async(req,res)=>{
     let  mainImageName
     if(req.file){
         mainImageName                = req.file.filename;
@@ -118,7 +118,7 @@ router.post('/administrator/upload/story', upload_story.single('photo'), async(r
 })
 
 //Uploading Location information
-router.post('/administrator/location',  async(req,res)=>{
+router.post('/administrator/location', authenticate, admin,  async(req,res)=>{
  
     location = new Location(req.body);
 
@@ -132,7 +132,7 @@ router.post('/administrator/location',  async(req,res)=>{
 })
 
 //Uploading Engagement information
-router.post('/administrator/engagement',  async(req,res)=>{
+router.post('/administrator/engagement', authenticate, admin, async(req,res)=>{
  
     engagement = new Engagement(req.body);
 
@@ -145,7 +145,7 @@ router.post('/administrator/engagement',  async(req,res)=>{
 })
 
 //Uploading  Skill/ Talent information
-router.post('/administrator/upload/skill_talent', upload_skill_talent.single('photo'), async(req,res)=>{
+router.post('/administrator/upload/skill_talent', authenticate, admin, upload_skill_talent.single('photo'), async(req,res)=>{
     let  mainImageName
     if(req.file){
         mainImageName                = req.file.filename;

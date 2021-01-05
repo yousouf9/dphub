@@ -7,7 +7,7 @@ block content
         form(method='post', action='/administrator/upload/header', enctype='multipart/form-data')
             .input-group.mb-3
                 .custom-file
-                    input#header.custom-file-input(type='file' name="photo")
+                    input#header.custom-file-input(type='file' name="photo" accept=".jpg,.jpeg,.png")
                     label.custom-file-label(for='slider') Choose file
             .form-group
                 label(for='name') Page name (NOTE: This is important)
@@ -22,4 +22,20 @@ block content
                 .form-group.col-md-6
                     label(for='date') Event Date
                     input.form-control.form-control-sm(type='datetime-local' name="date")
+            input.btn.btn-md.btn-success.mb-2( type="submit" value="save")
+        h2 Update Displacement Statistics
+        form(method='post', action='/administrator/displacement')
+            .form-row
+                .form-group.col-md-6
+                    label(for='stateID') Select State to Update
+                    select.form-control.form-control-sm(name="stateID" id="stateID"  required)
+                        if(stats)
+                            each property, i in stats
+                                option(value=`${property.properties.admin1Pcod}`) #{property.properties.admin1Name}
+                        else
+                            option data not available
+                .form-group.col-md-6
+                    label(for='totalDis') New Value
+                    input.form-control.form-control-sm(type='number' name="totalDis" required)
+                input(type="hidden" name="statID" value=`${ID}`)
             input.btn.btn-md.btn-success.mb-2( type="submit" value="save")

@@ -41,13 +41,17 @@ const userSchema = new mongoose.Schema({
     password:{
         type: String,
         required: true,
-        minlength: 5,
+        minlength: 6,
         maxlength: 100
     },
     profile_image:{
         type: String,
         default: 'noimage.png',
         required: true
+    },
+    about:{
+        type:String,
+        default: ""
     },
     admin:{
         type:Boolean,
@@ -64,6 +68,28 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default:  false
     },
+    mainSkill:{
+        type: String,
+        default: ""
+    },
+    social:{
+        facebook:{
+            type: String,
+            default: '',
+        },
+        twitter:{
+            type: String,
+            default: '',
+        },
+        instagram:{
+            type: String,
+            default: '',
+        },
+        google:{
+            type: String,
+            default: '',
+        }
+    }
 
 }, {timestamps: true});
 
@@ -131,7 +157,7 @@ const  validateUser =(userInputs)=>{
         name: Joi.string().min(5).max(100).required(),
         email: Joi.string().email().min(5).max(100).required(),
         username: Joi.string().min(5).max(100).required(),
-        password: Joi.string().min(5).max(100).required(),
+        password: Joi.string().min(6).max(100).required(),
         admin: Joi.boolean(),
         submit: Joi.allow(null)
     }) 

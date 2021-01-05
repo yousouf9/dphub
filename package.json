@@ -29,6 +29,7 @@
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "mongoose": "^5.11.4",
+    "mongoose-geojson-schema": "^2.1.5",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "node-downloader-helper": "^1.0.15",

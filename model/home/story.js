@@ -10,7 +10,7 @@ const storySchema = new mongoose.Schema({
         type: String,
         default: '',
     },
-    body:{
+    articleBody:{
         type: String,
         default: '',
     },

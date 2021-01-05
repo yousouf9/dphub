@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+    .container
+        h4.text-center.text-white.py-4 GALLERY
+        .container
+            .mygallery
+                if(galleries)
+                    .row
+                        each gallery, i in galleries
+                            .col-sm-3
+                                .image(style=`background: url(${gallery.photo})`)
+                        else
+                            p.text-white.px-4 Empty gallery

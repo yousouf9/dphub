@@ -14,7 +14,7 @@ block content
                 .col-md-9
                     .container 
                     if(presses)
-                        each press, i in presses
+                        each press, i in presses.results
                             .p-2.my-4.card-section 
                                 .row  
                                     .col-md-3 
@@ -53,6 +53,30 @@ block content
                                                 a.btn(href=`/resource/press/${press._id}`) 
                                                     span React more
                                                     | >>
+                    .d-flex.justify-content-center.pagination
+                        p.paginateLeft
+                            a.paginate(href="" data-submiturl="/resource/press" data-page="1"  data-rurl="/resource/press?page=1") 
+                                i.fas.fa-angle-double-left
+                        if !isObjectEmpty(presses.previous)
+                            p.paginateLeft 
+                                a.paginate(href=""  data-submiturl="/resource/press"  data-rurl=`/resource/press?page=${presses.previous.page}`)
+                                    i.fas.fa-angle-left
+                        if !isObjectEmpty(presses.first)
+                            p.paginateRight(class =`${presses.first.current ? presses.first.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/resource/press"  data-rurl=`/resource/press?page=${presses.first.value}` ) #{presses.first.value}
+                        if !isObjectEmpty(presses.second)
+                            p.paginateRight(class =`${presses.second.current ? presses.second.current: ""}`) 
+                                a.paginate(href=""  data-submiturl="/resource/press"  data-rurl=`/resource/press?page=${presses.second.value}`) #{presses.second.value}
+                        if !isObjectEmpty(presses.third)
+                            p.paginateRight(class =`${presses.third.current ? presses.third.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/resource/press"  data-rurl=`/resource/press?page=${presses.third.value}`) #{presses.third.value}
+                        if !isObjectEmpty(presses.next)
+                            p.paginateRight
+                                a.paginate(href=""  data-submiturl="/resource/press"  data-rurl=`/resource/press?page=${presses.next.page}`)
+                                    i.fas.fa-angle-right
+                        p.paginateRight 
+                            a.paginate(href=""  data-submiturl="/resource/press" data-page=`${presses.totalPages}` data-rurl=`/resource/press?page=${presses.totalPages}`)
+                                i.fas.fa-angle-double-right
                 .col-6.col-md-3 
                     form(method="get" action="/resource/press")
                         .input-group.py-4

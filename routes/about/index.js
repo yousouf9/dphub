@@ -1,10 +1,14 @@
 const express = require('express');
 const {Header} = require('../../model/General/header');
 const {Team} = require('../../model/about/team');
+const { DisplaceStat } = require('../../model/about/existStats');
 const router = express.Router();
 const multer = require('multer');
 const upload = multer({dest : 'public/images/uploads/general'});
 const upload_team = multer({dest : 'public/images/uploads/team'});
+
+const authenticate = require('../../middleware/athenticate');
+const admin = require('../../middleware/admin');
 
 
 
@@ -25,10 +29,19 @@ router.get('/about/whyweexist',  async function(req, res, next) {
        
     const header = await Header.find()
     if(!header) return res.status(404).send("NO Header image");
-    console.log(header);
+
+    const displaceStats= await DisplaceStat.find()
+                                           .limit(1);
+    let stats = null;
+
+    if(displaceStats.length === 1){
+        stats = displaceStats[0];
+    }
+
     res.render('about/whyweexist', { 
         title: 'About',
-        header
+        header,
+        stats
       });
 });
 
@@ -49,7 +62,7 @@ router.get('/about/team',  async function(req, res, next) {
 });
 
 /* GET Team Detail page. */
-router.get('/about/team/:id',  async function(req, res, next) {
+router.get('/about/team/:id',   async function(req, res, next) {
        
     const header = await Header.find()
     if(!header) return res.status(404).send("NO Team detail");
@@ -66,8 +79,59 @@ router.get('/about/team/:id',  async function(req, res, next) {
 });
 
 
+router.post('/administrator/whyweexist',authenticate, admin,  async(req,res) =>{
+
+    let displaceStats= await DisplaceStat.find()
+                                         .limit(1);
+  
+
+
+        if(displaceStats.length === 0){
+            displaceStats = new DisplaceStat(req.body);
+          const result = await displaceStats.save()
+ 
+          if(!result){
+                     req.flash('error', "Displacement stats failed to update")
+                    return res.status(400).render('admin/about', { 
+                        title: 'about',
+                        user:req.currentUser
+                    });
+            }
+        }else{
+
+            let currentStats = {};
+
+            displaceStats.forEach((item)=> currentStats = item);
+
+          const result =     await DisplaceStat.updateOne({_id: currentStats._id}, {
+               $set:{
+                 ...req.body
+               }
+             }, {new: true});
+
+
+             console.log("Hope it is from here", result);
+
+        }
+     //
+
+    //const result = await displaceStats.save()
+ 
+
+  //  if(!result){
+    //    req.flash('error', "Displacement stats failed to update")
+     //   return res.status(400).render('admin/about', { 
+     //     title: 'about',
+     //     user:req.currentUser
+     //   });
+  //  }
+    console.log(displaceStats);
+    req.flash('success', 'Displacement stats has been updated');
+    res.location('/administrator/about');
+    res.redirect('/administrator/about');
+})
 //Uploading Team information
-router.post('/administrator/upload/team', upload_team.single('photo'), async(req,res)=>{
+router.post('/administrator/upload/team', authenticate, admin, upload_team.single('photo'), async(req,res)=>{
     let  mainImageName
     if(req.file){
         mainImageName                = req.file.filename;
@@ -90,7 +154,14 @@ router.post('/administrator/upload/team', upload_team.single('photo'), async(req
 
     team = new Team(req.body);
 
-    if(!team)  return res.status(400).send("failed to upload team details");
+    if(!team){
+        req.flash('error', "failed to upload team details")
+      return res.status(400).render('admin/about', { 
+        title: 'about',
+        user:req.currentUser
+      });
+    }
+    
 
 
         await team.save();
@@ -102,10 +173,20 @@ router.post('/administrator/upload/team', upload_team.single('photo'), async(req
 
 /** Admin section code */
 /* GET Administrator about page. */
-router.get('/administrator/about',  function(req, res, next) {
+router.get('/administrator/about', authenticate, admin, async function(req, res, next) {
 
+  const displaceStats= await DisplaceStat.find()
+                                      .limit(1);
+  let stats = null;
+  
+      if(displaceStats.length === 1){
+          stats = displaceStats[0];
+      }
+      
     res.render('admin/about', { 
-        title: 'about'
+        title: 'about',
+        user:req.currentUser,
+        stats
       });
 });
 module.exports = router

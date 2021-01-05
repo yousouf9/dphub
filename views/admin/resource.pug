@@ -7,7 +7,7 @@ block content
         form(method='post', action='/administrator/upload/press', enctype='multipart/form-data')
             .input-group.mb-3
                 .custom-file
-                    input.custom-file-input(type='file' name="photo")
+                    input.custom-file-input(type='file' name="photo" accept=".jpg,.jpeg,.png")
                     label.custom-file-label(for='slider') Choose file
             .form-group
                 label(for='title') Press title
@@ -36,7 +36,7 @@ block content
         form(method='post', action='/administrator/upload/blog', enctype='multipart/form-data')
             .input-group.mb-3
                 .custom-file
-                    input.custom-file-input(type='file' name="photo")
+                    input.custom-file-input(type='file' name="photo" accept=".jpg,.jpeg,.png")
                     label.custom-file-label(for='slider') Choose file
             .form-group
                 label(for='title') Blog title

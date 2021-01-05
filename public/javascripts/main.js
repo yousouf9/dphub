@@ -1,6 +1,8 @@
 $(document).ready(function(){
    
     const socket = io();
+    
+    
 
     $('.download').click( function(e){
         e.preventDefault();
@@ -30,8 +32,9 @@ $(document).ready(function(){
         type: 'GET',
         success:function(data){
         let template = ''
-            data.events.forEach(event => {
+            data.events.results.forEach(event => {
 
+                console.log(event);
                let eventDate =  new Date(event.date).getTime();
 
          
@@ -77,13 +80,15 @@ $(document).ready(function(){
                     if (distance < 0) {
                         clearInterval(x);
                       
-                        $.ajax({
-                            url: '/general/event/'+event._id,
-                            type: 'DELETE',
-                            success:function(){
-                              console.log("Event removed");
-                            }
-                        });
+                        if(event._id){
+                            $.ajax({
+                                url: '/general/events/'+event._id,
+                                type: 'put',
+                                success:function(){
+                                  console.log("Event removed");
+                                }
+                            });
+                        }
                     }
                     }, 1000);
 
@@ -94,9 +99,19 @@ $(document).ready(function(){
 
             //wrapper.insertAdjacentElement("beforeend", template)
               
-          }
-   
+          },
+        error:function(error) {
+            console.log(error);
+        }
+        
         });
+
+       
+
+
+ if($("form")){    
+
+   
 
    $( 'form' ).find( 'select, textarea, input' ).each(function(){ 
   
@@ -131,16 +146,62 @@ $(document).ready(function(){
         }
     }) 
     
-
   });
+
+  $("form").find('input[type=checkbox], input[type=radio]').each(function() {
+    let checkRadioValue = $(this).val();
+    if(checkRadioValue.length !== 0 &&   checkRadioValue !== "undefined"){
+     $(this).prop('checked', true)
+    }else{
+     $(this).prop('checked', false) 
+    }
+ })
+
+
+   
+} 
+  
+
+
+if($("#userDisplacement")){ 
+
+    $("#userDisplacement").submit(function(event) {
+
+        let errorTexts = ""; 
+
+
+        var checkNum = $('input[type=checkbox]:checked').length;
+             
+        if(checkNum !== 0){
+            
+        }else{
+            errorTexts =  "Please select atleast one cause of displacement"
+
+                $('.alrt').css('display', 'block')
+                .addClass('alrt-error') 
+                .append(`<span> ${errorTexts} </span>`)
+                $('.alrt').focus();
+
+           return false
+     }
+})
+
+}
+
+
   //Registration form 
   if("#userRegister"){
       $("#userRegister").submit(function(event){
-           event.preventDefault();
+
+        $("#userRegister input[type=submit]").val("submitting...")
+        $(`#userRegister input[type="submit"]`).prop("disabled", true)
+
+          // event.preventDefault();
 
     if($('#confirm_password').val() !== $('#password').val()){
             $( `#confirm_password + .error-message`).css('display', 'block').html('Password does not match')
-         return false;
+        
+            return false;
         }else{
 
             $("#userRegister").submit();
@@ -150,6 +211,7 @@ $(document).ready(function(){
   }
 
   const formlga = document.getElementById('lga');
+  if(formlga){
   //State change function
   $( "#state" ).change(function() {
     $( "#lga #lga_loading" ).html("Loading...")
@@ -180,7 +242,7 @@ $(document).ready(function(){
         } )
         .catch(err => console.log(err))
     });
-
+  }
 
   const formState = document.getElementById('state');
   const formNation = document.getElementById('nationality');
@@ -221,10 +283,7 @@ $(document).ready(function(){
     }
 
 
-
-
  //submitting Intership form
-
 if($( 'form#internship, form#organisationForm, form#individualForm')){
     $( 'form#internship, form#individualForm, form#organisationForm' ).submit( function( event ) {
         event.preventDefault();
@@ -286,10 +345,9 @@ if($( 'form#internship, form#organisationForm, form#individualForm')){
           
          // $(`#${formId} input[type="submit"]`).val("submit")
           //$(`#${formId} input[type="submit"]`).prop("disabled", false) 
-
+          
           if($('#confirm, #oconfirm').is(':checked')) this.submit();
-          
-          
+
         } else {
         
             $('.alrt').css('display', 'block')
@@ -368,15 +426,260 @@ $('.remove').click( function(e){
     window.location = returnUrl;
   });
 
+  //pagination
+$('.paginate').click( function(e){
 
-  //Map section
-  var mapboxAccessToken = "pk.eyJ1IjoieW91c291ZjkiLCJhIjoiY2tqYWs5NjVwMGJxODM0bWVxZHA4OG85dyJ9.fHFQxtkS4lomQJ3TKdQ1iw";
-  var map = L.map('map').setView([9.077751, 8.6774567], 6);
+   $('.loader-container').css("display", 'block')
+    $('.loader').css("display", 'block')
+    e.preventDefault()
 
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
-    id: 'mapbox/light-v9',
-    attribution: "",
-    tileSize: 512,
-    zoomOffset: -1
-    }).addTo(map);
+    let returnUrl = $(this).data('rurl');
+    let submitUrl = $(this).data('submiturl');
+   // let pageNum = parseInt($(this).data('page')) ;
+
+     
+
+    $.ajax({
+        url: `${submitUrl}` ,
+        type: 'get',
+  
+        success:function(response){
+            console.log("currently here");
+        },
+    });
+    window.location = returnUrl;
+  });
+
+
+  //Map section stats for displacement
+  const mapId = document.getElementById("map");
+  if(mapId){
+
+    let mapData  = "";
+    const mapboxAccessToken = "pk.eyJ1IjoieW91c291ZjkiLCJhIjoiY2tqYWs5NjVwMGJxODM0bWVxZHA4OG85dyJ9.fHFQxtkS4lomQJ3TKdQ1iw";
+    const map = L.map('map').setView([9.0765, 7.3986], 6);
+    let  mapBound =  null;
+    let info = L.control()
+    const attribution =
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+    const titleUrl ="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=" + mapboxAccessToken  //'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    const tiles = L.tileLayer(titleUrl,{
+        id: 'mapbox/light-v9',
+        attribution,
+        tileSize: 512,
+        zoomOffset: -1
+       
+    });
+
+       
+  //map color for stats
+  function getColor(d) {
+    return d > 1000 ? '#588BAE' :
+           d > 500  ? '#95C8D8' :
+           d > 200  ? '#4682B4' :
+           d > 100  ? '#57A0D3' :
+           d > 50   ? '#0E4D92' :
+           d > 20   ? '#111E6C' :
+           d > 10   ? '#00539CFF' :
+                      '#0063B2FF';
+  }
+  //Styling the map
+  function style(feature) {
+    return {
+        fillColor: getColor(feature.properties.density),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+ }
+
+ //Adding hover event for layer
+ function highlightFeature(e) {
+    let layer = e.target;
+
+        layer.setStyle({
+            weight: 5,
+            color: '#666',
+            dashArray: '',
+            fillOpacity: 0.7
+        });
+
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
+
+        info.update(layer.feature.properties)
+    }
+
+    //Resetting map styling
+
+    function resetHighlight(e) {
+        mapBound.resetStyle(e.target);
+        info.update();
+    }
+
+    //Click event that zoom to state
+    function zoomToFeature(e) {
+        map.fitBounds(e.target.getBounds());
+    }
+
+
+    //add the listeners on our state layers
+    function onEachFeature(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight,
+            click: zoomToFeature
+        });
+    }
+
+    tiles.addTo(map);
+
+    //Don't forget to change data from mongodb ID
+    axios.get("http://localhost:3000/displacement/")
+    .then((response)=> {
+      mapData = response.data.data
+       mapBound = L.geoJson(mapData, {style: style, onEachFeature: onEachFeature}).addTo(map)
+          map.fitBounds(mapBound.getBounds());
+
+     })
+
+
+     info.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'stat-info'); // create a div with a class "stat-info"
+        this.update();
+        return this._div;
+    };
+       
+    // method that we will use to update the control based on feature properties passed
+    info.update = function (props) {
+        this._div.innerHTML = '<h4>Nigeria Displacement Stats</h4>' +  (props ?
+            '<b>' + props.admin1Name + '</b><br />' + props.totalDis + ' displaced '
+            : 'Hover over a state');
+    };
+
+    info.addTo(map);
+
+  }
+
+ //Map report sections
+ const mapIDReport = document.getElementById("mapReport");
+ if(mapIDReport){
+
+   let mapData  = "";
+   const mapboxAccessToken = "pk.eyJ1IjoieW91c291ZjkiLCJhIjoiY2tqYWs5NjVwMGJxODM0bWVxZHA4OG85dyJ9.fHFQxtkS4lomQJ3TKdQ1iw";
+   const map = L.map('mapReport').setView([9.0765, 7.3986], 6);
+   let  mapBound =  null;
+   let info = L.control()
+   const attribution =
+       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+   const titleUrl ="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=" + mapboxAccessToken  //'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+   const tiles = L.tileLayer(titleUrl,{
+       id: 'mapbox/light-v9',
+       attribution,
+       tileSize: 512,
+       zoomOffset: -1
+      
+   });
+
+      
+ //map color for stats
+ function getColor(d) {
+   return d > 10   ? '#00539CFF' :
+                     '#0063B2FF';
+ }
+ //Styling the map
+ function style(feature) {
+   return {
+       fillColor: getColor(feature.properties.density),
+       weight: 2,
+       opacity: 1,
+       color: 'white',
+       dashArray: '3',
+       fillOpacity: 0.7
+   };
+}
+
+//Adding hover event for layer
+function highlightFeature(e) {
+   let layer = e.target;
+
+       layer.setStyle({
+           weight: 5,
+           color: '#666',
+           dashArray: '',
+           fillOpacity: 0.7,
+           fillColor: 'white'
+       });
+
+       if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+           layer.bringToFront();
+       }
+
+       info.update(layer.feature.properties)
+   }
+
+   //Resetting map styling
+
+   function resetHighlight(e) {
+       mapBound.resetStyle(e.target);
+       info.update();
+   }
+
+   //Click event that zoom to state
+   function zoomToFeature(e) {
+       map.fitBounds(e.target.getBounds());
+   }
+
+
+   //add the listeners on our state layers
+   function onEachFeature(feature, layer) {
+       layer.on({
+           mouseover: highlightFeature,
+           mouseout: resetHighlight,
+           click: zoomToFeature
+       });
+   }
+
+   tiles.addTo(map);
+
+   //Don't forget to change data from mongodb ID
+   axios.get("http://localhost:3000/displacement/")
+   .then((response)=> {
+     mapData = response.data.data
+      mapBound = L.geoJson(mapData, {style: style, onEachFeature: onEachFeature}).addTo(map)
+         map.fitBounds(mapBound.getBounds());
+
+    })
+
+
+    info.onAdd = function (map) {
+       this._div = L.DomUtil.create('div', 'stat-info'); // create a div with a class "stat-info"
+       this.update();
+       return this._div;
+   };
+      
+   // method that we will use to update the control based on feature properties passed
+   info.update = function (props) {
+       this._div.innerHTML = '<h4>Nigeria Displacement Stats</h4>' +  (props ?
+           '<b>' + props.admin1Name + '</b><br />' + props.reports + ' displaced '
+           : 'Hover over a state');
+   };
+
+   info.addTo(map);
+
+ }
+
+
+//Monitor section
+$(".monitor-detail").mouseenter(function(e) {
+    let currentId =  $(this).attr( 'id' );
+    $(`#${currentId} > .monitor-detail-show`).css("display", "block")
+    $(".monitor-detail-show").mouseleave(function() {
+        $(this).css("display", "none")
+    })
+  })
+
 }); 

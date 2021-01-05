@@ -35,13 +35,37 @@ block content
                                 span MECHANIC
             .container
                 .row.row-cols-1.row-cols-md-4
-                        if(teams)
-                            each team, i in teams
-                                a.col.mb-4.team-card(href=`/about/team/${team._id}`)
-                                    .card.h-100(style="background-color:#1a4980")
-                                        img.card-img-top(src=`${team.photo}` alt=`${team.position}`   height="75%")
+                        if(skills)
+                            each skill, i in skills.results
+                                a.col.mb-4.team-card(href=`/user/about/${skill.user._id}`)
+                                    .card.h-100(style="background-color:#29ABE2")
+                                        img.card-img-top(src=`${skill.user.profile_image === "noimage.png" ? `/images/users/${skill.user.profile_image}`: `${skill.user.profile_image}`}` alt=`${skill.skill}`   height="75%")
                                         .card-body.p-2
-                                            h5.font-weight-bold.text-light.p-1 #{team.name}
-                                            h3.font-weight-bold.text-light #{team.surname}
-                                            small.text-white-50.p-1 #{team.position}
-
+                                            -let profilename =  skill.user.name.split(" ")
+                                            h5.text-light.p-1 #{profilename[0] ?profilename[0]: "" }
+                                            h3.text-light #{profilename[1] ?  profilename[1].toUpperCase() : "" }
+                                            small.text-dark.p-1 #{skill.skill.toUpperCase()}
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/whatwedo/skill_profile" data-page="1"  data-rurl="/whatwedo/skill_profile?page=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(skills.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/whatwedo/skill_profile"  data-rurl=`/whatwedo/skill_profile?page=${skills.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(skills.first)
+                        p.paginateRight(class =`${skills.first.current ? skills.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/whatwedo/skill_profile"  data-rurl=`/whatwedo/skill_profile?page=${skills.first.value}` ) #{skills.first.value}
+                    if !isObjectEmpty(skills.second)
+                        p.paginateRight(class =`${skills.second.current ? skills.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/whatwedo/skill_profile"  data-rurl=`/whatwedo/skill_profile?page=${skills.second.value}`) #{skills.second.value}
+                    if !isObjectEmpty(skills.third)
+                        p.paginateRight(class =`${skills.third.current ? skills.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/whatwedo/skill_profile"  data-rurl=`/whatwedo/skill_profile?page=${skills.third.value}`) #{skills.third.value}
+                    if !isObjectEmpty(skills.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/whatwedo/skill_profile"  data-rurl=`/whatwedo/skill_profile?page=${skills.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/whatwedo/skill_profile" data-page=`${skills.totalPages}` data-rurl=`/whatwedo/skill_profile?page=${skills.totalPages}`)
+                            i.fas.fa-angle-double-right
