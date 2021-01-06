@@ -538,7 +538,7 @@ $('.paginate').click( function(e){
     tiles.addTo(map);
 
     //Don't forget to change data from mongodb ID
-    axios.get("http://localhost:3000/displacement/")
+    axios.get("/displacement/")
     .then((response)=> {
       mapData = response.data.data
        mapBound = L.geoJson(mapData, {style: style, onEachFeature: onEachFeature}).addTo(map)
@@ -646,7 +646,7 @@ function highlightFeature(e) {
    tiles.addTo(map);
 
    //Don't forget to change data from mongodb ID
-   axios.get("http://localhost:3000/displacement/")
+   axios.get("/displacement/")
    .then((response)=> {
      mapData = response.data.data
       mapBound = L.geoJson(mapData, {style: style, onEachFeature: onEachFeature}).addTo(map)
