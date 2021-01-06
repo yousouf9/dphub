@@ -16,7 +16,7 @@ block content
                                 if(team)
                                     .col.mb-4.team-card
                                         .card.h-100(style="background-color:#1a4980")
-                                            img.card-img-top(src=`${team.photo}` alt=`${team.position}`   height="75%")
+                                            .card-team-image(style=`background:url(${team.photo})`)
                                             .card-body.p-2
                                                 h5.font-weight-bold.text-light.p-1 #{team.name}
                                                 h3.font-weight-bold.text-light #{team.surname}

@@ -383,8 +383,8 @@ router.post("/administrator/report/stat", authenticate,admin, async(req, res)=>{
 
   if(!stats) return res.status(400)   
   req.flash('success', 'Reports  stats updated');
-  res.location('/administrator/general');
-  res.redirect('/administrator/general');
+  res.location('/administrator/what_we_do');
+  res.redirect('/administrator/what_we_do');
   
 })
 

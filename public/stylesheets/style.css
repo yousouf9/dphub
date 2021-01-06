@@ -463,6 +463,13 @@ padding: 10px;
 .team-card h3{
   line-height: 0.2 !important;
 }
+.card-team-image{
+  position: relative;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  height: 250px !important;
+}
 
 .social-team{
   color: #fff;

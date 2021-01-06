@@ -24,7 +24,7 @@ $(document).ready(function(){
           }
       });
 
-     // window.location = '/resource/report/';
+      window.location = '/resource/report/';
     });
 
     $.ajax({
