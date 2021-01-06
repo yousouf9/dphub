@@ -103,9 +103,9 @@ const  validateform =(userInputs)=>{
     const schema =  Joi.object({
         
         reporter: Joi.string().required(),
-        reporter_name: Joi.string(),
-        reporter_phone: Joi.string().min(11).max(14),
-        reporter_email: Joi.string().email(),
+        reporter_name: Joi.string().allow(''),
+        reporter_phone: Joi.string().allow('').min(11).max(14),
+        reporter_email: Joi.string().allow('').email(),
         victim_name: Joi.string().required(),
         victim_sex: Joi.string().required(),
         victim_age: Joi.number().required(),
@@ -115,7 +115,7 @@ const  validateform =(userInputs)=>{
         other_complain: Joi.array().required(),
         victim_date: Joi.string().required(),
         victim_description: Joi.string().required(),
-        attachment: Joi.string(),
+        attachment: Joi.string().allow(''),
         offender_number: Joi.string().min(11).max(14).required(),
         offender_name: Joi.string().required(),
         offender_sex: Joi.string().required(),

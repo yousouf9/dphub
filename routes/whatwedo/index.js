@@ -220,7 +220,6 @@ router.post("/dp_complain_form", upload.single('attachment'), async(req, res)=>{
   let type_of_abuse = [];
   let other_complain = [];
 
-
   for(let key in req.body){
     if(key === "rape")   type_of_abuse.push("Rape")
     if(key === "sh")   type_of_abuse.push("Sexual harassment")
@@ -250,23 +249,13 @@ router.post("/dp_complain_form", upload.single('attachment'), async(req, res)=>{
 
   const {error}  = validateComplaintForm(req.body);
   if(typeof error !== 'undefined'){
-     
-      console.log(error);
-
-     req.flash('error', error.details[0].message)
-     res.status(400).render('whatwedo/dp_complainform', { 
+      res.status(400).render('whatwedo/dp_complainform', { 
       title: 'WhatWeDo',
       data: req.body,
     })
 
   }
 
-  req.flash("success", "Your complaint is received");
-  res.location("/whatwedo/dp_complain")
-  res.redirect("/whatwedo/dp_complain")
-
-
-  
   let FileData
   if(req.file){
     FileData                  = req.file.filename;
@@ -276,6 +265,32 @@ router.post("/dp_complain_form", upload.single('attachment'), async(req, res)=>{
 
  //Attachment URL
   req.body.attachment = `${req.protocol}://${req.headers.host}/images/uploads/application/${FileData}`;
+
+  console.log(req.body);
+
+
+
+  const complaits = new Complaint(req.body);
+  
+  const result = await complaits.save();
+
+  if(!result){ 
+    
+    req.flash('error', "Failed to submit complait")
+    res.status(400).render(
+    'whatwedo/dp_complainform', { 
+      title: 'WhatWeDo',
+      data: req.body,
+    }
+  )
+  }
+  
+  req.flash("success", "Your complaint is received");
+  res.location("/whatwedo/dp_complain")
+  res.redirect("/whatwedo/dp_complain")
+
+
+  
 
 
 
@@ -291,8 +306,6 @@ req.body.interesArea = {
     me:req.body.me,
     cr:req.body.cr
 }
-
-   const complain = new Complaint(req.body);
 
 })
 

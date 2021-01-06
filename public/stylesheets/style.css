@@ -148,7 +148,9 @@ padding: 5px;
   height: 480px !important;
 }
 /** partner slider **/
-
+.carousel-item.active.partner-containter{
+  background-color: transparent;
+}
 .carousel-item.partner-containter .col, .col-sm, .col-md
 {
   height: 150px !important;
@@ -756,6 +758,10 @@ padding: 10px;
 }
 .header {
   background-color: #001f3f !important;
+}
+.modal-backdrop.show {
+  z-index: 2 !important;
+  opacity: .5 !important;
 }
 
 /**Monitor page*/

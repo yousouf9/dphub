@@ -1,9 +1,5 @@
 $(document).ready(function(){
    
-    const socket = io();
-    
-    
-
     $('.download').click( function(e){
         e.preventDefault();
       $(this).html("downloading...")
@@ -399,6 +395,9 @@ setTimeout(function () {
 
 //Deleting on registration
 $('.remove').click( function(e){
+
+   // $('.loader-container').css("display", 'block')
+   // $('.loader').css("display", 'block')
 
     $(this).text("deleting...")
     $(this).prop("disabled", true)

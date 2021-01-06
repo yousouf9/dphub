@@ -43,7 +43,7 @@ block content
                                     p(class="label-title ") PHONE
                                 td
                                     .form-group
-                                        input.form-control.form-control-sm(type='text'  name="reporter_phone" id="reporter_phone" value= `${data ? data.reporter_phone: ''}` )
+                                        input.form-control.form-control-sm(type='number'  name="reporter_phone" id="reporter_phone" value= `${data ? data.reporter_phone: ''}` )
                                         label.error-message
                             tr
                                 th(scope='row')
@@ -181,7 +181,7 @@ block content
                                                 .modal-header
                                                     h5#exampleModalLabel.modal-title ATTACHMENT
                                                     button.close(type='button' data-dismiss='modal' aria-label='Close')
-                                                        span(aria-hidden='true') &times;
+                                                        span.bg-success(aria-hidden='true') close;
                                                 .modal-body
                                                         .input-group.mb-3
                                                             .custom-file
@@ -197,7 +197,7 @@ block content
                                     p(class="label-title required") NUMBER
                                 td 
                                     .form-group
-                                        input.form-control.form-control-sm(type='text'  name="offender_number" id="offender_number" value= `${data ? data.offender_number: ''}` required)
+                                        input.form-control.form-control-sm(type='number'  name="offender_number" id="offender_number" value= `${data ? data.offender_number: ''}` required)
                                         label.error-message
                             tr
                                 th(scope='row') 
