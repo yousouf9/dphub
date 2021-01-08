@@ -106,7 +106,7 @@ router.get('/resource/report',  async function(req, res, next) {
   let report
   if(search){
     report = await Report.find({title : {$regex: `${search}`, $options: 'i'}});
-    if(press.length === 0) {
+    if(report.length === 0) {
       req.flash('success', "Report Not found")
       report = await Report.find();
     }

@@ -839,17 +839,127 @@ router.post('/hire/me/',  async (req, res, next)=> {
   res.redirect('/whatwedo/skill_profile');
 });
 
-router.get('/verify_email', function(req, res, next) {
+router.get('/verify_email', (req, res, next)=> {
+
   res.render('forgotpassword', { title: 'verify email' });
 });
 
-router.get('/change_password', function(req, res, next) {
-  res.render('resetPassword', { title: 'reset' });
+router.post('/verify_email',  async(req, res)=>{
+
+  const user =await User.findOne({email: req.body.email});  
+  if(!user){
+     req.flash('error', "user does not exist!")
+    return res.status(400).render('forgotpassword', {
+     data: req.body
+   })
+  }
+
+  const verificationToken = await User.sendEmailToken(user._id);
+  //update user account verification token  
+  //hash user password  
+  user.token= verificationToken;
+
+const mailto = `${req.protocol}://${req.headers.host}/user/change_password/${verificationToken}`;
+const message = `<div>
+                     <h2>Welcome to DPHUB</h2>
+                     <p>Please click the link below to change your password</p>
+                     <a href=${mailto}>Change Password</a>
+                     <p>Change password Link: ${mailto}</p>
+                 </div>`
+
+ 
+sendMail("info@dphubng.org", user.email, 'Update your password', message,  async function(error, info){
+
+
+ {
+
+
+       if(error) {
+         console.log(error);
+         winston.error(error.message, error);
+         req.flash('error', error.message)
+       return  res.status(400).render('forgotpassword', {
+         data: req.body
+       })
+
+
+     } else {
+       let result = await user.save();
+
+       if(!result) {
+            req.flash('error', "user does not exist or check your network and try again")
+         return   res.status(400).render('forgotpassword', {
+            data: req.body
+          })
+        }
+   
+        req.flash('success', "Please check your email to verify your account")
+        res.location('/');
+        res.redirect('/');
+
+     }
+   }
+
+}); 
+
+})
+
+router.get('/change_password/:token',  async(req, res, next)=> {
+
+  const Token = await User.verifyEmailToken(req.params.token);
+  let user = await User.findById(Token.id)
+
+  if(!user) {
+    req.flash('error', "User account does not exist")
+   return res.status(400).render('/')
+  }
+
+  res.render('resetPassword', { title: 'reset', user});
+});
+
+router.post('/change_password',  async(req, res, next)=> {
+
+
+  if(req.body.password !== req.body.c_password){
+    req.flash("error", "Password does not match")
+    res.render('resetPassword', { title: 'reset', user:req.body.userID });
+  }
+
+  req.body.password = await User.encryptPassword(req.body.password);
+
+  let user = await User.findOneAndUpdate({_id:req.body.userID}, {
+    $set:{
+      password:req.body.password
+    }
+  })
+
+  if(!user) {
+    req.flash('error', "Failed to update password please contact admin")
+   return res.status(400).render('/')
+  }
+
+  if(user.admin){
+    req.flash("success", "Successfully updated password")
+    res.location(`/administrator/login`)
+    res.redirect(`/administrator/login`)
+  }else{
+    req.flash("success", "Successfully updated password")
+    res.location(`/user/login`)
+    res.redirect(`/user/login`)
+  }
+
 });
 
 router.get('/email_verification_message', function(req, res, next) {
   res.render('email-html', { title: 'Email Verify Message' });
 });
+
+
+router.get('/email_verification_message', function(req, res, next) {
+  res.render('email-html', { title: 'Email Verify Message' });
+});
+
+
 
 
 /** Register a new user */

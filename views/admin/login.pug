@@ -12,7 +12,6 @@ html
   body
     .container-fluid.login
         .p-0.m-0.h-100.d-flex.justify-content-center.align-items-center
-        
             .shadow.p-5.bg-white.roundeda
                 form(method='post', action='/administrator/login')
                         .input-group.mb-3
@@ -25,12 +24,7 @@ html
                                 .input-group-text 
                                     i.fas.fa-key
                             input.form-control(type="password" name="password" placeholder="password" required)
-                        .d-flex
-                            .p-2 
-                                .custom-control.custom-checkbox
-                                    input#customCheck1.custom-control-input(type='checkbox')
-                                    label.custom-control-label.pt-1(for='customCheck1') Remember me
-                            .ml-auto.p-2
-                                a.nav-link(href="#") Forgot password
+                        p
+                            a.nav-link.p-0(href="/user/verify_email") Forgot password
                         input.btn.btn-block.btn-success.mb-3(name="submit" type="submit" value="Login")
         

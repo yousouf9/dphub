@@ -108,6 +108,7 @@ userSchema.statics.validatePassword =async (password, hash) => {
 };
 
 userSchema.methods.validateHashed= function(password, hashedPass){
+
     return bcrypt.compare(password, hashedPass);
 }
 
@@ -117,7 +118,6 @@ userSchema.statics.getUserByUsername =  function(email, callback){
      return user
    
 };
-
 
 userSchema.statics.getUserById = async function(id, callback){
   return User.findById(id, callback);

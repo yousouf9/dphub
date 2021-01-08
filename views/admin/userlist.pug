@@ -1,0 +1,76 @@
+extends ../admin_layout
+
+block content
+    .container
+        .shadow-sm.p-5.mb-5.bg-white.rounded
+            .row.no-gutters.py-2
+                .col-sm-6
+                    a(href="/administrator/manage" style="background-color:#092944; padding:8px; color:white; font-weight:bold; font-size:16px; text-decoration:none") Manage Admins
+                .col-sm-6
+                    form(method="get" action="/administrator/users")
+                        .input-group
+                            input.form-control(type='search' name="search" placeholder='admin, email, main skill, ' aria-label='Search')
+                            .input-group-append
+                                button.input-group-text.btn.my-2.my-sm-0.bg-dark(type='submit')
+                                    i.fas.fa-search.text-white
+            header.p-2.text-white(style="background:#092944")
+                | LIST OF USERS
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Name
+                            th(scope='col') Email
+                            th(scope='col') Main Skill
+                            th(scope='col') About
+                    tbody
+                        if(users)
+                            each user, i in users.results
+                                tr
+                                    td 
+                                        | #{user.name}
+                                    td
+                                        | #{user.email}
+                                    td
+                                        | #{user.mainSkill}
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#userdetail${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`userdetail${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        div( width="100%" height="100%")
+                                                            != user.about
+                                                        .border-top.text-mutted
+
+            if(users)
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/administrator/users" data-page="1"  data-rurl="/administrator/users?page=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(users.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/administrator/users"  data-rurl=`/administrator/users?page=${users.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(users.first)
+                        p.paginateRight(class =`${users.first.current ? users.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/users"  data-rurl=`/administrator/users?page=${users.first.value}` ) #{users.first.value}
+                    if !isObjectEmpty(users.second)
+                        p.paginateRight(class =`${users.second.current ? users.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/administrator/users"  data-rurl=`/administrator/users?page=${users.second.value}`) #{users.second.value}
+                    if !isObjectEmpty(users.third)
+                        p.paginateRight(class =`${users.third.current ? users.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/users"  data-rurl=`/administrator/users?page=${users.third.value}`) #{users.third.value}
+                    if !isObjectEmpty(users.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/administrator/users"  data-rurl=`/administrator/users?page=${users.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/administrator/users" data-page=`${users.totalPages}` data-rurl=`/administrator/users?page=${users.totalPages}`)
+                            i.fas.fa-angle-double-right

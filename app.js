@@ -29,6 +29,7 @@ const resourceRouter = require('./routes/resource/index');
 const contactRouter = require('./routes/contact/index');
 const donateRouter = require('./routes/donate/index');
 const generalRouter = require('./routes/general/index');
+const complaintRouter = require('./routes/complaint/index');
 const app = express();
 
  
@@ -120,6 +121,7 @@ app.use('/', generalRouter);
 app.use('/', contactRouter);
 app.use('/', donateRouter);
 app.use('/', resourceRouter)
+app.use('/', complaintRouter);
 
 
 // catch 404 and forward to error handler

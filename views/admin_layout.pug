@@ -56,7 +56,7 @@ html
                     |               About
                 li.nav-item
                   a.nav-link(href='/administrator/what_we_do' class=`${title === 'Whatwedo'? 'active' : '' }`)
-                    i(class='fas fa-calendar-plus')
+                    i(class='fas fa-user-friends')
                     |               WHat We do
                 li.nav-item
                   a.nav-link(href='/administrator/get_involved' class=`${title === 'GetInvolved'? 'active' : '' }`)
@@ -76,8 +76,16 @@ html
                     |               Users
                 li.nav-item
                   a.nav-link(href='/administrator/general' class=`${title === 'General'? 'active' : '' }`)
-                    i(class='fas fa-user-plus')
+                    i(class='fas fa-th')
                     |               General
+                li.nav-item
+                  a.nav-link(href='/administrator/complaint' class=`${title === 'Complaints'? 'active' : '' }`)
+                    i(class='fas fa-exclamation-triangle')
+                    |               Complaints
+                li.nav-item
+                  a.nav-link(href='/administrator/donation' class=`${title === 'Donations'? 'active' : '' }`)
+                    i(class='fas fa-hand-holding-usd')
+                    |               Donations
               if(!user.admin)
                 li.nav-item
                     a.nav-link(href='/user/profile' class=`${title === 'Profile'? 'active' : '' }`)

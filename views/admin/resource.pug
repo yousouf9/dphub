@@ -156,10 +156,11 @@ block content
                                                         button.close(type='button' data-dismiss='modal' aria-label='Close')
                                                             span(aria-hidden='true') &times;
                                                     .modal-body
-                                                        object(data=`${report.filename}` type='application/pdf' width='100%' height='500')
-                                                            iframe(src=`${report.filename}` width='100%' height='500' style='border: none;')
-                                                                | This browser does not support PDFs. Please download the PDF to view it: 
-                                                                a(href=`${report.filename}`) Download PDF
+                                                        if(report.filename)
+                                                            object(data=`${report.filename}` type='application/pdf' width='100%' height='500')
+                                                                iframe(src=`${report.filename}` width='100%' height='500' style='border: none;')
+                                                                    | This browser does not support PDFs. Please download the PDF to view it: 
+                                                                    a(href=`${report.filename}`) Download PDF
                                                         .border-top.text-mutted
                                     td
                                         a.btn.btn-sm.btn-danger.remove(href="" data-id=`${report._id}` data-submiturl="/report/" data-rurl="/administrator/resources") Remove

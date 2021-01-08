@@ -17,6 +17,7 @@ const router = express.Router();
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const { render } = require('pug');
 
 
 /* GET home page. */
@@ -232,7 +233,7 @@ router.post('/administrator/login',
 
 /** Register a new Admin user */
 
-router.post('/administrator/register', async (req, res)=>{
+router.post('/administrator/add', authenticate, admin, async (req, res)=>{
 
   const {error}  = validateUser(req.body);
   
@@ -242,7 +243,8 @@ router.post('/administrator/register', async (req, res)=>{
 
      req.flash('error', error.details[0].message)
      res.status(400).render('admin/register', {
-      data: req.body
+      data: req.body,
+      user: req.currentUser
     })
 
   }
@@ -251,26 +253,30 @@ router.post('/administrator/register', async (req, res)=>{
   const usernameAvailable =await User.findOne({username: req.body.username});
   
   if(isEmailAvailable){
-     req.flash('error', "User with email already exist!")
+     req.flash('error', "Admin User with email already exist!")
     return res.status(400).render('admin/register', {
-     data: req.body
+     data: req.body,
+     user: req.currentUser
    })
   }
 
   if(usernameAvailable){
-    req.flash('error', "Username already exist!")
+    req.flash('error', " Admin Username already exist!")
     res.status(400).render('admin/register', {
-    data: req.body
+    data: req.body,
+    user: req.currentUser
   })
  }
 
-
+  req.body.admin = true;
+  req.body.isVerified = true;
  const user = new User(req.body);
 
  if(!user) {
-      req.flash('error', "Failed to create user")
+      req.flash('error', "Failed to create admin user")
      return res.status(400).render('admin/register', {
-      data: req.body
+      data: req.body,
+      user: req.currentUser
     })
   }
 
@@ -286,14 +292,15 @@ router.post('/administrator/register', async (req, res)=>{
 
    if(!result) {
         req.flash('error', "Failed to create user")
-     return   res.status(400).render('user/register', {
-        data: req.body
+     return   res.status(400).render('admin/register', {
+        data: req.body,
+        user: req.currentUser
       })
     }
 
-    req.flash('success', "Account Successfully created")
-    res.location('/user/email_verification_message');
-    res.redirect('/user/email_verification_message');
+    req.flash('success', "Admin user created")
+    res.location(`/administrator/registerdetail/${result._id}`);
+    res.redirect(`/administrator/registerdetail/${result._id}`);
 
  
 })
@@ -305,9 +312,40 @@ router.get("/administrator/users", authenticate, admin,  async(req, res)=>{
   let user
   if(search){
     if(search === "admin" || search ==="Admin"){
-      user = await User.find({admin : {$regex: true, $options: 'i'}});
+      user = await User.find({admin : true});
     }else{
-      user = await User.find({admin : {$regex: false, $options: 'i'}});
+      user = await User.find({$or:[{email : {$regex: `${search}`, $options: 'i'}},{mainSkill : {$regex: `${search}`, $options: 'i'}}]});
+    }
+    
+    if(user.length === 0) {
+      req.flash('error', "No user found")
+      user = await User.find();
+    }
+  }else{
+    user = await User.find();
+  }
+   
+                           
+   let page =  parseInt(req.query.page) || 1;
+    const  result  = Pagination(user, page, 10) 
+
+  res.render('admin/userlist', {
+    title: "Users",
+    user:req.currentUser,
+    users:result,
+  })
+})
+
+router.get("/administrator/manage", authenticate, admin,  async(req, res)=>{
+
+  let search = req.query.search;
+
+  let user
+  if(search){
+    if(search === "admin" || search ==="Admin"){
+      user = await User.find({admin : true});
+    }else{
+      user = await User.find({$or:[{email : {$regex: `${search}`, $options: 'i'}},{mainSkill : {$regex: `${search}`, $options: 'i'}}]});
     }
     
     if(user.length === 0) {
@@ -327,6 +365,28 @@ router.get("/administrator/users", authenticate, admin,  async(req, res)=>{
     user:req.currentUser,
     users:result,
   })
+})
+
+router.get('/administrator/registerdetail/:id', authenticate, admin, async(req, res)=>{
+  const user =await User.findOne({_id: req.params.id});
+  res.render('admin/admindetails',{
+    user
+  })
+})
+
+//Deletion for administrator
+router.delete('/administrator/:id', authenticate, admin,  async(req, res)=>{
+       
+  const user = await  User.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+        if(!user) return res.status(404).render('admin/register', { 
+          title: 'Administrator',
+          user: req.currentUser
+        });
+
+        req.flash('success', "Admin deleted detail deleted")
+        res.location('/administrator/manage');
+        res.redirect('/administrator/manage');
+
 })
 
 module.exports = router;
