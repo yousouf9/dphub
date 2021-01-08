@@ -30,13 +30,9 @@ const userSchema = new mongoose.Schema({
     },
     phone:{
         type: String,
-        minlength: 11,
-        maxlength: 16
     },
     whatapp:{
         type: String,
-        minlength: 11,
-        maxlength: 50
     },
     password:{
         type: String,
@@ -165,8 +161,6 @@ const  validateUser =(userInputs)=>{
 
     return schema.validate(userInputs, {abortEarly: false, allowUnknown: true});
 }
-
-
 
 module.exports.User = User;
 module.exports.validateUser = validateUser;

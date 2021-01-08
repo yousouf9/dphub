@@ -31,7 +31,7 @@ block content
                                                             | DPHUB
 
                                             .report-download
-                                                a(href=`#` class="download" data-id= `${report._id}`) Download
+                                                a(href=`${report.filename}` ) Download
                     .d-flex.justify-content-center.pagination
                         p.paginateLeft
                             a.paginate(href="" data-submiturl="/resource/report" data-page="1"  data-rurl="/resource/report?page=1") 
@@ -83,29 +83,29 @@ block content
                                 input.form-control.form-control-sm.required(type='text'  name="email" placeholder="enter your email address" required)
                             .form-row.pl-4
                                 .form-check.col-md-6
-                                    input.form-check-input(type='checkbox' name="press_release" value='1')
+                                    input.form-check-input(type='checkbox' name="press_release" )
                                     span.form-check-label
                                         | Press Release
                                 .form-check.col-md-6
-                                    input.form-check-input(type='checkbox' name="event" value='2')
+                                    input.form-check-input(type='checkbox' name="event" )
                                     span.form-check-label
                                         | Event
                             .form-row.pl-4
                                 .form-check.col-md-6
-                                    input.form-check-input(type='checkbox' name="publication" value='3')
+                                    input.form-check-input(type='checkbox' name="publication")
                                     span.form-check-label
                                         | Publication
                                 .form-check.col-md-6
-                                    input.form-check-input(type='checkbox' name="blogs" value='4')
+                                    input.form-check-input(type='checkbox' name="blogs")
                                     span.form-check-label
                                         | Blogs
                             .form-row.pl-4
                                 .form-check.col-md-6
-                                    input.form-check-input(type='checkbox' name="multimedia" value='5')
+                                    input.form-check-input(type='checkbox' name="multimedia")
                                     span.form-check-label
                                         | Multimedia
                                 .form-check.col-md-6
-                                    input.form-check-input(type='checkbox' name="jobs" value='6')
+                                    input.form-check-input(type='checkbox' name="jobs")
                                     span.form-check-label
                                         | Jobs
                             input.form-check-input(type='hidden' name="urlpath" value='/resource/report')
@@ -115,22 +115,24 @@ block content
                             span
                         .row.pl-2
                             .cols.p-2.mr-1
-                                form(method="post" action="/events/1" name="upcoming")
-                                    input.btn.btn-block.btn-primary(type="submit" value="Upcoming")
+                                a.btn.btn-block.btn-primary.paginate(href=""  data-submiturl="/resource/report"  data-rurl=`/resource/report?epage=1`) Upcoming
                             .cols.p-2
-                                form(method="post" action="/events/5" name="Previous")
-                                    input.btn.btn-block.btn-outline-primary(type="submit" value="Upcoming")
-                        .font-weight-light Launch of Nigeria’s first DPs need assessment            
-                        .d-flex.justify-content-center.text-center
-                            .px-2
-                                h2.p-0.m-0.text-danger 00
-                                p.p-0.m-0 Days
-                            .px-2
-                                h2.p-0.m-0.text-danger 00
-                                p.p-0.m-0 Hours
-                            .px-2
-                                h2.p-0.m-0.text-danger 00
-                                p.p-0.m-0 Minutes
-                            .px-2
-                                h2.p-0.m-0.text-danger 00
-                                p.p-0.m-0 Seconds
+                                if !isObjectEmpty(events.next)
+                                    a.btn.btn-block.btn-outline-primary.paginate(href=""  data-submiturl="/resource/report"  data-rurl=`/resource/report?epage=${events.next.page}`) Previous
+                        #counterDiv
+                            if(events)
+                                each event, i in events.results
+                                    small.inline-block #{event.title}          
+                                        .d-flex.justify-content-start.text-center
+                                            .px-1
+                                                h6.p-0.m-0.text-danger.update-counter #{dateCounter(event).days}
+                                                small.font-weight-bold.p-0.m-0 Days
+                                            .px-1
+                                                h6.p-0.m-0.text-danger.update-counter #{dateCounter(event).hours}
+                                                small.font-weight-bold.p-0.m-0 Hours
+                                            .px-1
+                                                h6.p-0.m-0.text-danger.update-counter #{dateCounter(event).minutes}
+                                                small.font-weight-bold.p-0.m-0 Minutes
+                                            .px-1
+                                                h6.p-0.m-0.text-danger.update-counter #{dateCounter(event).seconds}
+                                                small.font-weight-bold.p-0.m-0 Seconds

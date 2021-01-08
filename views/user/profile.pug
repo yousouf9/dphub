@@ -49,7 +49,7 @@ block content
                         .form-group.row
                             label.col-sm-2.col-form-label.col-form-label-sm.required(for='about') About
                             .col-sm-10
-                                textarea.form-control(name='about' rows='3' id="about" required)
+                                textarea.form-control(name='about' rows='3' id="about"  required spellcheck="true") #{user.about ? user.about : ""}
                                 label.error-message
                         .form-group.row
                             label.col-sm-2.col-form-label.col-form-label-sm(for='submit') 
@@ -64,43 +64,43 @@ block content
                             label.col-sm-4.col-form-label.col-form-label-sm Age
                             .col-sm-8
                                 .custom-control.custom-switch
-                                    input#age.custom-control-input(type='checkbox' name="age")
+                                    input#age.custom-control-input.profile-switch(type='checkbox' name="age" value=`${personal.dob.show ? 'on' : ''}`)
                                     label.custom-control-label(for='age') Show/Hide
                         .form-group.row
                             label.col-sm-4.col-form-label.col-form-label-sm Marital Status
                             .col-sm-8
                                 .custom-control.custom-switch
-                                    input#status.custom-control-input(type='checkbox' name="status")
+                                    input#status.custom-control-input.profile-switch(type='checkbox' name="status" value=`${personal.marital_status.show ? 'on' : ''}`)
                                     label.custom-control-label(for='status') Show/Hide
                         .form-group.row
                             label.col-sm-4.col-form-label.col-form-label-sm Sex
                             .col-sm-8
                                 .custom-control.custom-switch
-                                    input#sex.custom-control-input(type='checkbox' name="sex")
+                                    input#sex.custom-control-input.profile-switch(type='checkbox' name="sex" value=`${personal.sex.show ? 'on' : ''}`)
                                     label.custom-control-label(for='sex') Show/Hide
                         .form-group.row
                             label.col-sm-4.col-form-label.col-form-label-sm State of origin
                             .col-sm-8
                                 .custom-control.custom-switch
-                                    input#origin.custom-control-input(type='checkbox' name="origin")
+                                    input#origin.custom-control-input.profile-switch(type='checkbox' name="origin" value=`${personal.state.show ? 'on' : ''}`)
                                     label.custom-control-label(for='origin') Show/Hide
                         .form-group.row
                             label.col-sm-4.col-form-label.col-form-label-sm Camp
                             .col-sm-8
                                 .custom-control.custom-switch
-                                    input#camp.custom-control-input(type='checkbox' name="camp")
+                                    input#camp.custom-control-input.profile-switch(type='checkbox' name="camp" value=`${displacement.place_residence.show ? 'on' : ''}`)
                                     label.custom-control-label(for='camp') Show/Hide
                         .form-group.row
                             label.col-sm-4.col-form-label.col-form-label-sm Year of Displacement
                             .col-sm-8
                                 .custom-control.custom-switch
-                                    input#yod.custom-control-input(type='checkbox' name="yod")
+                                    input#yod.custom-control-input.profile-switch(type='checkbox' name="yod" value=`${displacement.yod.show ? 'on' : ''}`)
                                     label.custom-control-label(for='yod') Show/Hide
                         .form-group.row
                             label.col-sm-4.col-form-label.col-form-label-sm YEARS OF EXPERIENCE
                             .col-sm-8
                                 .custom-control.custom-switch
-                                    input#yoe.custom-control-input(type='checkbox' name="yoe")
+                                    input#yoe.custom-control-input.profile-switch(type='checkbox' name="yoe" value=`${skill.yoe.show ? 'on' : ''}`)
                                     label.custom-control-label(for='yoe') Show/Hide
                         .form-group
                             input.btn.btn-block.btn-outline-success(type='submit' value="Update")

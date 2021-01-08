@@ -5,7 +5,7 @@ block content
         .px-md-5.pt-4
             .container.px-md-5.pb-md-5.form-section(style='background-color:#eef2f9;')
                 h4.font-weight-light.pt-3(style='color:#3c88c8; width: 350px; margin:0 auto;') VOLUNTEER/INTERNSHIP FORM
-                form.px-md-4(method='post' action="/application/intern" name="internship" id ="internship")
+                form.px-md-4(method='post' action="/application/intern" name="internship" id ="internship" enctype='multipart/form-data')
                     .form-group
                         label.m-0.required(for='name') Name (surname first)
                         input.form-control.form-control-sm(type='text'  name="name" id="name" value= `${data ? data.name: ''}` required)
@@ -59,7 +59,7 @@ block content
                             input.form-control.form-control-sm(type='number' name="duration" value= `${data ? data.duration: ''}` placeHolder="e.g 4 years")
                         .form-group.col-md-6
                             label(for='yog') Year of Graduation
-                            input.form-control.form-control-sm(type='text' name="yog" value= `${data ? data.yog: ''}` placeHolder="e.g 2018")
+                            input.form-control.form-control-sm(type='date' name="yog" value= `${data ? data.yog: ''}` placeHolder="e.g 2018")
                     .form-group
                         label.m-0(for='how') How did you here about DPHUB's Position
                         input.form-control.form-control-sm(type='text'  name="how" value= `${data ? data.how: ''}`)

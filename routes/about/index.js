@@ -4,13 +4,11 @@ const {Team} = require('../../model/about/team');
 const { DisplaceStat } = require('../../model/about/existStats');
 const router = express.Router();
 const multer = require('multer');
-const upload = multer({dest : 'public/images/uploads/general'});
-const upload_team = multer({dest : 'public/images/uploads/team'});
+const upload_teamStorage = multer.diskStorage(require('../../middleware/multerstorage')('public/images/uploads/team'))
+const upload_team = multer({storage:upload_teamStorage});
 
 const authenticate = require('../../middleware/athenticate');
 const admin = require('../../middleware/admin');
-
-
 
 /* GET Who we are page. */
 router.get('/about/whoweare',  async function(req, res, next) {
@@ -78,6 +76,30 @@ router.get('/about/team/:id',   async function(req, res, next) {
       });
 });
 
+//Deletion for Team member
+router.delete('/about/team/:id', authenticate, admin,  async(req, res)=>{
+       
+  const team = await  Team.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+        if(!team) return res.status(404).render('admin/about', { 
+          title: 'Administrator',
+          user: req.currentUser
+        });
+
+      if(team.photo !== ""){
+      
+          console.log("Is it here", team);
+          let filename = path.basename(team.photo);
+      
+          fs.unlink(`public/images/uploads/team/${filename}`, function (err) {
+          if (err) console.log(err);;
+          console.log('File deleted!');
+          });
+      }
+        req.flash('success', "Team Member detail deleted")
+        res.location('/administrator');
+        res.redirect('/administrator');
+
+})
 
 router.post('/administrator/whyweexist',authenticate, admin,  async(req,res) =>{
 
@@ -113,19 +135,7 @@ router.post('/administrator/whyweexist',authenticate, admin,  async(req,res) =>{
              console.log("Hope it is from here", result);
 
         }
-     //
 
-    //const result = await displaceStats.save()
- 
-
-  //  if(!result){
-    //    req.flash('error', "Displacement stats failed to update")
-     //   return res.status(400).render('admin/about', { 
-     //     title: 'about',
-     //     user:req.currentUser
-     //   });
-  //  }
-    console.log(displaceStats);
     req.flash('success', 'Displacement stats has been updated');
     res.location('/administrator/about');
     res.redirect('/administrator/about');
@@ -175,6 +185,10 @@ router.post('/administrator/upload/team', authenticate, admin, upload_team.singl
 /* GET Administrator about page. */
 router.get('/administrator/about', authenticate, admin, async function(req, res, next) {
 
+  const team = await Team.find()
+  if(!team) return res.status(404).send("NO Team Image");
+
+
   const displaceStats= await DisplaceStat.find()
                                       .limit(1);
   let stats = null;
@@ -184,9 +198,10 @@ router.get('/administrator/about', authenticate, admin, async function(req, res,
       }
       
     res.render('admin/about', { 
-        title: 'about',
+        title: 'About',
         user:req.currentUser,
-        stats
+        stats,
+        teams:team
       });
 });
 module.exports = router

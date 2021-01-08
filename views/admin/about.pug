@@ -72,4 +72,54 @@ block content
                     label(for='whatsapp') whatsapp
                     input.form-control.form-control-sm(type="url" name="whatsapp"  placeholder="https://www.whatsapp.com/jacob_kalid123")
             input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | TEAM MEMBER DETAILS
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Name
+                            th(scope='col') Position
+                            th(scope='col') Bio
+                            th(scope='col') Image
+                            th(scope='col')
+                    tbody
+                        if(teams)
+                            each team, i in teams
+                                tr
+                                    td 
+                                       | #{team.name}  #{team.surname}
+                                    td 
+                                       | #{team.position} 
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#exampleModalCenter${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`exampleModalCenter${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        != team.body
+                                                        .border-top.text-mutted
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#team${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`team${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        img(src=`${team.photo}` width="100%" height="100%")
+                                                        .border-top.text-mutted
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${team._id}` data-submiturl="/about/team/" data-rurl="/administrator") Remove
     

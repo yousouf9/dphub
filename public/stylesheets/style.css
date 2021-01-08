@@ -4,6 +4,9 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 }
+#sidebarMenu{
+  overflow-y: auto;
+}
 .main-color{
   background-color: #0f5996e0 ;
 }

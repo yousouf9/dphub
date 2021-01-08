@@ -9,22 +9,22 @@ const subscribeSchema = new mongoose.Schema({
         required: true
     },
     press_release:{
-        type: Number
+        type: String
     },
     event:{
-        type: Number
+        type: String
     },
     publication:{
-        type: Number
+        type: String
     },
     blogs:{
-        type: Number
+        type: String
     },
     multimedia:{
-        type: Number
+        type: String
     },
     jobs:{
-        type: Number
+        type: String
     }
 
 

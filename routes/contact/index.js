@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const {Contact, validateInput} = require('../../model/contact/index');
 const {sendMail} = require('../../utility/sendMail');
+const authenticate = require('../../middleware/athenticate');
+const admin = require('../../middleware/admin');
+const {Pagination} = require('../../middleware/pagination');
 
 
 /* GET CONTACT US page. */
@@ -78,4 +81,36 @@ router.post('/contact',  async(req,res)=>{
 
 })
 
+router.get('/administrator/contact', authenticate, admin, async(req, res)=>{
+   
+
+  const contact = await Contact.find()
+                               .sort({createdAt: -1})
+
+
+  let page =  parseInt(req.query.page) || 1;
+  const pagRes = Pagination(contact, page, 10) 
+
+
+  res.render('admin/contact', {
+    title:"Contact",
+    user: req.currentUser,
+    contacts:pagRes
+  })
+})
+
+//Deletion for events
+router.delete('/contact/:id', authenticate, admin,  async(req, res)=>{
+       
+  const contact = await  Contact.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+        if(!contact) return res.status(404).render('admin/contact', { 
+          title: 'Administrator',
+          user: req.currentUser
+        });
+
+        req.flash('success', "Contact detail deleted")
+        res.location('/administrator/contact');
+        res.redirect('/administrator/contact');
+
+})
 module.exports = router

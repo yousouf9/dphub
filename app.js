@@ -13,6 +13,7 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const config = require('config')
 const _ = require('lodash');
+const {countDown} = require('./utility/counter');
 
 
 require('./startup/db');
@@ -66,8 +67,10 @@ app.locals.truncateText = function(text, length){
 app.locals.isObjectEmpty = function(data) {
    return _.isEmpty(data)
 }
-app.locals.dateCounter = function() {
-  
+app.locals.dateCounter = function(date) {
+
+      console.log(date);
+    return countDown(date);
 }
 
 // view engine setup

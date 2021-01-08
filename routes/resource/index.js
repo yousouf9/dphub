@@ -1,16 +1,26 @@
 const express = require('express');
+const path = require('path')
+const fs  = require('fs')
 const {Header} = require('../../model/General/header');
 const {Press, validateInput} = require('../../model/resource/press');
 const {Report} = require('../../model/resource/report');
 const {Blog} = require('../../model/resource/blog');
+const {Event} = require('../../model/General/events');
 const {Subscribe} = require('../../model/General/subscribe');
 const {  DownloaderHelper } = require('node-downloader-helper')
 const multer = require('multer');
-const upload_ = multer({dest : 'public/images/uploads/general'});
-const upload_press = multer({dest : 'public/images/uploads/press'});
-const upload_report_file = multer({dest : 'public/images/uploads/report'});
-const upload_blog = multer({dest : 'public/images/uploads/blog'});
-const path = require('path')
+
+const upload_pressStorage = multer.diskStorage(require('../../middleware/multerstorage')('public/images/uploads/press'))
+const upload_press = multer({storage:upload_pressStorage});
+
+const upload_report_fileStorage = multer.diskStorage(require('../../middleware/multerstorage')('public/images/uploads/report'))
+const upload_report_file = multer({storage:upload_report_fileStorage});
+
+
+const upload_blogStorage = multer.diskStorage(require('../../middleware/multerstorage')('public/images/uploads/blog'))
+const upload_blog = multer({storage:upload_blogStorage});
+
+
 const authenticate = require('../../middleware/athenticate');
 const admin = require('../../middleware/admin');
 const {Pagination} = require('../../middleware/pagination');
@@ -41,6 +51,15 @@ router.get('/resource/press',  async function(req, res, next) {
   
      
     if(!press) return res.status(404).send("No Press articles available");
+
+    
+      const event = await Event.find({show:true})
+                               .sort({date: 1}) 
+    if(!event) return res.status(404).send("Events not found"); 
+
+
+    let epage = parseInt(req.query.epage) || 1
+    const Results = Pagination(event, epage, 3)
     
 
     let page =  parseInt(req.query.page) || 1;
@@ -49,7 +68,8 @@ router.get('/resource/press',  async function(req, res, next) {
     res.render('resource/press', { 
         title: 'Resources',
         header,
-        presses:pagRes
+        presses:pagRes,
+        events: Results
       });
 });
 
@@ -95,18 +115,25 @@ router.get('/resource/report',  async function(req, res, next) {
   }
    
 
+  const event = await Event.find({show:true})
+                           .sort({date: 1}) 
+  if(!event) return res.status(404).send("Events not found"); 
+
+
+  let epage = parseInt(req.query.epage) || 1
+  const Results = Pagination(event, epage, 3)
    
   if(!report) return res.status(404).send("No report available");
   
-
-
+   
   let page =  parseInt(req.query.page) || 1;
   const pagRes = Pagination(report, page, 9) 
 
   res.render('resource/report', { 
       title: 'Resources',
       header,
-      reports:pagRes
+      reports:pagRes,
+      events: Results,
     });
 });
 /* GET Resource blog page. */
@@ -191,13 +218,117 @@ router.post('/resource/report/download/:id', async(req, res, next)=>{
 
 /* Administrator section */
 /* GET Administrator Resourcepage. */
-router.get('/administrator/resources', authenticate, admin,  function(req, res, next) {
+router.get('/administrator/resources', authenticate, admin,  async function(req, res, next) {
+
+      const blog = await Blog.find()
+                             .sort({createdAt: -1})
+      if(!blog) return res.status(404).send("No report available");
+      let bpage =  parseInt(req.query.bpage) || 1;
+      const bpagRes = Pagination(blog, bpage, 7) 
+
+
+      const report = await Report.find()
+                                 .sort({createdAt: -1})
+      if(!report) return res.status(404).send("No report available");
+      let rpage =  parseInt(req.query.rpage) || 1;
+      const rpagRes = Pagination(report, rpage, 7) 
+
+
+      const press = await Press.find()
+                               .sort({createdAt: -1})
+      if(!press) return res.status(404).send("No press available");
+      let ppage =  parseInt(req.query.ppage) || 1;
+      const ppagRes = Pagination(press, ppage, 7) 
+
 
     res.render('admin/resource', { 
-        title: 'Resource',
-        user:req.currentUser
+        title: 'Resources',
+        user:req.currentUser,
+        blogs: bpagRes,
+        reports: rpagRes,
+        presses: ppagRes
       });
 });
+//Deletion Press
+router.delete('/press/:id', authenticate, admin,  async(req, res)=>{
+       
+  const press = await  Press.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+        if(!press) return res.status(404).render('admin/resource', { 
+          title: 'Resources',
+          user: req.currentUser
+        });
+        if(press.photo !== ""){
+        
+          let filename = path.basename(press.photo);
+          fs.unlink(`public/images/uploads/press/${filename}`, function (err) {
+          if (err) throw err;
+          console.log('File deleted!');
+          });
+      }
+
+        req.flash('success', "Press detail deleted")
+        res.location('/administrator/resources');
+        res.redirect('/administrator/resources');
+
+})
+
+//Deletion Blog
+router.delete('/blog/:id', authenticate, admin,  async(req, res)=>{
+       
+  const blog = await  Blog.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+        if(!blog) return res.status(404).render('admin/resource', { 
+          title: 'Resources',
+          user: req.currentUser
+        });
+        if(blog.photo !== ""){
+        
+          let filename = path.basename(blog.photo);
+          fs.unlink(`public/images/uploads/blog/${filename}`, function (err) {
+          if (err) throw err;
+          console.log('File deleted!');
+          });
+      }
+
+        req.flash('success', "Blog detail deleted")
+        res.location('/administrator/resources');
+        res.redirect('/administrator/resources');
+
+})
+
+//Deletion Report
+router.delete('/report/:id', authenticate, admin,  async(req, res)=>{
+       
+  const report = await  Report.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+        if(!report) return res.status(404).render('admin/resource', { 
+          title: 'Resources',
+          user: req.currentUser
+        });
+
+        if(report.photo !== ""){
+        
+          let filename = path.basename(report.photo);
+          console.log(filename);
+          fs.unlink(`public/images/uploads/report/${filename}`, function (err) {
+          if (err) throw err;
+          console.log('File deleted!');
+          });
+       }
+
+       if(report.filename !== ""){
+        
+          let filename = path.basename(report.filename);
+          console.log(filename);
+          fs.unlink(`public/images/uploads/report/${filename}`, function (err) {
+          if (err) throw err;
+          console.log('File deleted!');
+          });
+      }
+        req.flash('success', "Report detail deleted")
+        res.location('/administrator/resources');
+        res.redirect('/administrator/resources');
+
+})
+
 
 router.post('/administrator/upload/press', authenticate, admin,  upload_press.single('photo'), async(req, res, next)=>{
 
@@ -335,12 +466,26 @@ router.post('/subscription', async(req, res, next)=>{
 
  let subscribe = await Subscribe.findOne({email:req.body.email});
 
+   
       if(subscribe){
           req.flash('error', "Your are already subscribed to our platform") 
           res.location(req.body.urlpath);
           res.redirect( req.body.urlpath);
+          return
       }
 
+      for(let key in req.body){
+        if(key === "press_release") req.body.press_release = "Press Release";
+        if(key === "event") req.body.event = "Event";
+        if(key === "publication") req.body.publication = "Publication";
+        if(key === "blogs") req.body.blogs = "Blogs";
+        if(key === "multimedia") req.body.multimedia = "Multimedia";
+        if(key === "jobs") req.body.multimedia = "jobs";
+    
+      }
+
+      console.log(req.body);
+      
       subscribe = new Subscribe(req.body);
 
   if(!subscribe)  return res.status(400).send("failed to save subscription");

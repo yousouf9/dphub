@@ -1,10 +1,16 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const {Internship} = require('../../model/forms/internship');
 const {Sponsor} = require('../../model/forms/sponsor');
 const { sendMail} = require('../../utility/sendMail')
 const multer = require('multer');
-const upload = multer({dest : 'public/images/uploads/application'});
+const upload_internStorage = multer.diskStorage(require('../../middleware/multerstorage')('public/images/uploads/application'))
+const upload_intern = multer({storage: upload_internStorage});
+
 const authenticate = require('../../middleware/athenticate');
+const {Pagination} = require('../../middleware/pagination');
+
 const admin = require('../../middleware/admin');
 const router = express.Router();
 
@@ -29,7 +35,7 @@ router.get('/getinvolved/intern',  async function(req, res, next) {
 });
 
 //Internship application
-router.post('/application/intern',  upload.single('cv'), async function(req, res, next) {
+router.post('/application/intern',  upload_intern.single("cv"), async function(req, res, next) {
    
 
 
@@ -195,6 +201,73 @@ router.post('/application/sponsor', authenticate,admin,  async function(req, res
 
 });
 
+//GET getInvolved admin page
+router.get('/administrator/get_involved', authenticate, admin, async(req, res)=>{
+
+
+
+
+  const intern = await Internship.find()
+                               .sort({_id: -1});
+
+    
+  const sponsor = await Sponsor.find()
+                               .sort({_id: -1});
+
+  let ipage =  parseInt(req.query.ipage) || 1;
+  const iResults = Pagination(intern, ipage, 5)
+
+  let spage =  parseInt(req.query.spage) || 1;
+  const sResults = Pagination(sponsor, spage, 5)
+
+
+  res.render('admin/getinvolved', {
+    title:"GetInvolved",
+    user: req.currentUser,
+    internships:iResults,
+    sponsors: sResults
+  })
+})
+
+//Deletion internship
+router.delete('/internship/:id', authenticate, admin,  async(req, res)=>{
+       
+  const internship = await  Internship.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+        if(!internship) return res.status(404).render('admin/getinvolved', { 
+          title: 'GetInvolved',
+          user: req.currentUser
+        });
+        if(internship.cv !== ""){
+        
+          let filename = path.basename(internship.cv);
+
+          console.log(filename);
+          fs.unlink(`public/images/uploads/application/${filename}`, function (err) {
+          if (err) throw err;
+          console.log('File deleted!');
+          });
+      }
+
+        req.flash('success', "Internship detail deleted")
+        res.location('/administrator/get_involved');
+        res.redirect('/administrator/get_involved');
+
+})
+
+//Deletion for events
+router.delete('/sponsor/:id', authenticate, admin,  async(req, res)=>{
+       
+  const sponsor = await  Sponsor.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
+        if(!sponsor) return res.status(404).render('admin/getinvolved', { 
+          title: 'GetInvolved',
+          user: req.currentUser
+        });
+        req.flash('success', "Sponsor detail deleted")
+        res.location('/administrator/get_involved');
+        res.redirect('/administrator/get_involved');
+
+})
+
 /* GET getInvolved promoter page. */
 router.get('/getinvolved/promoter',  async function(req, res, next) {
    
@@ -202,5 +275,4 @@ router.get('/getinvolved/promoter',  async function(req, res, next) {
       title: 'GetInvolved'
     });
 });
-
 module.exports = router;

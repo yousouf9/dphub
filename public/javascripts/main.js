@@ -27,10 +27,7 @@ $(document).ready(function(){
         url: '/general/events',
         type: 'GET',
         success:function(data){
-        let template = ''
             data.events.results.forEach(event => {
-
-                console.log(event);
                let eventDate =  new Date(event.date).getTime();
 
          
@@ -42,36 +39,7 @@ $(document).ready(function(){
     
                     // Find the distance between now and the count down date
                     var distance = eventDate - now;
-    
-                    // Time calculations for days, hours, minutes and seconds
-                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    
-                    // Display the result in the element with id="demo"
-                            template = `
-                            <div class="font-weight-light"> ${event.title} </div>
-                            <div class="d-flex justify-content-start text-center">
-                                <div class="px-2">
-                                    <h2 class="p-0 m-0 text-danger">${days}</h2>
-                                    <p class="p-0 m-0">Days</p>
-                                </div>
-                                <div class="px-2">
-                                    <h2 class="p-0 m-0 text-danger">${hours}</h2>
-                                    <p class="p-0 m-0">Hours</p>
-                                </div>
-                                <div class="px-2">
-                                    <h2 class="p-0 m-0 text-danger">${minutes}</h2>
-                                    <p class="p-0 m-0">Minutes</p>
-                                </div>
-                                <div class="px-2">
-                                    <h2 class="p-0 m-0 text-danger">${seconds}</h2>
-                                    <p class="p-0 m-0">Seconds</p>
-                                </div>
-                            </div>
-                            ` 
-                            $('#date-countdown').html(template)
+
                     // If the count down is finished, write some text
                     if (distance < 0) {
                         clearInterval(x);
@@ -81,7 +49,6 @@ $(document).ready(function(){
                                 url: '/general/events/'+event._id,
                                 type: 'put',
                                 success:function(){
-                                  console.log("Event removed");
                                 }
                             });
                         }
@@ -106,8 +73,6 @@ $(document).ready(function(){
 
 
  if($("form")){    
-
-   
 
    $( 'form' ).find( 'select, textarea, input' ).each(function(){ 
   
@@ -211,19 +176,15 @@ if($("#userDisplacement")){
   //State change function
   $( "#state" ).change(function() {
     $( "#lga #lga_loading" ).html("Loading...")
-    console.log("State chnage");
     let currentState = $(this).val()
         if(currentState ==="Federal"){
             currentState = "Federal Capital Territory"
-            console.log(currentState);
         }
         if(currentState ==="Akwa"){
             currentState = "Akwa Ibom"
-            console.log(currentState);
         }
         if(currentState ==="Cross"){
             currentState = "Cross River"
-            console.log(currentState);
         }
 
         axios.get("https://immense-ocean-91058.herokuapp.com/api/state/"+currentState)
@@ -382,12 +343,23 @@ $("#individual").change(function (e) {
 }
 
 });
+//Start here
+if($('.profile-switch')){
+    $('.profile-switch').change(function(){
+            if($(this).is(':checked')){
+                $(this).val('on')
+            }else{
+                $(this).val('') 
+            }
+    })
+}
+
+
 //Handling input file change.
 $('input[type=file]').change(function(e){
     let filename = e.target.files[0].name;
     let currentId =  e.target.id;
          $(`#${currentId} + label`).text(""+filename)
-    console.log($(`#${currentId} + label`));
 })
 setTimeout(function () {
      $('#messages').fadeOut();
@@ -406,14 +378,10 @@ $('.remove').click( function(e){
     let returnUrl = $(this).data('rurl');
     let submitUrl = $(this).data('submiturl');
 
-    console.log("What is wrong here!",submitUrl, "RURL", returnUrl);
-
-
-
     $.ajax({
         url: `${submitUrl}${dataId}` ,
         type: 'DELETE',
-        success:function(){
+        success:function(response){
             $(this).text("Delete")
             $(this).prop("disabled", false)
         },
@@ -422,6 +390,7 @@ $('.remove').click( function(e){
             $(this).prop("disabled", false) 
         }
     });
+   
     window.location = returnUrl;
   });
 
@@ -443,7 +412,6 @@ $('.paginate').click( function(e){
         type: 'get',
   
         success:function(response){
-            console.log("currently here");
         },
     });
     window.location = returnUrl;
@@ -680,5 +648,11 @@ $(".monitor-detail").mouseenter(function(e) {
         $(this).css("display", "none")
     })
   })
+
+if($("#counterDiv")){
+    setInterval(()=>{
+     // $("#counterDiv").load(location.href + " #counterDiv");
+     }, 1000)
+}
 
 }); 

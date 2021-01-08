@@ -8,8 +8,15 @@ const {Engagement} = require('../model/home/engagement');
 const {Skill_Talent}= require("../model/user/skill");
 const { Statistic} = require('../model/statistics/displacement');
 const {Displacement} = require('../model/user/displacement');
-const { User } = require("../model/user/user");
+const { User , validateUser} = require("../model/user/user");
+const {Pagination}= require('../middleware/pagination');
+const authenticate= require('../middleware/athenticate');
+const admin= require('../middleware/admin');
+
 const router = express.Router();
+
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
 
 /* GET home page. */
@@ -123,7 +130,6 @@ router.get('/',  async function(req, res, next) {
             totalDisplacePerson,
             conflict_violence,
             disaster
-
     });
 });
 
@@ -161,4 +167,166 @@ res.render('news/newsdetail', {
    article
  });
 });
+
+
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+ 
+passport.deserializeUser(function(id, done) {
+  User.getUserById(id, function (err, user) {
+    done(err, user);
+  });
+});
+
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+        User.getUserByUsername(username, async function(err, user) {
+          if(err) throw new Error(err);
+             
+          if(!user) {
+            console.log('not a valide user');
+            return done(null, false, {message: 'unknown user'});
+          }
+          
+          if(user.admin==="false"){
+            console.log('Not and admin');
+            return done(null, false, {message: 'You dont have permission for here'});
+          }
+
+          const isValid =  await User.validatePassword(password, user.password)
+          if(!isValid){
+              console.log('Password did not matched')
+              return done(null, false);
+          } 
+
+          return done(null, user);
+
+       });
+    }
+
+));
+
+router.post('/administrator/login',
+ passport.authenticate('local', {failureRedirect:'/administrator/login', failureFlash:'invalid username or password'}),
+
+ async(req, res)=>{
+
+  const loginToken = await User.sendEmailToken(req.user._id);
+    //update user account verification token  
+    //hash user password  
+   const user = await User.findById(req.user._id); 
+   user.loginToken= loginToken;
+
+    await user.save();
+
+
+  req.flash('success','you are logged in');
+  res.cookie('x-auth',  loginToken);
+
+    res.location(`/administrator`)
+    res.redirect(`/administrator`)
+  
+})
+
+/** Register a new Admin user */
+
+router.post('/administrator/register', async (req, res)=>{
+
+  const {error}  = validateUser(req.body);
+  
+  if(typeof error !== 'undefined'){
+     
+      console.log(error);
+
+     req.flash('error', error.details[0].message)
+     res.status(400).render('admin/register', {
+      data: req.body
+    })
+
+  }
+
+  const isEmailAvailable =await User.findOne({email: req.body.email});
+  const usernameAvailable =await User.findOne({username: req.body.username});
+  
+  if(isEmailAvailable){
+     req.flash('error', "User with email already exist!")
+    return res.status(400).render('admin/register', {
+     data: req.body
+   })
+  }
+
+  if(usernameAvailable){
+    req.flash('error', "Username already exist!")
+    res.status(400).render('admin/register', {
+    data: req.body
+  })
+ }
+
+
+ const user = new User(req.body);
+
+ if(!user) {
+      req.flash('error', "Failed to create user")
+     return res.status(400).render('admin/register', {
+      data: req.body
+    })
+  }
+
+
+  
+   const verificationToken = await User.sendEmailToken(user._id);
+   //update user account verification token  
+   //hash user password  
+   user.token= verificationToken;
+   user.password =await User.encryptPassword(user.password);
+
+   let result = await user.save();
+
+   if(!result) {
+        req.flash('error', "Failed to create user")
+     return   res.status(400).render('user/register', {
+        data: req.body
+      })
+    }
+
+    req.flash('success', "Account Successfully created")
+    res.location('/user/email_verification_message');
+    res.redirect('/user/email_verification_message');
+
+ 
+})
+
+router.get("/administrator/users", authenticate, admin,  async(req, res)=>{
+
+  let search = req.query.search;
+
+  let user
+  if(search){
+    if(search === "admin" || search ==="Admin"){
+      user = await User.find({admin : {$regex: true, $options: 'i'}});
+    }else{
+      user = await User.find({admin : {$regex: false, $options: 'i'}});
+    }
+    
+    if(user.length === 0) {
+      req.flash('error', "No user found")
+      user = await User.find();
+    }
+  }else{
+    user = await User.find();
+  }
+   
+                           
+   let page =  parseInt(req.query.page) || 1;
+    const  result  = Pagination(user, page, 10) 
+
+  res.render('admin/register', {
+    title: "Users",
+    user:req.currentUser,
+    users:result,
+  })
+})
+
 module.exports = router;

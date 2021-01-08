@@ -1,6 +1,7 @@
 const express = require('express');
 const {sendMail} = require('../utility/sendMail')
-
+const fs = require('fs');
+const path = require('path')
 const { User, validateUser } = require('../model/user/user');
 const {Personal} = require('../model/user/personal');
 const {Displacement} = require('../model/user/displacement');
@@ -12,12 +13,15 @@ const {Upload} = require('../model/user/uploads');
 const { Gallery} = require('../model/user/gallery');
 const {Hire} = require('../model/user/hire');
 const multer = require('multer');
-const upload_report_file = multer({dest : 'public/images/users/upload'});
-const profileImage = multer({dest: 'public/images/users'})
-const userGallery = multer({dest: 'public/images/users/gallery'})
 
-const fs = require('fs');
-const path = require('path')
+const upload_report_fileStorage = multer.diskStorage(require('../middleware/multerstorage')('public/images/users/upload'))
+const upload_report_file = multer({storage:upload_report_fileStorage});
+
+const profileImageStorage = multer.diskStorage(require('../middleware/multerstorage')('public/images/users'))
+const profileImage = multer({storage:profileImageStorage})
+
+const userGalleryStorage = multer.diskStorage(require('../middleware/multerstorage')('public/images/users/gallery'))
+const userGallery = multer({storage: userGalleryStorage})
 
 
 
@@ -481,6 +485,12 @@ router.get('/profile', authenticate,  async function(req, res, next) {
 
   const user = await User.findOne({_id: req.currentUser._id})
 
+  const skill = await Skill_Talent.findOne({user: req.currentUser._id})
+  const personal = await Personal.findOne({user: req.currentUser._id})
+  const displacement = await Displacement.findOne({user: req.currentUser._id})
+
+  console.log("Skill", skill, "Personal", personal, "Displacement", displacement);
+
     if(!user) {
         req.flash('error', "Please login first")
       return res.status(400).render('user/profile', {
@@ -488,7 +498,7 @@ router.get('/profile', authenticate,  async function(req, res, next) {
       })
     }
 
-  res.render('user/profile', { title: 'Profile', user });
+  res.render('user/profile', { title: 'Profile', user,skill,personal,displacement});
 });
 
 //update profile picture;
@@ -562,10 +572,27 @@ router.post('/profile/social/:id', authenticate, async (req, res)=>{
 
 })
 
+router.post('/profile/personal/:id', authenticate, async (req, res)=>{
+
+        await User.findOneAndUpdate({_id:req.params.id}, {
+          $set:{
+            name: req.body.name,
+            phone: req.body.phone,
+            whatsapp: req.body.whatsapp,
+            email: req.body.email,
+            about: req.body.about,
+          }},{upsert:true}) 
+
+        req.flash('success', 'Profile updated');
+        res.location('/user/profile');
+        res.redirect('/user/profile');
+})
 //Post to user profile hide/show
 
 router.post('/profile/hide/:id', authenticate, async(req, res)=>{
 
+
+  console.log(req.body);
 
   let age, status,sex, origin, camp, yod, yoe
 
@@ -632,6 +659,7 @@ router.get('/mygallery/:id',  async (req, res, next)=> {
 router.post('/gallery', authenticate, userGallery.single('photo'), async (req, res)=>{
 
 
+ 
   let  mainImageName
   if(req.file){
       mainImageName                = req.file.filename;
@@ -663,14 +691,14 @@ router.post('/gallery', authenticate, userGallery.single('photo'), async (req, r
 })
 
 //Delete Gallery picture
-router.delete('/gallery/:id', async(req, res)=>{
+router.delete('/gallery/:id', authenticate, async(req, res)=>{
 
   const gallery = await  Gallery.findOneAndRemove({_id: req.params.id},{new:true,useFindAndModify:false});
         if(!gallery) return res.status(404).render('user/dashboard')
 
-        if(gallery.photo !== ""){
-           
-          let filename = path.basename(gallery.photo);
+        let filename = path.basename(gallery.photo);
+
+        if(gallery.photo !== "" && filename !== 'undefined'){
        
            fs.unlink(`public/images/users/gallery/${filename}`, function (err) {
              if (err) throw err;
@@ -763,7 +791,7 @@ router.delete('/hire/:id', async(req, res)=>{
         req.flash('success', "Hire request deleted")
         res.location('/user/hire');
         res.redirect('/user/hire');
-  })
+})
 // GET Hire Me Form
 router.get('/hire/me/:id',  async (req, res, next)=> {
 
@@ -1049,6 +1077,13 @@ router.post('/login',
     //update user account verification token  
     //hash user password  
    const user = await User.findById(req.user._id); 
+
+   if(user.admin){
+    req.flash('error','invalid username or password');
+    res.location(`/user/login`)
+    res.redirect(`/user/login`)
+   }
+
    user.loginToken= loginToken;
     await user.save();
 
@@ -1069,6 +1104,8 @@ router.post('/login',
 
 
 
+
+
 router.get('/logout', authenticate,  async (req, res) =>{
 
   req.logout();
@@ -1076,6 +1113,10 @@ router.get('/logout', authenticate,  async (req, res) =>{
   const result = await req.currentUser.deleteToken(req.token);
   if(!result) return res.status(400).send('Failed to logout')
 
+  if(req.currentUser.admin){
+    req.flash('success', 'You have successfully logged out');
+    res.redirect('/administrator/login');
+  }
   
   req.flash('success', 'You have successfully logged out');
   res.redirect('/user/login');

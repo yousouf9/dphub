@@ -158,14 +158,14 @@ block content
                                     p(class="label-title required") DATE/TIME
                                 td
                                     .form-group
-                                        input.form-control.form-control-sm(type='datetime-local' name="victim_date" required)
+                                        input.form-control.form-control-sm(type='datetime-local' name="victim_date" value=`${data ? data.victim_date: ''}` required)
                                         label.error-message
                             tr
                                 th(scope='row') 
                                     p(class="label-title required") INCIDENT DESCRIPTION
                                 td
                                     .form-group
-                                        textarea.form-control(name='victim_description' rows='4')
+                                        textarea.form-control(name='victim_description' rows='4') #{data ? data.victim_description: ''}
                                         label.error-message
                             tr
                                 th
@@ -180,12 +180,13 @@ block content
                                             .modal-content
                                                 .modal-header
                                                     h5#exampleModalLabel.modal-title ATTACHMENT
+                                                        span (PDF)
                                                     button.close(type='button' data-dismiss='modal' aria-label='Close')
-                                                        span.bg-success(aria-hidden='true') close;
+                                                        span.btn.btn-sm.btn-primary(aria-hidden='true') save
                                                 .modal-body
                                                         .input-group.mb-3
                                                             .custom-file
-                                                                input#victim.custom-file-input(type='file' name="attachment")
+                                                                input#victim.custom-file-input(type='file' name="attachment" accept=".pdf")
                                                                 label.custom-file-label(for='slider') Choose file
                     .w-100
                         hr
@@ -239,7 +240,7 @@ block content
                                     p(class="label-title") OFFENDERS DESCRIPTION
                                 td
                                     .form-group
-                                        textarea.form-control(name='offender_description' rows='4')
+                                        textarea.form-control(name='offender_description' rows='4') #{data ? data.offender_description: ''}
                                         label.error-message
                             tr
                                 th

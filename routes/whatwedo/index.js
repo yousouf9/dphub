@@ -13,7 +13,8 @@ const admin = require('../../middleware/admin');
 const {Statistic} = require('../../model/statistics/displacement');
 const {Pagination} = require('../../middleware/pagination');
 const multer = require('multer');
-const upload = multer({dest : 'public/images/uploads/application'});
+const uploadStorage = multer.diskStorage(require('../../middleware/multerstorage')('public/images/uploads/application'))
+const upload = multer({storage: uploadStorage});
 
 const router = express.Router();
 
@@ -67,9 +68,50 @@ router.get('/whatwedo/skill_profile',  async function(req, res, next) {
 
 /* GET talent Profiling  page. */
 router.get('/whatwedo/talent_profile',  async function(req, res, next) {
-    res.render('whatwedo/talent', { 
-        title: 'WhatWeDo'
-      });
+
+   
+  let search = req.query.search;
+  let skill
+  if(search){
+    skill = await Skill_Talent.find({skill : {$regex: `${search}`, $options: 'i'}})
+                              .populate('user')
+    if(skill.length === 0) {
+      req.flash('error', "No user is registered with this skills")
+      skill = await Skill_Talent.find()
+                         .populate('user');
+    }
+  }else{
+    skill = await Skill_Talent.find()
+                              .populate('user');
+  }
+   
+
+   
+  if(!skill) return res.status(404).send("No skills available");
+
+  let skillsArray = [...new Set(skill)];
+
+
+    const result = [];
+    const map = new Map();
+    for (const item of skillsArray) {
+        if(!map.has(item.user._id)){
+            map.set(item.user._id, true);    // set any value to Map
+            result.push({
+                _id: item._id,
+                skill: item.skill,
+                user: item.user
+            });
+        }
+    }
+
+    let page =  parseInt(req.query.page) || 1;
+    const pagRes = specialPagination(result, page, 8) 
+
+  res.render('whatwedo/talent', { 
+    title: 'WhatWeDo',
+    skills: pagRes
+  });
 });
 
 /* GET DP complain   page. */
@@ -249,6 +291,7 @@ router.post("/dp_complain_form", upload.single('attachment'), async(req, res)=>{
 
   const {error}  = validateComplaintForm(req.body);
   if(typeof error !== 'undefined'){
+    req.flash('error', error.details[0].message)
       res.status(400).render('whatwedo/dp_complainform', { 
       title: 'WhatWeDo',
       data: req.body,
@@ -266,7 +309,7 @@ router.post("/dp_complain_form", upload.single('attachment'), async(req, res)=>{
  //Attachment URL
   req.body.attachment = `${req.protocol}://${req.headers.host}/images/uploads/application/${FileData}`;
 
-  console.log(req.body);
+
 
 
 
@@ -290,22 +333,6 @@ router.post("/dp_complain_form", upload.single('attachment'), async(req, res)=>{
   res.redirect("/whatwedo/dp_complain")
 
 
-  
-
-
-
-
-req.body.interesArea = {
-    human_right: req.body.human_right,
-    skill:req.body.skill,
-    advocacy:req.body.advocacy,
-    wash:req.body.wash,
-    dc:req.body.dc,
-    hr:req.body.hr,
-    policy:req.body.policy,
-    me:req.body.me,
-    cr:req.body.cr
-}
 
 })
 
@@ -323,6 +350,7 @@ router.get("/administrator/what_we_do", authenticate, admin,  async(req, res)=>{
     }
 
   res.render('admin/whatwedo', {
+    title: "Whatwedo",
     user:req.currentUser,
     stats: data.features,
     ID: data._id

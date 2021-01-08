@@ -34,7 +34,7 @@ const specialPagination = (model, page, limit ) => {
 
   const totalPages = Math.ceil(model.length / limit);
 
-   console.log(totalPages);
+
    let first = {}, second= {}, third = {};
 
 
