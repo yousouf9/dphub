@@ -14,6 +14,8 @@ const flash = require('connect-flash');
 const config = require('config')
 const _ = require('lodash');
 const {countDown} = require('./utility/counter');
+const compression = require('compression');
+const helmet = require('helmet');
 
 
 require('./startup/db');
@@ -31,6 +33,9 @@ const donateRouter = require('./routes/donate/index');
 const generalRouter = require('./routes/general/index');
 const complaintRouter = require('./routes/complaint/index');
 const app = express();
+
+app.use(compression());
+app.use(helmet());
 
  
 
