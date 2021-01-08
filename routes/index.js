@@ -17,7 +17,7 @@ const router = express.Router();
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const { render } = require('pug');
+
 
 
 /* GET home page. */
@@ -208,6 +208,10 @@ passport.use(new LocalStrategy(
     }
 
 ));
+
+router.get('/administrator/login', function(req, res, next) {
+  res.render('admin/login', { title: 'Login' });
+});
 
 router.post('/administrator/login',
  passport.authenticate('local', {failureRedirect:'/administrator/login', failureFlash:'invalid username or password'}),

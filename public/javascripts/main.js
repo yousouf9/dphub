@@ -653,7 +653,7 @@ $(".monitor-detail").mouseenter(function(e) {
 
 if($("#counterDiv")){
     setInterval(()=>{
-      $("#counterDiv").load(location.href + " #counterDiv");
+     // $("#counterDiv").load(location.href + " #counterDiv");
      }, 1000)
 }
 }); 

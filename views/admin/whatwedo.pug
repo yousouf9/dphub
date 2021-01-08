@@ -11,7 +11,7 @@ block content
                     label.error-message
                 .form-group.col-md-6
                     label.m-0.required(for='category') DISASTER TYPE
-                    input.form-control.form-control-sm(type="text" name="category" id="category" value=`${data ? data.category : ""}`  placeholder="Boko Haram" required)
+                    input.form-control.form-control-sm(type="text" name="category" id="m_category" value=`${data ? data.category : ""}`  placeholder="Boko Haram" required)
                     label.error-message
             .form-row
                 .form-group.col-md-6
@@ -30,7 +30,7 @@ block content
                     label.error-message
                 .form-group.col-md-6
                     label.m-0.required(for='date') Date
-                    input.form-control.form-control-sm(type="date" name="date" id="date" value=`${data ? data.date : ""}` required)
+                    input.form-control.form-control-sm(type="date" name="date" id="m_date" value=`${data ? data.date : ""}` required)
                     label.error-message
             input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
         h2 Update Report Statistics
