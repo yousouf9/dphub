@@ -88,11 +88,6 @@ router.get('/administrator',  authenticate, admin, async function(req, res, next
 });
 
 
-router.get('/administrator/login', function(req, res, next) {
-    res.render('admin/login', { title: 'Express' });
-  });
-
-
 //Uploading Slider information
 router.post('/administrator/upload/slider', authenticate, admin, upload_slider.single('photo'), async(req,res)=>{
 

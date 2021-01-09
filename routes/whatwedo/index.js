@@ -263,6 +263,12 @@ router.post("/dp_complain_form", upload.single('attachment'), async(req, res)=>{
   let other_complain = [];
 
   for(let key in req.body){
+    if(key === "victim_sex") req.body.human_right = "Human Right"
+    if(key === "skill") req.body.skill = "Skills/Talent Promotion"
+    if(key === "advocacy") req.body.advocacy = "Advocacy"
+}
+
+  for(let key in req.body){
     if(key === "rape")   type_of_abuse.push("Rape")
     if(key === "sh")   type_of_abuse.push("Sexual harassment")
     if(key === "stalking")   type_of_abuse.push("Stalking")
