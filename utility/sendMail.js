@@ -10,7 +10,7 @@ const hostConfig={
  
    host: config.get("mail.mailHost"),
    port: config.get("mail.mailPort"),
-   secure: true, // true for 465, false for other ports
+   secure: false, // true for 465, false for other ports
     auth: {
         user: config.get("mail.mailUsername"),
         pass: config.get("mail.mailPassword")
