@@ -1,0 +1,185 @@
+extends ../admin_layout
+
+block content
+    .container-fluid
+        .shadow-sm.p-5.mb-5.bg-white.rounded
+            .form-section
+                header.p-2.text-white(style="background:#092944")
+                    | COMPLAINTS INFORMATION
+                .table-responsive
+                    table.table.table-hover
+                        thead
+                            tr
+                                th(scope='col') SN
+                                th(scope='col') REPORTER
+                                th(scope='col') VICTIM
+                                th(scope='col') ATTACHMENT
+                                th(scope='col') OFFENDER
+                                th(scope='col') 
+                        tbody
+                            if(complaints)
+                                each complaint, i in complaints.results
+                                    tr
+                                        td 
+                                            small #{i+1}
+                                        td
+                                            // Button trigger modal
+                                            button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#report${i}`)
+                                                | VIEW
+                                            // Modal
+                                            .modal.fade(tabindex='-1' role='dialog' id=`report${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                                .modal-dialog.modal-dialog-centered.modal-xl(role='document')
+                                                    .modal-content
+                                                        .modal-header
+                                                            button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                                span(aria-hidden='true') &times;
+                                                        .modal-body
+                                                            .table-responsive
+                                                                table.table.table-hover
+                                                                    thead
+                                                                        tr
+                                                                            th(scope='col') REPORTER
+                                                                            th(scope='col') NAME
+                                                                            th(scope='col') PHONE
+                                                                            th(scope='col') EMAIL
+                                                                    tbody
+                                                                        tr  
+                                                                            td
+                                                                                small #{complaint.reporter}
+                                                                            td
+                                                                                small #{complaint.reporter_name}
+                                                                            td
+                                                                                small #{complaint.reporter_phone}
+                                                                            td
+                                                                                small #{complaint.reporter_email}
+                                                            .border-top.text-mutted
+                                        td
+                                            // Button trigger modal
+                                            button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#victim-detail${i}`)
+                                                | View
+                                            // Modal
+                                            .modal.fade(tabindex='-1' role='dialog' id=`victim-detail${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                                .modal-dialog.modal-dialog-centered.modal-xl(role='document')
+                                                    .modal-content
+                                                        .modal-header
+                                                            button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                                span(aria-hidden='true') &times;
+                                                        .modal-body
+                                                            .table-responsive
+                                                                table.table.table-hover
+                                                                    thead
+                                                                        tr
+                                                                            th(scope='col') NAME
+                                                                            th(scope='col') SEX
+                                                                            th(scope='col') AGE
+                                                                            th(scope='col') STATE
+                                                                            th(scope='col') CAMP
+                                                                            th(scope='col') TYPE OF ABUSE
+                                                                            th(scope='col') OTHER COMPLAIN
+                                                                            th(scope='col') DATE/TIME
+                                                                            th(scope='col') DESCRIPTION
+                                                                    tbody
+                                                                        tr  
+                                                                            td
+                                                                                small #{complaint.victim_name}
+                                                                            td
+                                                                                small #{complaint.victim_sex}
+                                                                            td
+                                                                                small #{complaint.victim_age}
+                                                                            td
+                                                                                small #{complaint.state}
+                                                                            td
+                                                                                small #{complaint.victim_camp}
+                                                                            td
+                                                                                each type, v in complaint.type_of_abuse
+                                                                                    span.p-1 #{type},
+                                                                            td
+                                                                                each other, o in complaint.other_complain
+                                                                                    span.p-1 #{other},
+                                                                            td
+                                                                                small #{moment(complaint.victim_date).format('MM:DD:YYY, h:mm')}
+                                                                            td
+                                                                                small #{complaint.victim_description}
+                                                            .border-top.text-mutted
+                                        td 
+                                            // Button trigger modal
+                                            button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#attach${i}`)
+                                                | View
+                                            // Modal
+                                            .modal.fade(tabindex='-1' role='dialog' id=`attach${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                                .modal-dialog.modal-dialog-centered.modal-xl(role='document')
+                                                    .modal-content
+                                                        .modal-header
+                                                            button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                                span(aria-hidden='true') &times;
+                                                        .modal-body
+                                                            if(complaint.attachment)
+                                                                object(data=`${complaint.attachment}` type='application/pdf' width='100%' height='500')
+                                                                    iframe(src=`${complaint.attachment}` width='100%' height='500' style='border: none;')
+                                                                        | This browser does not support PDFs. Please download the PDF to view it: 
+                                                                        a(href=`${complaint.attachment}`) Download PDF
+                                                            .border-top.text-mutted
+                                        td
+                                            // Button trigger modal
+                                            button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#offender${i}`)
+                                                | VIEW
+                                            // Modal
+                                            .modal.fade(tabindex='-1' role='dialog' id=`offender${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                                .modal-dialog.modal-dialog-centered.modal-xl(role='document')
+                                                    .modal-content
+                                                        .modal-header
+                                                            button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                                span(aria-hidden='true') &times;
+                                                        .modal-body
+                                                            .table-responsive
+                                                                table.table.table-hover
+                                                                    thead
+                                                                        tr
+                                                                            th(scope='col') NUMBER
+                                                                            th(scope='col') NAME
+                                                                            th(scope='col') SEX
+                                                                            th(scope='col') AFFILIATION
+                                                                            th(scope='col') LINK TO VICTIM
+                                                                            th(scope='col') DESCRIPTION
+                                                                    tbody
+                                                                        tr  
+                                                                            td
+                                                                                small #{complaint.offender_number}
+                                                                            td
+                                                                                small #{complaint.offender_name}
+                                                                            td
+                                                                                small #{complaint.offender_sex}
+                                                                            td
+                                                                                small #{complaint.offender_affiliation}
+                                                                            td
+                                                                                small #{complaint.offender_link_victim}
+                                                                            td
+                                                                                small #{complaint.offender_description}
+                                                            .border-top.text-mutted
+                                        td
+                                            a.btn.btn-sm.btn-danger.remove(href="" data-id=`${complaint._id}` data-submiturl="/complaint/" data-rurl="/administrator/complaint") Remove
+                if(complaints)
+                    .d-flex.justify-content-center.pagination
+                        p.paginateLeft
+                            a.paginate(href="" data-submiturl="/administrator/complaint" data-page="1"  data-rurl="/administrator/complaint?page=1") 
+                                i.fas.fa-angle-double-left
+                        if !isObjectEmpty(complaints.previous)
+                            p.paginateLeft 
+                                a.paginate(href=""  data-submiturl="/administrator/complaint"  data-rurl=`/administrator/complaint?page=${complaints.previous.page}`)
+                                    i.fas.fa-angle-left
+                        if !isObjectEmpty(complaints.first)
+                            p.paginateRight(class =`${complaints.first.current ? complaints.first.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/administrator/complaint"  data-rurl=`/administrator/complaint?page=${complaints.first.value}` ) #{complaints.first.value}
+                        if !isObjectEmpty(complaints.second)
+                            p.paginateRight(class =`${complaints.second.current ? complaints.second.current: ""}`) 
+                                a.paginate(href=""  data-submiturl="/administrator/complaint"  data-rurl=`/administrator/complaint?page=${complaints.second.value}`) #{complaints.second.value}
+                        if !isObjectEmpty(complaints.third)
+                            p.paginateRight(class =`${complaints.third.current ? complaints.third.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/administrator/complaint"  data-rurl=`/administrator/complaint?page=${complaints.third.value}`) #{complaints.third.value}
+                        if !isObjectEmpty(complaints.next)
+                            p.paginateRight
+                                a.paginate(href=""  data-submiturl="/administrator/complaint"  data-rurl=`/administrator/complaint?page=${complaints.next.page}`)
+                                    i.fas.fa-angle-right
+                        p.paginateRight 
+                            a.paginate(href=""  data-submiturl="/administrator/complaint" data-page=`${complaints.totalPages}` data-rurl=`/administrator/complaint?page=${complaints.totalPages}`)
+                                i.fas.fa-angle-double-right

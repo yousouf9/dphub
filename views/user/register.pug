@@ -1,0 +1,34 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0(style="background:#e6e9ec ")
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section
+                form.p-4(method='post' action="/user/register" name="userRegister" id="userRegister")
+                    header.p-2.text-white(style="background:#092944")
+                        | CREATE ACCOUNT
+                    .form-group
+                        label.m-0.required(for='username' ) username
+                        input.form-control.form-control-sm(type='text'  name="username" id="username" value= `${data ? data.username: ''}` required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='name' ) Name (surname first)
+                        input.form-control.form-control-sm(type='text'  name="name" id="name" value= `${data ? data.name: ''}` required)
+                        label.error-message
+                    .form-group
+                        label.m-0(for='whatsapp' ) WhatsApp 
+                        input.form-control.form-control-sm(type='text'  name="whatsapp" id="whatsapp" value= `${data ? data.whatsapp: ''}`)
+                    .form-group
+                        label.m-0.required(for='email') Email
+                        input.form-control.form-control-sm(type='email' name="email" id="email" value= `${data ? data.email: ''}` required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='password') Password (Atleast 6 characters)
+                        input.form-control.form-control-sm(type='password' name="password" id="password"  required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='confirm_password') confirm Password
+                        input.form-control.form-control-sm(type='password' name="confirm_password" id="confirm_password"  required)
+                        label.error-message
+                    .text-center
+                        input.btn.btn-md.btn-primary(type='submit'  value='Register' )

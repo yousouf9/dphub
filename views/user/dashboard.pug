@@ -1,0 +1,23 @@
+extends ../admin_layout
+
+block content
+    .container
+        .shadow-sm.p-5.mb-5.bg-white.rounded
+            .form-section.p-0.m-0
+                header.p-2.text-white(style="background:#092944")
+                    | UPLOAD GALLERY IMAGES HERE
+                .row.row-cols-1.row-cols-sm-2.row-cols-md-3.row-cols-lg-4
+                        if(galleries)
+                            each gallery, i in galleries
+                                .gallery.my-1
+                                    .card.h-100.m-md-3
+                                        img.card-img-top(src=`${gallery.photo}` alt=`gallery ${i+1}`   height="85%")
+                                        a.btn.btn-block.btn-danger.remove(href="" data-id=`${gallery._id}` data-submiturl="/user/gallery/" data-rurl="/user/dashboard") Delete
+        .shadow-sm.p-3.mb-5.bg-white.rounded
+             form(method="post" action=`/user/gallery` enctype='multipart/form-data')
+                .form-group
+                    .input-group.mb-3
+                        .custom-file
+                            input#other.custom-file-input(type='file' name='photo' accept=".jpg,.jpeg,.png" required)
+                            label.custom-file-label(for='other' aria-describedby='inputGroupFileAddon02') Choose file
+                input.btn.btn-block.btn-success.px-4(type='submit'  value='upload')

@@ -1,0 +1,120 @@
+extends ../layout
+
+block content
+    .container-fluid.p-4
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section(style='background-color:#eef2f9;')
+                h4.font-weight-light.pt-3(style='color:#3c88c8; width: 350px; margin:0 auto;') VOLUNTEER/INTERNSHIP FORM
+                form.px-md-4(method='post' action="/application/intern" name="internship" id ="internship" enctype='multipart/form-data')
+                    .form-group
+                        label.m-0.required(for='name') Name (surname first)
+                        input.form-control.form-control-sm(type='text'  name="name" id="name" value= `${data ? data.name: ''}` required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='phone') Phone
+                        input.form-control.form-control-sm(type='number' name="phone" id="phone" value= `${data ? data.phone: ''}`  required)
+                        label.error-message
+                    .form-group
+                        label.m-0(for='whatsapp') WhatsApp 
+                        input.form-control.form-control-sm(type='text'  name="whatsapp" value= `${data ? data.whatsapp: ''}`)
+                       
+                    .form-group
+                        label.m-0.required(for='email') Email
+                        input.form-control.form-control-sm.required(type='email' name="email"  id="email" value= `${data ? data.email: ''}` required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='sex') Sex
+                        select.form-control.form-control-sm.required(name="sex" value= `${data ? data.sex: ''}`)
+                            option Male
+                            option Female
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='address') Contact Address
+                        input.form-control.form-control-sm.required(type='text' name="address"  id="address" value= `${data ? data.address: ''}` required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='state') State
+                        select.form-control.form-control-sm(name="state" id="state" value= `${data ? data.state: ''}` required)
+                            option select state
+                    
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='nationality') Nationality
+                        input.form-control.form-control-sm(name="nationality"  id="nationality" value= `${data ? data.nationality: ''}` required placeHolder="Nigeria")
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='education_level') Highest Level of Education
+                        input.form-control.form-control-sm.required(type='text' name="education_level" id="education_level" value= `${data ? data.education_level: ''}`   required)
+                        label.error-message
+                    .form-row
+                        .form-group.col-md-6
+                            label(for='specialization') Specialization
+                            input.form-control.form-control-sm(type='text' name="specialization" value= `${data ? data.specialization: ''}`)
+                        .form-group.col-md-6
+                            label(for='institution') Institution
+                            input.form-control.form-control-sm(type='text' name="institution" value= `${data ? data.institution: ''}`)
+                    .form-row
+                        .form-group.col-md-6
+                            label(for='duration') Duration
+                            input.form-control.form-control-sm(type='number' name="duration" value= `${data ? data.duration: ''}` placeHolder="e.g 4 years")
+                        .form-group.col-md-6
+                            label(for='yog') Year of Graduation
+                            input.form-control.form-control-sm(type='date' name="yog" value= `${data ? data.yog: ''}` placeHolder="e.g 2018")
+                    .form-group
+                        label.m-0(for='how') How did you here about DPHUB's Position
+                        input.form-control.form-control-sm(type='text'  name="how" value= `${data ? data.how: ''}`)
+                    .row
+                        .col-sm-6
+                            p.d-inline-block Area of Interest
+                            .form-check
+                                input.form-check-input(type='checkbox' name="human_right" value= `${data ? data.human_right: ''}` )
+                                label.form-check-label(for='human_right')
+                                    | Human Right
+                            .form-check
+                                input.form-check-input(type='checkbox' name="skill" value= `${data ? data.skill: ''}`  )
+                                label.form-check-label(for='skill')
+                                    | Skills/Talent Promotion
+                            .form-check
+                                input.form-check-input(type='checkbox' name="advocacy" value= `${data ? data.advocacy: ''}`)
+                                label.form-check-label(for='advocacy')
+                                    | Advocacy
+                            .form-check
+                                input.form-check-input(type='checkbox' name="wash" value= `${data ? data.wash: ''}` )
+                                label.form-check-label(for='wash')
+                                    | WASH
+                            .form-check
+                                input.form-check-input(type='checkbox' name="dc" value= `${data ? data.dc: ''}` )
+                                label.form-check-label(for='dc')
+                                    | Development and Communications
+                            .form-check
+                                input.form-check-input(type='checkbox' name="hr" value= `${data ? data.hr: ''}` )
+                                label.form-check-label(for='hr')
+                                    | Human Resource
+                            .form-check
+                                input.form-check-input(type='checkbox' name="policy" value= `${data ? data.policy: ''}` )
+                                label.form-check-label(for='policy')
+                                    |  Policy
+                            .form-check
+                                input.form-check-input(type='checkbox' name="me" value= `${data ? data.me: ''}` )
+                                label.form-check-label(for='me')
+                                    | Monitering and Evaluation
+                            .form-check
+                                input.form-check-input(type='checkbox' name="cr" value= `${data ? data.cr: ''}` )
+                                label.form-check-label(for='cr')
+                                    | Confict Resolution
+                        .col-sm-6
+                            .form-group
+                                label.m-0(for='how') Upload CV
+                                .custom-file
+                                    input#customFile.custom-file-input(type='file' name='cv' class="cv" accept=".pdf,.doc" required)
+                                    label.custom-file-label(for='customFile') Choose file
+                                label.error-message
+                            .form-check
+                                input.form-check-input(type='checkbox' name="confirm" id="confirm"  value=""  required)
+                                label.form-check-label(for='confirm')
+                                    | I confirm that I will abide by the time
+                                    | commitments as outlined in the full
+                                    | 12-week program.
+                                label.error-message
+                    p.text-center
+                        input.btn.btn-md.btn-success.my-3(type='submit' id="intern_submit" value='Submit' )

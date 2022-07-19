@@ -1,0 +1,62 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0(style="background:#e6e9ec ")
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section
+                header.p-2.text-white(style="background:#092944")
+                    | PROFESSIONAL QUALIFICATION
+                .table-responsive
+                    table.table.table-striped.table-hover
+                        thead
+                            tr
+                                th(scope='col') SN
+                                th(scope='col') Certificate
+                                th(scope='col') Institution
+                                th(scope='col') Date of Award
+                                th(scope='col')
+                        tbody
+                            if(qualifications)
+                                each qualification, i in qualifications
+                                        tr
+                                            th(scope='row') #{i+1}
+                                            td #{qualification.cert_name}
+                                            td #{qualification.institution}
+                                            td #{moment(qualification.doa).format("DD/MM/YYYY")}
+                                            td 
+                                                a.btn.btn-sm.btn-danger.remove(href="" data-id=`${qualification._id}` data-submiturl="/user/qualification/" data-rurl="/user/register/6") Delete
+
+                p.text-center.py-4
+                    // Button trigger modal
+                    button.btn.btn-primary(type='button' data-toggle='modal' data-target='#exampleModal')
+                        | Add Qualification
+                // Modal
+                #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                    .modal-dialog
+                        .modal-content
+                            .modal-header
+                                h5#exampleModalLabel.modal-title PROFESSIONAL QUALIFICATION
+                                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                    span(aria-hidden='true') &times;
+                            .modal-body
+                                form.px-md-4(method='post' name="qualification")
+                                    .form-group
+                                        label.m-0(for='cert_name') Name of Certificate
+                                        input.form-control.form-control-sm(type='text'  name="cert_name" value= `${data ? data.cert_name: ''}`)
+                                    .form-row
+                                        .form-group.col-md-6
+                                            label(for='institution') Institutions
+                                            input.form-control.form-control-sm(type='text' name="institution" value= `${data ? data.institution: ''}`)
+                                        .form-group.col-md-6
+                                            label(for='doa') Date of Award
+                                            input.form-control.form-control-sm(type='date' name="doa" value= `${data ? data.doa: ''}`)
+                                    .d-flex.bd-highlight
+                                        .flex-grow-1.bd-highlight 
+                                            button.btn.btn-danger(type='button' data-dismiss='modal') Cancel
+                                        .bd-highlight
+                                            input.btn.btn-md.btn-primary.px-4(type='submit'  value='save')
+                .d-flex.bd-highlight
+                    .flex-grow-1.bd-highlight 
+                        a.btn.btn-md.btn-primary.px-4(href="/user/register/5") Back
+                    .bd-highlight
+                        a.btn.btn-md.btn-primary.px-4(href="7") Next

@@ -1,0 +1,154 @@
+extends layout
+
+block content
+  if(sliders)
+    #homeCarouselControls.carousel.slide(data-ride='carousel')
+      .carousel-inner
+        each slider, i in sliders
+          if(i===0)
+            .carousel-item.active.slider-containter
+              .description.text-light
+                !=slider.description
+              .home_slider.d-block.w-100(style=`background:url(${slider.photo})`)
+          else   
+            .carousel-item.slider-containter
+              .description.text-light
+                 !=slider.description
+              .home_slider.d-block.w-100(style=`background:url(${slider.photo})`)
+      a.carousel-control-prev(href='#homeCarouselControls' role='button' data-slide='prev')
+        span.carousel-control-prev-icon(aria-hidden='true')
+        span.sr-only Previous
+      a.carousel-control-next(href='#homeCarouselControls' role='button' data-slide='next')
+        span.carousel-control-next-icon(aria-hidden='true')
+        span.sr-only Next
+  .section
+    .d-md-flex.d-lg-flex.justify-content-center.p-3
+      .px-4.text-white.font-weight-bold.text-center
+        h2.p-0.m-0 #{location}
+        p.p-0.m-0 LOCATIONS
+      .px-4.text-white.font-weight-bold.text-center
+        h2.p-0.m-0 #{talent}
+        p.p-0.m-0 SKILLS
+      .px-4.text-white.font-weight-bold.text-center
+        h2.p-0.m-0 #{talent}
+        p.p-0.m-0 TALENTS
+      .px-4.text-white.font-weight-bold.text-center
+        h2.p-0.m-0 #{engagement}
+        p.p-0.m-0 ENGAGEMENTS
+  //Skills and Talent section
+  .container.px-4
+    .d-flex.justify-content-center
+    if(items)
+        #skill-carousel.carousel.slide(data-ride='carousel')
+          .carousel-inner
+            if(items.first)
+                .carousel-item.active.skill-containter(data-interval="10000")
+                  .row
+                    each item, i in items.first
+                      .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`)   
+            if(items.second)
+                .carousel-item.skill-containter(data-interval="10000")
+                  .row
+                    each item, i in items.second
+                        .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`)  
+            if(items.third)
+                .carousel-item.skill-containter(data-interval="10000")
+                  .row
+                    each item, i in items.third
+                        .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`) 
+            if(items.fourth)
+                .carousel-item.skill-containter(data-interval="10000")
+                  .row
+                    each item, i in items.fourth
+                        .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`) 
+ 
+          a.carousel-control-prev(href='#skill-carousel' role='button' data-slide='prev')
+            span.carousel-control-prev-icon(aria-hidden='true')
+            span.sr-only Previous
+          a.carousel-control-next(href='#skill-carousel' role='button' data-slide='next')
+            span.carousel-control-next-icon(aria-hidden='true')
+            span.sr-only Next
+  //Nigeria's displacement statistics
+  .displacement_statistics
+    .row
+      .col-md-8.d-md-flex.justify-content-end
+         #map
+      .col-md-4
+        .d-md-flex.justify-content-center
+          .container
+            p.font-weight-bold.text-white.mt-md-5
+              | NIGERIA’S DISPLACEMENT STATISTICS
+            ul.pb-md-5
+              li
+                span(style="color:#000; font-size:25px; font-weight: bold") 
+                  | #{totalDisplacePerson}
+                br
+                span.text-white(style="font-size:12px;") Total number of IDPs
+              li
+                span(style="color:#000; font-size:25px; font-weight: bold")
+                  | #{conflict_violence}
+                br
+                span.text-white(style="font-size:12px;")  Conflict/violence displacement
+              li 
+                span(style="color:#000; font-size:25px; font-weight: bold")
+                  | #{disaster}
+                br
+                span.text-white(style="font-size:12px;") Disaster displacement
+
+
+  //Story section 
+  .container.py-5.story
+    .d-flex.justify-content-center.py-3
+      h2.font-weight-bold.border-bottom.border-white OUR STORIES
+    .row
+      if(stories)
+        each story, i in stories
+          .col-sm-6.col-md-4.pt-4
+            .card.mb-3.bg-transparent.border-0(style='max-width: 500px;')
+              a(href=`/news/${story._id}` style="text-decoration:none")
+                .row.no-gutters
+                  .col-md-5
+                    .h-100
+                      img.card-img.img-fluid(src=`${story.photo}` alt=`${story.title}`)
+                  .col-md-7
+                    .card-body.py-0.px-1
+                      span.text-white.font-weight-bold.card-title.mb-0 #{story.title}
+                      p.card-text
+                        small.text-muted #{story.description}
+
+
+  //Partner section  
+  .section
+    .container.p-4
+      .d-flex.justify-content-center.py-3
+       h2.font-weight-bold.border-bottom.border-white.text-white PARTNERS
+      if(partners)
+          #partner-carousel.carousel.slide(data-ride='carousel')
+            .carousel-inner
+              if(partners.first)
+                  .carousel-item.active.partner-containter(data-interval="10000")
+                    .row
+                      each item, i in partners.first
+                        .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`)   
+              if(partners.second)
+                  .carousel-item.partner-containter(data-interval="10000")
+                    .row
+                      each item, i in partners.second
+                          .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`)  
+              if(partners.third)
+                  .carousel-item.partner-containter(data-interval="10000")
+                    .row
+                      each item, i in partners.third
+                          .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`) 
+              if(partners.fourth)
+                  .carousel-item.partner-containter(data-interval="10000")
+                    .row
+                      each item, i in partners.fourth
+                          .col.col-sm.col-md.d-flex.align-items-center.justify-content-center(style=`background-image:url(${item.photo})`) 
+
+            a.carousel-control-prev(href='#partner-carousel' role='button' data-slide='prev')
+              span.carousel-control-prev-icon(aria-hidden='true')
+              span.sr-only Previous
+            a.carousel-control-next(href='#partner-carousel' role='button' data-slide='next')
+              span.carousel-control-next-icon(aria-hidden='true')
+              span.sr-only Next

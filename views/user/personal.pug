@@ -1,0 +1,56 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0(style="background:#e6e9ec ")
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section
+                form.p-4(method='post' action="/user/register/1" name="userPersonal" id="userPersonal")
+                    header.p-2.text-white(style="background:#092944")
+                        | PERSONAL INFORMATION
+                    .form-group
+                        label.m-0.required(for='sex') Sex
+                        select.form-control.form-control-sm(name="sex" value= `${data ? data.sex: (personal ? personal.sex.value: '')}` id="sex" required)
+                            option Male
+                            option Female
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='dob') Date of Birth
+                        input.form-control.form-control-sm(type='date'  name="dob" value= `${data ? data.dob:  (personal ? personal.dob.value: '')}` id="dob" required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='marital_status') Marital Status
+                        select.form-control.form-control-sm(name="marital_status" id="marital_status" required)
+                            option Single
+                            option Married
+                            option Divorced
+                            option Widow
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='number_children') Number of Children
+                        input.form-control.form-control-sm(type='number' name="number_children" value= `${data ? data.number_children: (personal ? personal.number_children: '')}`)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='state') State
+                        select.form-control.form-control-sm(name="state" id="state" value= `${data ? data.state: (personal ? personal.state.value: '')}` required)
+                            option select state
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='state') LGA
+                        select.form-control.form-control-sm(name="lga" id="lga" value= `${data ? data.lga: (personal ? personal.lga: '')}`)
+                            option(id="lga_loading") select lga
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='home_town') Home Town
+                        input.form-control.form-control-sm.required(type='text' name="home_town" id="home_town" value= `${data ? data.home_town: (personal ? personal.home_town: '')}`  required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='nationality') Nationality
+                        select.form-control.form-control-sm(name="nationality" id="nationality"  value= `${data ? data.nationality: (personal ? personal.nationality: '')}` required)
+                            option select nation
+                        label.error-message
+                    .d-flex.bd-highlight
+                        .flex-grow-1.bd-highlight 
+                            p
+                        .bd-highlight
+                            input.btn.btn-sm.btn-primary.px-4(type='submit'  value='Next')
+

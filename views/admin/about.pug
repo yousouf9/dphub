@@ -1,0 +1,125 @@
+extends ../admin_layout
+
+block content
+    .container-fluid
+        h2 Why We Exist Updates
+        form(method='post', action='/administrator/whyweexist')
+            .form-row
+                .form-group.col-md-6
+                    label(for='skilled_talent') Percentage self-reliance with digitized promotion
+                    input.form-control.form-control-sm(type="text" name="skilled_talent"  value=`${stats !==null? stats.skilled_talent : ""}` placeholder="e.g. 20%")
+                .form-group.col-md-6
+                    label(for='skilled_talent_displaced') Percentage person waiting for aid & donation
+                    input.form-control.form-control-sm(type="text" name="skilled_talent_displaced" value=`${stats !==null? stats.skilled_talent_displaced : ""}`  placeholder="e.g. 90%")
+            .form-row
+                .form-group.col-md-6
+                    label(for='training_person') percentage wasted in training
+                    input.form-control.form-control-sm(type="text" name="training_person" value=`${stats !==null? stats.training_person : ""}`  placeholder="e.g. 90%")
+                .form-group.col-md-6
+                    label(for='displaced_adult') Ratio skilled or talent Adult person
+                    input.form-control.form-control-sm(type="text" name="displaced_adult" value=`${stats !==null? stats.displaced_adult : ""}`  placeholder="e.g. 1in3")
+            .form-row
+                .form-group.col-md-6
+                    label(for='displaced_adult_benefit') Ratio Adult benefit from training
+                    input.form-control.form-control-sm(type="text" name="displaced_adult_benefit" value=`${stats !==null? stats.displaced_adult_benefit : ""}`  placeholder="e.g. 1in5")
+                .form-group.col-md-6
+                    label(for='displaced_person_talent') Ration person has talent
+                    input.form-control.form-control-sm(type="text" name="displaced_person_talent" value=`${stats !==null? stats.displaced_person_talent : ""}` placeholder="e.g.1in20")
+            .form-row
+                .form-group.col-md-6
+                    label(for='forced_displaced') Forcefully displaced Nigerians
+                    input.form-control.form-control-sm(type="text" name="forced_displaced" value=`${stats !==null? stats.forced_displaced : ""}`  placeholder="e.g. 3.4M")
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        h2 Team Member Details
+        form(method='post', action='/administrator/upload/team', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input#team.custom-file-input(type='file' name="photo" accept=".jpg,.jpeg,.png")
+                    label.custom-file-label(for='slider') Choose file
+            .form-row
+                .form-group.col-md-6
+                    label(for='name') Team member Details
+                    input.form-control(type="text" name="name" placeholder="Jacob")
+                .form-group.col-md-6
+                    label(for='surname') surname
+                    input.form-control(type="text" name="surname"  placeholder="Kalid")
+            .form-group
+                label(for='position') Position
+                input.form-control(type="text" name="position"  placeholder="CEO")
+            .form-group
+                label(for='body') Team member Bio Detail
+                textarea.form-control(name='body' rows='3')
+
+            .form-row
+                .form-group.col-md-6
+                    label(for='facebook') facebook
+                    input.form-control.form-control-sm(type="url" name="facebook"  placeholder="https://www.facebook.com/jacob_kalid123")
+                .form-group.col-md-6
+                    label(for='twitter') twitter
+                    input.form-control.form-control-sm(type="url" name="twitter"  placeholder="https://www.twitter.com/jacob_kalid123")
+            .form-row
+                .form-group.col-md-6
+                    label(for='linkin') linkin
+                    input.form-control.form-control-sm(type="url" name="linkin"  placeholder="https://www.linkin.com/jacob_kalid123")
+                .form-group.col-md-6
+                    label(for='google_plus') google plus
+                    input.form-control.form-control-sm(type="url" name="google"  placeholder="https://www.google_plus.com/jacob_kalid123")
+            .form-row
+                .form-group.col-md-6
+                    label(for='instagram') instagram
+                    input.form-control.form-control-sm(type="url" name="instagram"  placeholder="https://www.instagram.com/jacob_kalid123")
+                .form-group.col-md-6
+                    label(for='whatsapp') whatsapp
+                    input.form-control.form-control-sm(type="url" name="whatsapp"  placeholder="https://www.whatsapp.com/jacob_kalid123")
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | TEAM MEMBER DETAILS
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Name
+                            th(scope='col') Position
+                            th(scope='col') Bio
+                            th(scope='col') Image
+                            th(scope='col')
+                    tbody
+                        if(teams)
+                            each team, i in teams
+                                tr
+                                    td 
+                                       | #{team.name}  #{team.surname}
+                                    td 
+                                       | #{team.position} 
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#exampleModalCenter${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`exampleModalCenter${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        != team.body
+                                                        .border-top.text-mutted
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#team${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`team${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        img(src=`${team.photo}` width="100%" height="100%")
+                                                        .border-top.text-mutted
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${team._id}` data-submiturl="/about/team/" data-rurl="/administrator") Remove
+    

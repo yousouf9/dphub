@@ -1,0 +1,281 @@
+extends ../admin_layout
+
+block content
+    .container-fluid
+        .border-bottom.pt-3.pb-2.mb-3
+            h2 DPHUB PRESS RELEASES
+        form(method='post', action='/administrator/upload/press', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="photo" accept=".jpg,.jpeg,.png")
+                    label.custom-file-label(for='slider') Choose file
+            .form-group
+                label(for='title') Press title
+                input.form-control(type="text" name="title")
+            .form-group
+                label(for='articleBody') Press Body
+                textarea.form-control(name='articleBody' rows='3')
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | PRESS RELEASES DETAILS
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Date
+                            th(scope='col') TITLE
+                            th(scope='col') IMAGE
+                            th(scope='col') ARTICLE
+                            th(scope='col') 
+                    tbody
+                        if(presses)
+                            each press, i in presses.results
+                                tr
+                                    td 
+                                        small #{moment(press.createdAt).format("MM:DD:YYYY")}
+                                    td
+                                        small #{press.title}
+
+                                    td 
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#presImage${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`presImage${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        img(src=`${press.photo}` width="100%" height="100%")
+                                                        .border-top.text-mutted
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#presArticle${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`presArticle${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        div( width="100%" height="100%")
+                                                            != press.articleBody
+                                                        .border-top.text-mutted
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${press._id}` data-submiturl="/press/" data-rurl="/administrator/resources") Remove
+            if(presses)
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/administrator/resources" data-page="1"  data-rurl="/administrator/resources?ppage=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(presses.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?ppage=${presses.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(presses.first)
+                        p.paginateRight(class =`${presses.first.current ? presses.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?ppage=${presses.first.value}` ) #{presses.first.value}
+                    if !isObjectEmpty(presses.second)
+                        p.paginateRight(class =`${presses.second.current ? presses.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?ppage=${presses.second.value}`) #{presses.second.value}
+                    if !isObjectEmpty(presses.third)
+                        p.paginateRight(class =`${presses.third.current ? presses.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?ppage=${presses.third.value}`) #{presses.third.value}
+                    if !isObjectEmpty(presses.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?ppage=${presses.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/administrator/resources" data-page=`${presses.totalPages}` data-rurl=`/administrator/resources?ppage=${presses.totalPages}`)
+                            i.fas.fa-angle-double-right
+        h2 DPHUB REPORTS
+        form(method='post', action='/administrator/upload/report', enctype='multipart/form-data')
+            label Upload Report cover page
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="photo" accept=".jpg,.jpeg,.png" required)
+                    label.custom-file-label Choose file
+            label() Upload Report PDF FILE
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="filename" accept=".pdf,.doc" required)
+                    label.custom-file-label Choose file
+            .form-group
+                label(for='title') Report Title
+                input.form-control(type="text" name="title" required)
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | REPORTS ARTICLE DETAILS
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Date
+                            th(scope='col') TITLE
+                            th(scope='col') IMAGE
+                            th(scope='col') FILE
+                            th(scope='col') 
+                    tbody
+                        if(reports)
+                            each report, i in reports.results
+                                tr
+                                    td 
+                                        small #{moment(report.createdAt).format("MM:DD:YYYY")}
+                                    td
+                                        small #{report.title}
+
+                                    td 
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#reportImage${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`reportImage${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        img(src=`${report.photo}` width="100%" height="100%")
+                                                        .border-top.text-mutted
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#reportFile${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`reportFile${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        if(report.filename)
+                                                            object(data=`${report.filename}` type='application/pdf' width='100%' height='500')
+                                                                iframe(src=`${report.filename}` width='100%' height='500' style='border: none;')
+                                                                    | This browser does not support PDFs. Please download the PDF to view it: 
+                                                                    a(href=`${report.filename}`) Download PDF
+                                                        .border-top.text-mutted
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${report._id}` data-submiturl="/report/" data-rurl="/administrator/resources") Remove
+            if(reports)
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/administrator/resources" data-page="1"  data-rurl="/administrator/resources?rpage=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(reports.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?rpage=${reports.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(reports.first)
+                        p.paginateRight(class =`${reports.first.current ? reports.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?rpage=${reports.first.value}` ) #{reports.first.value}
+                    if !isObjectEmpty(reports.second)
+                        p.paginateRight(class =`${reports.second.current ? reports.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?rpage=${reports.second.value}`) #{reports.second.value}
+                    if !isObjectEmpty(reports.third)
+                        p.paginateRight(class =`${reports.third.current ? reports.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?rpage=${reports.third.value}`) #{reports.third.value}
+                    if !isObjectEmpty(reports.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?rpage=${reports.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/administrator/resources" data-page=`${reports.totalPages}` data-rurl=`/administrator/resources?rpage=${reports.totalPages}`)
+                            i.fas.fa-angle-double-right
+        h2 DPHUB BLOG ARTICLE
+        form(method='post', action='/administrator/upload/blog', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input.custom-file-input(type='file' name="photo" accept=".jpg,.jpeg,.png")
+                    label.custom-file-label(for='slider') Choose file
+            .form-group
+                label(for='title') Blog title
+                input.form-control(type="text" name="title")
+            .form-group
+                label(for='articleBody') Blog Body
+                textarea.form-control(name='articleBody' rows='3')
+            input.btn.btn-md.btn-success.mb-2( type="submit" value="save")
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | BLOG ARTICLE DETAILS
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Date
+                            th(scope='col') TITLE
+                            th(scope='col') IMAGE
+                            th(scope='col') ARTICLE
+                            th(scope='col') 
+                    tbody
+                        if(blogs)
+                            each blog, i in blogs.results
+                                tr
+                                    td 
+                                        small #{moment(blog.createdAt).format("MM:DD:YYYY")}
+                                    td
+                                        small #{blog.title}
+
+                                    td 
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#blogImage${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`blogImage${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        img(src=`${blog.photo}` width="100%" height="100%")
+                                                        .border-top.text-mutted
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#blogArticle${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`blogArticle${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        div( width="100%" height="100%")
+                                                            != blog.articleBody
+                                                        .border-top.text-mutted
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${blog._id}` data-submiturl="/blog/" data-rurl="/administrator/resources") Remove
+            if(blogs)
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/administrator/resources" data-page="1"  data-rurl="/administrator/resources?bpage=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(blogs.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?bpage=${blogs.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(blogs.first)
+                        p.paginateRight(class =`${blogs.first.current ? blogs.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?bpage=${blogs.first.value}` ) #{blogs.first.value}
+                    if !isObjectEmpty(blogs.second)
+                        p.paginateRight(class =`${blogs.second.current ? blogs.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?bpage=${blogs.second.value}`) #{blogs.second.value}
+                    if !isObjectEmpty(blogs.third)
+                        p.paginateRight(class =`${blogs.third.current ? blogs.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?bpage=${blogs.third.value}`) #{blogs.third.value}
+                    if !isObjectEmpty(blogs.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/administrator/resources"  data-rurl=`/administrator/resources?bpage=${blogs.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/administrator/resources" data-page=`${blogs.totalPages}` data-rurl=`/administrator/resources?bpage=${blogs.totalPages}`)
+                            i.fas.fa-angle-double-right

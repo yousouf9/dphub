@@ -1,0 +1,70 @@
+extends ../admin_layout
+
+block content
+    .container-fluid
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | List of Contacts
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Date
+                            th(scope='col') Sender
+                            th(scope='col') Subject
+                            th(scope='col') Message
+                            th(scope='col') 
+                    tbody
+                        if(contacts)
+                            each contact, i in contacts.results
+                                tr
+                                    td 
+                                        | #{moment(contact.createdAt).format("MM:DD:YYYY")}
+                                    td
+                                        small.font-weight-bold #{contact.name}
+                                        br
+                                        small #{contact.email}
+                                    td 
+                                        | #{contact.subject}
+                                    td
+                                            // Button trigger modal
+                                            button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#storydetail${i}`)
+                                                | View
+                                            // Modal
+                                            .modal.fade(tabindex='-1' role='dialog' id=`storydetail${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                                .modal-dialog.modal-dialog-centered(role='document')
+                                                    .modal-content
+                                                        .modal-header
+                                                            button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                                span(aria-hidden='true') &times;
+                                                        .modal-body
+                                                            div( width="100%" height="100%")
+                                                                != contact.message
+                                                            .border-top.text-mutted
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${contact._id}` data-submiturl="/contact/" data-rurl="/administrator/contact") Remove
+            if(contacts)
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/administrator/contact" data-page="1"  data-rurl="/administrator/contact?page=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(contacts.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/administrator/contact"  data-rurl=`/administrator/contact?page=${contacts.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(contacts.first)
+                        p.paginateRight(class =`${contacts.first.current ? contacts.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/contact"  data-rurl=`/administrator/contact?page=${contacts.first.value}` ) #{contacts.first.value}
+                    if !isObjectEmpty(contacts.second)
+                        p.paginateRight(class =`${contacts.second.current ? contacts.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/administrator/contact"  data-rurl=`/administrator/contact?page=${contacts.second.value}`) #{contacts.second.value}
+                    if !isObjectEmpty(contacts.third)
+                        p.paginateRight(class =`${contacts.third.current ? contacts.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/contact"  data-rurl=`/administrator/contact?page=${contacts.third.value}`) #{contacts.third.value}
+                    if !isObjectEmpty(contacts.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/administrator/contact"  data-rurl=`/administrator/contact?page=${contacts.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/administrator/contact" data-page=`${contacts.totalPages}` data-rurl=`/administrator/contact?page=${contacts.totalPages}`)
+                            i.fas.fa-angle-double-right

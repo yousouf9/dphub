@@ -1,0 +1,11 @@
+{
+    "App name": "DPHUB",
+    "hostname":"mongodb://localhost/dphub",
+    "jwtPrivate": " dphub_jwtPrivateKey",
+    "mail":{
+        "mailHost":"mail_host_secret",
+        "mailUsername":"mail_username_secret",
+        "mailPassword":"mail_password_secret",
+        "mailPort":"mail_port_secret"
+    }
+}

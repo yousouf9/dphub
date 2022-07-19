@@ -1,0 +1,85 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0
+        header.p-0.m-0
+            if(header)
+                each head, i in header
+                    if(head.name=="displace_monitor")
+                        .page-header(style=`background: url(${head.photo})`)
+                            .page-header-title
+                                | DISPLACEMENT MONITOR
+        //Nigeria's displacement statistics
+        .displacement_statistics
+            .row
+                .col-md-8.d-md-flex.justify-content-end
+                    #map
+                .col-md-4
+                    .d-md-flex.justify-content-center
+                        .container
+                            p.font-weight-bold.text-white.mt-md-5
+                                | NIGERIA’S DISPLACEMENT STATISTICS
+                            ul.pb-md-5
+                                li
+                                    span(style="color:#000; font-size:25px; font-weight: bold") 
+                                        | #{totalDisplacePerson}
+                                        br
+                                    span.text-white(style="font-size:12px;") Total number of IDPs
+                                li
+                                    span(style="color:#000; font-size:25px; font-weight: bold")
+                                        | #{conflict_violence}
+                                        br
+                                    span.text-white(style="font-size:12px;")  Conflict/violence displacement
+                                li 
+                                    span(style="color:#000; font-size:25px; font-weight: bold")
+                                        | #{disaster}
+                                        br
+                                    span.text-white(style="font-size:12px;") Disaster displacement
+        //Monitor Stats and News updates
+        .monitor_news
+            .row.p-sm-3.p-md-5  
+                .col-sm-6.col-md-8.p-4
+                    .container
+                        h4.text-center.text-white.font-weight-bold.p-4.mb-0(style="background-color:#0A2844") DISPLACEMENT MONITOR
+                        if(monitors)
+                            table.table.table-bordered.text-white.mt-0
+                                colgroup
+                                    col.main-color
+                                    col.secondary-color
+                                    col.main-color
+                                    col.secondary-color
+                                    col.main-color
+                                thead
+                                    tr
+                                        th DATE
+                                        th CASE
+                                        th DISASTER TYPE
+                                        th COMMUNITY
+                                        th STATE
+                                tbody(style="font-size:13px")
+                                    each monitor, i in monitors
+                                        tr
+                                            th #{moment(monitor.date).format(`DD: MM: YYYY`)}
+                                            td 
+                                                span #{monitor.case}
+                                                span.monitor-detail.badge.badge-light.text-danger(id='monitor'+i) i
+                                                    span.monitor-detail-show.text-left.pr-1
+                                                        span.py-1.text-dark #{monitor.case}
+                                                        br
+                                                        a.py-2(href=`${monitor.source}`) #{monitor.source}
+                                                        br
+                                                        span.text-danger SOURCE
+                                            td #{monitor.category}
+                                            td #{monitor.community}
+                                            td #{monitor.state}
+                        else
+                            h3.text-white Empty Monitor Data
+                .col-sm-6.col-md-4.pr-md-4
+                    .monitor_news-section.p-3
+                        h4 HUMANITARIAN NEWS
+                            span
+                        if(stories)
+                            each news, i in stories
+                                p 
+                                    a(href=`/news/${news._id}`) #{news.title}
+                

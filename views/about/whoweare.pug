@@ -1,0 +1,31 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0
+        header.p-0.m-0
+            #{header.photo}
+            if(header)
+                each head, i in header
+                    if(head.name=="whoweare")
+                        .page-header(style=`background: url(${head.photo})`)
+        .container
+            .d-flex.flex-column.py-5.px-md-5
+                .px-md-5
+                    h2.font-weight-bold.border-bottom.border-white.text-white(style='display:inline-block')  WHO WE ARE
+                    .container.p-0.m-0.text-white.font-weight-light.pt-3
+                        p
+                            | Displaced Persons Hub (DPHub) is a nonprofit youth civic movement promoting protec tion and self-reliance amongst displaced persons in Nigeria. 
+                        p 
+                            | From a personal National Youth Service Corps personal Community Development Service project, DPHub has morphed into a Nigeria's leading humanitarian organization. 
+                        p
+                            | The dignity and rights of displaced persons is at the centre of DPHub's existence. A s such, it is c reatively maximizing all skills and talents
+                        p
+                            | within displaced communities; thereby reducing the wastage of training investments by government, INGOs and NGO. Instead of constituting into liabilities, DPHub is converting DP's energy into economic bricks.
+                        ul
+                            li.py-1
+                                span(style='color:#3c88c8') VISION:
+                                |  A world where skilled and relented displaced persons no longer wait aid and donations
+                            li.py-1
+                                span(style='color:#3c88c8') MISSION:
+                                |  To champion promote digitized protection and self-reliance amongst displaced persons through partnership and engagement.
+

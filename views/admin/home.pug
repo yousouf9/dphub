@@ -1,0 +1,295 @@
+extends ../admin_layout
+
+block content
+    .container-fluid
+        .border-bottom.pt-3.pb-2.mb-3
+            h2 upload home page slider images
+        form(method='post', action='/administrator/upload/slider', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input#home_slider.custom-file-input(type='file' name="photo" accept=".jpg,.jpeg,.png")
+                    label.custom-file-label(for='slider') Choose file
+            .form-group
+                label(for='description') Description
+                textarea.form-control(name='description' rows='3')
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | Home Page Slide Images
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Discription
+                            th(scope='col')
+                            th(scope='col')
+                    tbody
+                        if(sliders)
+                            each slider, i in sliders
+                                tr
+                                    td 
+                                        != slider.description
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#exampleModalCenter${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`exampleModalCenter${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        img(src=`${slider.photo}` width="100%" height="100%")
+                                                        .border-top.text-mutted
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${slider._id}` data-submiturl="/slider/" data-rurl="/administrator") Remove
+        h2 Story Details
+        form(method='post', action='/administrator/upload/story', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input#story_detail.custom-file-input(type='file' name="photo" accept=".jpg,.jpeg,.png")
+                    label.custom-file-label(for='slider') Choose file
+            .form-group
+                label(for='title') Story's title
+                input.form-control(type="text" name="title")
+            .form-group
+                label(for='description') Short description
+                input.form-control(type="text" name="description")
+            .form-group
+                label(for='body') News Body
+                textarea.form-control(name='articleBody' rows='3')
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | Story Details
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Short description
+                            th(scope='col')
+                            th(scope='col')
+                    tbody
+                        if(stories)
+                            each story, i in stories.results
+                                tr
+                                    td 
+                                        != story.description
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#storydetail${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`storydetail${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        div( width="100%" height="100%")
+                                                            != story.articleBody
+                                                        .border-top.text-mutted
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${story._id}` data-submiturl="/story/" data-rurl="/administrator") Remove
+            if(stories)
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/administrator" data-page="1"  data-rurl="/administrator?spage=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(stories.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?spage=${stories.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(stories.first)
+                        p.paginateRight(class =`${stories.first.current ? stories.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?spage=${stories.first.value}` ) #{stories.first.value}
+                    if !isObjectEmpty(stories.second)
+                        p.paginateRight(class =`${stories.second.current ? stories.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?spage=${stories.second.value}`) #{stories.second.value}
+                    if !isObjectEmpty(stories.third)
+                        p.paginateRight(class =`${stories.third.current ? stories.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?spage=${stories.third.value}`) #{stories.third.value}
+                    if !isObjectEmpty(stories.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?spage=${stories.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/administrator" data-page=`${stories.totalPages}` data-rurl=`/administrator?spage=${stories.totalPages}`)
+                            i.fas.fa-angle-double-right
+        h2 Location  Update
+        form(method='post', action='/administrator/location')
+            .form-group
+                label(for='name') Location title
+                input.form-control(type="text" name="name")
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | Location Details
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Name
+                            th(scope='col')
+                    tbody
+                        if(locations)
+                            each location, i in locations.results
+                                tr
+                                    td 
+                                        != location.name
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${location._id}` data-submiturl="/location/" data-rurl="/administrator") Remove
+            if(locations)
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/administrator" data-page="1"  data-rurl="/administrator?lpage=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(locations.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?lpage=${locations.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(locations.first)
+                        p.paginateRight(class =`${locations.first.current ? locations.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?lpage=${locations.first.value}` ) #{locations.first.value}
+                    if !isObjectEmpty(locations.second)
+                        p.paginateRight(class =`${locations.second.current ? locations.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?lpage=${locations.second.value}`) #{locations.second.value}
+                    if !isObjectEmpty(locations.third)
+                        p.paginateRight(class =`${locations.third.current ? locations.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?lpage=${locations.third.value}`) #{locations.third.value}
+                    if !isObjectEmpty(locations.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?lpage=${locations.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/administrator" data-page=`${locations.totalPages}` data-rurl=`/administrator?lpage=${locations.totalPages}`)
+                            i.fas.fa-angle-double-right
+        h2 Engagement  Update
+        form(method='post', action='/administrator/engagement')
+            .form-group
+                label(for='name') Engagement title
+                input.form-control(type="text" name="name")
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | Engagement Details
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Name
+                            th(scope='col')
+                    tbody
+                        if(engagements)
+                            each engagement, i in engagements.results
+                                tr
+                                    td 
+                                        != engagement.name
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${engagement._id}` data-submiturl="/engagement/" data-rurl="/administrator") Remove
+            if(engagements)
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/administrator" data-page="1"  data-rurl="/administrator?epage=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(engagements.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?epage=${engagements.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(engagements.first)
+                        p.paginateRight(class =`${engagements.first.current ? engagements.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?epage=${engagements.first.value}` ) #{engagements.first.value}
+                    if !isObjectEmpty(engagements.second)
+                        p.paginateRight(class =`${engagements.second.current ? engagements.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?epage=${engagements.second.value}`) #{engagements.second.value}
+                    if !isObjectEmpty(engagements.third)
+                        p.paginateRight(class =`${engagements.third.current ? engagements.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?epage=${engagements.third.value}`) #{engagements.third.value}
+                    if !isObjectEmpty(engagements.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/administrator"  data-rurl=`/administrator?epage=${engagements.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/administrator" data-page=`${engagements.totalPages}` data-rurl=`/administrator?epage=${engagements.totalPages}`)
+                            i.fas.fa-angle-double-right
+        h2 Upload Skill/Talent 
+        form(method='post', action='/administrator/upload/skill_talent', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input#skill.custom-file-input(type='file' name="photo" accept=".jpg,.jpeg,.png")
+                    label.custom-file-label(for='slider') Choose file
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | Upload Skill/Talent Images
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Images
+                            th(scope='col')
+                    tbody
+                        if(skills)
+                            each skill, i in skills
+                                tr
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#skill-talent${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`skill-talent${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        img(src=`${skill.photo}` width="100%" height="100%")
+                                                        .border-top.text-mutted
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${skill._id}` data-submiturl="/skill_talent/" data-rurl="/administrator") Remove
+        h2 Partner's Details
+        form(method='post', action='/administrator/upload/partner', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input#partners.custom-file-input(type='file' name="photo")
+                    label.custom-file-label(for='slider') Choose file
+            .form-group
+                label(for='description') Description
+                input.form-control(type="text" name="name" placeholder="Partner's name")
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | Partner's Details
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Name
+                            th(scope='col')
+                            th(scope='col')
+                    tbody
+                        if(partners)
+                            each partner, i in partners
+                                tr
+                                    td 
+                                        != partner.name
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#patdetail${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`patdetail${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        img(src=`${partner.photo}` width="100%" height="100%")
+                                                        .border-top.text-mutted
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${partner._id}` data-submiturl="/partner/" data-rurl="/administrator") Remove

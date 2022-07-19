@@ -1,0 +1,51 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0
+        header.p-0.m-0
+            #{header.photo}
+            if(header)
+                each head, i in header
+                    if(head.name=="whyweexist")
+                        .page-header(style=`background: url(${head.photo})`)
+        .displacement_statistics.p-0.m-0
+            .row.whyweexist.no-gutters
+                .col-sm-6.text-right.p-3
+                    h4.border-bottom.d-inline-block WHY WE EXIST
+                    .why
+                        .why-top
+                          span(style="font-size:25px; font-weight:bold") #{stats !==null? stats.displaced_adult_benefit : ""}
+                            br
+                          span Displaced adult have benefitted from skills training
+                        .why-left
+                          span(style="font-size:25px; font-weight:bold") #{stats !==null? stats.forced_displaced : ""} 
+                            br
+                          span Nigerians have been forcibly displaced
+                        .why-right
+                          span(style="font-size:25px; font-weight:bold") #{stats !==null? stats.displaced_adult : ""}
+                            br
+                          span Displaced adult is either skilled or talented
+                        .why-bottom
+                          span(style="font-size:25px; font-weight:bold") #{stats !==null? stats.displaced_person_talent : ""}
+                            br
+                          span Displaced persons has talent
+                .col-sm-6.pt-5.text-white
+                    p.d-inline-block.text-center
+                            | #{stats !==null? stats.skilled_talent : ""}
+                    span.d-inline-block(style="width: 250px; margin:10px 0 0 5px; padding-top:10px line-height:150px") of skilled and talented
+                                     | displaced persons can
+                                     | be self-reliance with
+                                     |  digitized promotion
+                    .row.no-gutters
+                        .col-md-6
+                            .why-icon
+                                span.why-icon-text(style="background-color: #29ABE2;font-size:25px; font-weight:bold") 
+                                    | #{stats !==null? stats.skilled_talent_displaced : ""}
+                            p.px-3  of skilled and talented displaced persons still wait for aid and donations
+
+                        .col-md-6
+                            .why-icon
+                                span.why-icon-text(style="font-size:25px; font-weight:bold") 
+                                    | #{stats !==null? stats.training_person : ""}
+                            p.px-3 of training investments in displaced persons is wasting
+                

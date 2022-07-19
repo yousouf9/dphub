@@ -1,0 +1,118 @@
+extends ../admin_layout
+
+block content
+    .container-fluid
+        .border-bottom.pt-3.pb-2.mb-3
+            h2 Upload page header image
+        form(method='post', action='/administrator/upload/header', enctype='multipart/form-data')
+            .input-group.mb-3
+                .custom-file
+                    input#header.custom-file-input(type='file' name="photo" accept=".jpg,.jpeg,.png")
+                    label.custom-file-label(for='slider') Choose file
+            .form-group
+                label(for='name') Page name (NOTE: This is important)
+                input.form-control(type="text" name="name" placeholder="e.g whoweare")
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | ALL PAGES HEADER DETAILS
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') PAGE NAME
+                            th(scope='col') Image
+                            th(scope='col')
+                    tbody
+                        if(headers)
+                            each header, i in headers
+                                tr
+                                    td 
+                                       | #{header.name} 
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#header${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`header${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        img(src=`${header.photo}` width="100%" height="100%")
+                                                        .border-top.text-mutted
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${header._id}` data-submiturl="/header/" data-rurl="/administrator/general") Remove
+        h2 Add Event
+        form(method='post', action='/administrator/event')
+            .form-group
+                label(for='title') Page name (NOTE: This is important)
+                input.form-control(type="text" name="title" placeholder="e.g Launch of Nigeria’s first DPs need assessment")
+            .form-row
+                .form-group.col-md-6
+                    label(for='date') Event Date
+                    input.form-control.form-control-sm(type='datetime-local' name="date")
+            input.btn.btn-md.btn-success.mb-2( type="submit" value="save")
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | Details Details
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Date
+                            th(scope='col') Name
+                            th(scope='col')
+                    tbody
+                        if(events)
+                            each event, i in events.results
+                                tr
+                                    td 
+                                        | #{moment(event.date).format("MM:DD:YYYY, h:mm:ss a")}
+                                    td
+                                        | #{event.title}
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${event._id}` data-submiturl="/event/" data-rurl="/administrator/general") Remove
+            if(events)
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/administrator/general" data-page="1"  data-rurl="/administrator/general?page=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(events.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/administrator/general"  data-rurl=`/administrator/general?page=${events.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(events.first)
+                        p.paginateRight(class =`${events.first.current ? events.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/general"  data-rurl=`/administrator/general?page=${events.first.value}` ) #{events.first.value}
+                    if !isObjectEmpty(events.second)
+                        p.paginateRight(class =`${events.second.current ? events.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/administrator/general"  data-rurl=`/administrator/general?page=${events.second.value}`) #{events.second.value}
+                    if !isObjectEmpty(events.third)
+                        p.paginateRight(class =`${events.third.current ? events.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/general"  data-rurl=`/administrator/general?page=${events.third.value}`) #{events.third.value}
+                    if !isObjectEmpty(events.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/administrator/general"  data-rurl=`/administrator/general?page=${events.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/administrator/general" data-page=`${events.totalPages}` data-rurl=`/administrator/general?page=${events.totalPages}`)
+                            i.fas.fa-angle-double-right
+        h2 Update Displacement Statistics
+        form(method='post', action='/administrator/displacement')
+            .form-row
+                .form-group.col-md-6
+                    label(for='stateID') Select State to Update
+                    select.form-control.form-control-sm(name="stateID" id="stateID"  required)
+                        if(stats)
+                            each property, i in stats
+                                option(value=`${property.properties.admin1Pcod}`) #{property.properties.admin1Name}
+                        else
+                            option data not available
+                .form-group.col-md-6
+                    label(for='totalDis') New Value
+                    input.form-control.form-control-sm(type='number' name="totalDis" required)
+                input(type="hidden" name="statID" value=`${ID}`)
+            input.btn.btn-md.btn-success.mb-2( type="submit" value="save")

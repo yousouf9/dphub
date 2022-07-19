@@ -1,0 +1,285 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0.monitor_news
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section(style='background-color:#eef2f9;')
+                h4.font-weight-bold.text-center.text-black.py-2 DP COMPLAIN REFERAL FORM
+                p Have you experienced abuse or witness abuse of DP or do you have any
+                  | other complain that bothers on the welfare of DPs? Feel free to ll the
+                  | form below for onward transfer of complain to appropriate authors.
+                  | Submission of the information requested is voluntary; however, your
+                  | failure to supply requested information may impede or preclude the
+                  | investigation of your complaint by law enforcement agencies.
+                form.rounded-lg.bg-white.py-3.complain-form(method="post" action="/dp_complain_form" , enctype='multipart/form-data')
+                    .w-100
+                        hr
+                        p.text-center.headline REPORTER’S INFORMATION
+                    table.table.table-borderless
+                        tbody
+                            tr
+                                th(scope='row') 
+                                    p(class="label-title required") REPORTER
+                                td 
+                                    .d-md-flex.justify-content-between
+                                        .custom-control.reporter.custom-radio.custom-control-inline
+                                            input#victim.custom-control-input(type='radio' name='reporter' value="Victim")
+                                            label.custom-control-label(for='victim') Victim
+                                        .custom-control.custom-radio.custom-control-inline
+                                            input#representative.reporter.custom-control-input(type='radio' name='reporter' value="Representative")
+                                            label.custom-control-label(for='representative') Representative
+                                        .custom-control.custom-radio.custom-control-inline
+                                            input#annonymous.reporter.custom-control-input(type='radio' name='reporter' value="Annonymous")
+                                            label.custom-control-label(for='annonymous') Annonymous
+                            tr
+                                th(scope='row')
+                                    p(class="label-title") NAME
+                                td 
+                                    .form-group
+                                        input.form-control.form-control-sm(type='text'  name="reporter_name" id="reporter_name" value= `${data ? data.reporter_name: ''}` )
+                                        label.error-message
+                            tr
+                                th(scope='row') 
+                                    p(class="label-title ") PHONE
+                                td
+                                    .form-group
+                                        input.form-control.form-control-sm(type='number'  name="reporter_phone" id="reporter_phone" value= `${data ? data.reporter_phone: ''}` )
+                                        label.error-message
+                            tr
+                                th(scope='row')
+                                    p(class="label-title")  EMAIL
+                                td
+                                    .form-group
+                                        input.form-control.form-control-sm(type='email'  name="reporter_email" id="reporter_email" value= `${data ? data.reporter_email: ''}` )
+                                        label.error-message
+                    .w-100
+                        hr
+                        p.text-center.headline VICTIM INFORMATION
+                    table.table.table-borderless
+                        tbody
+                            tr
+                                th(scope='row')
+                                    p(class="label-title required") VICTIM’S NAME
+                                td 
+                                    .form-group
+                                        input.form-control.form-control-sm(type='text'  name="victim_name" id="victim_name_name" value= `${data ? data.victim_name: ''}`  required)
+                                        label.error-message
+                            tr
+                                th(scope='row') 
+                                    p(class="label-title required") SEX
+                                td 
+                                    .d-md-flex.justify-content-between
+                                        .custom-control.custom-radio.custom-control-inline
+                                            input#male.victim_sex.custom-control-input(type='radio' name='victim_sex' value="Male")
+                                            label.custom-control-label(for='male') Male
+                                        .custom-control.custom-radio.custom-control-inline
+                                            input#female.victim_sex.custom-control-input(type='radio' name='victim_sex' value="Female")
+                                            label.custom-control-label(for='female') Female
+                                        .custom-control.custom-radio.custom-control-inline
+                                            input#p_not_say.victim_sex.custom-control-input(type='radio' name='victim_sex' value="p_not_say")
+                                            label.custom-control-label(for='p_not_say') Prefer not to say
+                            tr
+                                th(scope='row') 
+                                    p(class="label-title required") AGE
+                                td
+                                    .form-group
+                                        input.form-control.form-control-sm(type='number'  name="victim_age" id="victim_age" value= `${data ? data.reporter_phone: ''}` required)
+                                        label.error-message
+                            tr
+                                th(scope='row')
+                                    p(class="label-title required")  STATE
+                                td
+                                    .form-group
+                                        select.form-control.form-control-sm(name="state" id="state" value= `${data ? data.state: ''}` required)
+                                            option select state
+                                        label.error-message
+                            tr
+                                th(scope='row') 
+                                    p(class="label-title required") CAMP
+                                td
+                                    .form-group
+                                        input.form-control.form-control-sm(type='text'  name="victim_camp" id="victim_camp" value= `${data ? data.victim_camp: ''}` required)
+                                        label.error-message
+                            tr
+                                th(scope='row') 
+                                    p(class="label-title required") TYPE OF ABUSE
+                                td
+                                    .form-check.form-check-inline
+                                        input#rape.type_of_abuse.form-check-input(type='checkbox' name="rape"  value= `${data ? data.rape: ''}`)
+                                        label.form-check-label(for='rape') Rape
+                                    .form-check.form-check-inline
+                                        input#sh.type_of_abuse.form-check-input(type='checkbox' name="sh" value= `${data ? data.sh: ''}`)
+                                        label.form-check-label(for='sh') Sexual harassment
+                                    .form-check.form-check-inline
+                                        input#stalking.type_of_abuse.form-check-input(type='checkbox' name="stalking" value= `${data ? data.stalking: ''}`)
+                                        label.form-check-label(for='stalking') Stalking
+                                    .form-check.form-check-inline
+                                        input#sa.type_of_abuse.form-check-input(type='checkbox' name ="sa" value= `${data ? data.sa: ''}`)
+                                        label.form-check-label(for='sa') Sexual assult
+                                    .form-check.form-check-inline
+                                        input#discrimination.type_of_abuse.form-check-input(type='checkbox' name="discrimination" value= `${data ? data.discrimination: ''}`)
+                                        label.form-check-label(for='discrimination') Discrimination
+                                    .form-check.form-check-inline
+                                        input#se.type_of_abuse.form-check-input(type='checkbox' name="se" value= `${data ? data.se: ''}`)
+                                        label.form-check-label(for='se') Sexual exploitation
+                                    .form-check.form-check-inline
+                                        input#retaliation.type_of_abuse.form-check-input(type='checkbox' name="retaliation" value= `${data ? data.retaliation: ''}`)
+                                        label.form-check-label(for='retaliation') Retaliation
+                                    .form-check.form-check-inline
+                                        input#gbh.type_of_abuse.form-check-input(type='checkbox' name="gbh" value= `${data ? data.gbh: ''}`)
+                                        label.form-check-label(for='gbh') Gender-based harassment
+                                    .form-check.form-check-inline
+                                        input#na.type_of_abuse.form-check-input(type='checkbox' name="na" value= `${data ? data.na: ''}`)
+                                        label.form-check-label(for='na') NA
+                            tr
+                                th(scope='row') 
+                                    p(class="label-title required") OTHER COMPLAIN
+                                td
+                                    .form-check.form-check-inline
+                                        input#trafficking.other_complain.form-check-input(type='checkbox' name="trafficking" value= `${data ? data.trafficking: ''}`)
+                                        label.form-check-label(for='trafficking') Trafficking
+                                    .form-check.form-check-inline
+                                        input#extortion.other_complain.form-check-input(type='checkbox' name="extortion" value= `${data ? data.extortion: ''}`)
+                                        label.form-check-label(for='extortion') Extortion
+                                    .form-check.form-check-inline
+                                        input#starvation.other_complain.form-check-input(type='checkbox' name="starvation" value= `${data ? data.starvation: ''}`)
+                                        label.form-check-label(for='starvation') Starvation
+                                    .form-check.form-check-inline
+                                        input#dfs.other_complain.form-check-input(type='checkbox' name="dfs" value= `${data ? data.dfs: ''}`)
+                                        label.form-check-label(for='dfs') Diversion food stuff
+                                    .form-check.form-check-inline
+                                        input#do.other_complain.form-check-input(type='checkbox' name="do" value= `${data ? data.do: ''}`)
+                                        label.form-check-label(for='do') Disease outbreak 
+                                    .form-check.form-check-inline
+                                        input#ona.other_complain.form-check-input(type='checkbox' name="ona" value= `${data ? data.ona: ''}`)
+                                        label.form-check-label(for='na') NA
+                            tr
+                                th(scope='row') 
+                                    p(class="label-title required") DATE/TIME
+                                td
+                                    .form-group
+                                        input.form-control.form-control-sm(type='datetime-local' name="victim_date" value=`${data ? data.victim_date: ''}` required)
+                                        label.error-message
+                            tr
+                                th(scope='row') 
+                                    p(class="label-title required") INCIDENT DESCRIPTION
+                                td
+                                    .form-group
+                                        textarea.form-control(name='victim_description' rows='4') #{data ? data.victim_description: ''}
+                                        label.error-message
+                            tr
+                                th
+                                td
+                                    p.text-center
+                                        // Button trigger modal
+                                        button.btn.btn-primary(type='button' data-toggle='modal' data-target='#attachment')
+                                            | ATTACHMENT
+                                    // Modal
+                                    #attachment.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true' style="position:relative")
+                                        .modal-dialog
+                                            .modal-content
+                                                .modal-header
+                                                    h5#exampleModalLabel.modal-title ATTACHMENT
+                                                        span (PDF)
+                                                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                        span.btn.btn-sm.btn-primary(aria-hidden='true') save
+                                                .modal-body
+                                                        .input-group.mb-3
+                                                            .custom-file
+                                                                input#victim.custom-file-input(type='file' name="attachment" accept=".pdf")
+                                                                label.custom-file-label(for='slider') Choose file
+                    .w-100
+                        hr
+                        p.text-center.headline OFFENDER INFORMATION
+                    table.table.table-borderless
+                        tbody
+                            tr
+                                th(scope='row')
+                                    p(class="label-title required") NUMBER
+                                td 
+                                    .form-group
+                                        input.form-control.form-control-sm(type='number'  name="offender_number" id="offender_number" value= `${data ? data.offender_number: ''}` required)
+                                        label.error-message
+                            tr
+                                th(scope='row') 
+                                    p(class="label-title  required") NAME(S)
+                                td
+                                    .form-group
+                                        input.form-control.form-control-sm(type='text'  name="offender_name" id="offender_name" value= `${data ? data.offender_name: ''}`  required)
+                                        label.error-message
+                            tr
+                                th(scope='row') 
+                                    p(class="label-title required") SEX
+                                td 
+                                    .d-md-flex.justify-content-between
+                                        .custom-control.custom-radio.custom-control-inline
+                                            input#omale.offender_sex.custom-control-input(type='radio' name='offender_sex' value="Male")
+                                            label.custom-control-label(for='omale') Male
+                                        .custom-control.custom-radio.custom-control-inline
+                                            input#ofemale.offender_sex.custom-control-input(type='radio' name='offender_sex' value="Female")
+                                            label.custom-control-label(for='ofemale') Female
+                                        .custom-control.custom-radio.custom-control-inline
+                                            input#mix.offender_sex.custom-control-input(type='radio' name='offender_sex' value="Mix")
+                                            label.custom-control-label(for='mix') Mix
+                            tr
+                                th(scope='row')
+                                    p(class="label-title required")  AFFILIATION
+                                td
+                                    .form-group
+                                        input.form-control.form-control-sm(type='text'  name="offender_affiliation" id="offender_affoliation" value= `${data ? data.offender_affiliation: ''}` required)
+                                        label.error-message
+                            tr
+                                th(scope='row')
+                                    p(class="label-title required")  LINK TO VICTIM*
+                                td
+                                    .form-group
+                                        input.form-control.form-control-sm(type='text'  name="offender_link_victim" id="offender_link_victim" value= `${data ? data.offender_link_victim: ''}` required)
+                                        label.error-message
+                            tr
+                                th(scope='row') 
+                                    p(class="label-title") OFFENDERS DESCRIPTION
+                                td
+                                    .form-group
+                                        textarea.form-control(name='offender_description' rows='4') #{data ? data.offender_description: ''}
+                                        label.error-message
+                            tr
+                                th
+                                td
+                                    p.text-center
+                                        input.btn.btn-success(type='submit' value="submit")
+                h6.font-weight-bold.text-center.text-black.py-2 ALTERNATIVE REPORTING FORMAT
+                .row.px-sm-2.px-md-4 
+                    .col-md-4.my-1
+                        .p-2.alt-report
+                            img.mx-auto.d-block.py-4(src="/images/phone.png")
+                            p.px-3
+                                | Call to 
+                                span.p-1(style="color:#29ABE2") 08073360300
+                                | are responded to 24/7,
+                                | however, they are to be
+                                | paid for by complainant.
+                                | Before you put a call
+                                | through ensure you have
+                                | reasonable information.
+                                span.last
+                    .col-md-4.my-1
+                        .p-2.alt-report
+                            img.mx-auto.d-block.py-4(src="/images/sms.png")
+                            p.px-3
+                                | You can send sms to
+                                span.p-1(style="color:#29ABE2") 08073360300.
+                                | Your
+                                | message should capture
+                                | complain, identity and location of victim(s).
+                                span.last
+                    .col-md-4.my-1.mb-sm-4
+                        .p-2.alt-report
+                            img.mx-auto.d-block.py-4(src="/images/email.png")
+                            p.px-3
+                                | Send your complain email to
+                                span.p-1(style="color:#29ABE2") help@dphubng.org.
+                                | We will repond within 48 hours. 
+                                span.last
+
+
+

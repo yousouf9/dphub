@@ -1,0 +1,84 @@
+extends ../admin_layout
+
+block content
+    .container-fluid
+        h2 Monitor stats updates
+        form(method='post', action='/administrator/monitor')
+            .form-row
+                .form-group.col-md-6
+                    label.m-0.required(for='case') CASE
+                    input.form-control.form-control-sm(type="text" name="case"  id="case" value=`${data ? data.case : ""}` placeholder="10 missing" required)
+                    label.error-message
+                .form-group.col-md-6
+                    label.m-0.required(for='category') DISASTER TYPE
+                    input.form-control.form-control-sm(type="text" name="category" id="m_category" value=`${data ? data.category : ""}`  placeholder="Boko Haram" required)
+                    label.error-message
+            .form-row
+                .form-group.col-md-6
+                    label.m-0.required(for='community') COMMUNITY
+                    input.form-control.form-control-sm(type="text" name="community" id="community"  value=`${data ? data.community : ""}`  placeholder="Bida" required)
+                    label.error-message
+                .form-group.col-md-6
+                    label.m-0.required(for='source') NEWS SOURCE
+                    input.form-control.form-control-sm(type="text" name="source" id="source" value=`${data ? data.source : ""}`  placeholder="https://www.channelstv.com/" required)
+                    label.error-message
+            .form-row
+                .form-group.col-md-6
+                    label.m-0.required(for='state') State
+                    select.form-control.form-control-sm(name="state" id="state" value= `${data ? data.state: ""}` required)
+                        option select state
+                    label.error-message
+                .form-group.col-md-6
+                    label.m-0.required(for='date') Date
+                    input.form-control.form-control-sm(type="date" name="date" id="m_date" value=`${data ? data.date : ""}` required)
+                    label.error-message
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        h2 Update Report Statistics
+        form(method='post', action='/administrator/report/stat')
+            .form-row
+                .form-group.col-md-6
+                    label(for='stateID') Select State to Update
+                    select.form-control.form-control-sm(name="stateID" id="stateID"  required)
+                        if(stats)
+                            each property, i in stats
+                                option(value=`${property.properties.admin1Pcod}`) #{property.properties.admin1Name}
+                        else
+                            option data not available
+                .form-group.col-md-6
+                    label(for='totalDis') New Value
+                    input.form-control.form-control-sm(type='number' name="report" required)
+                input(type="hidden" name="statID" value=`${ID}`)
+            input.btn.btn-md.btn-success.mb-2( type="submit" value="save")
+        h2 States Reporter Cases
+        form(method='post', action='/administrator/dp_complain/report')
+            .form-row
+                .form-group.col-md-6
+                    label.m-0.required(for='case') Total NUmber
+                    input.form-control.form-control-sm(type="number" name="total_number"  id="total_number" value=`${data ? data.total_number : ""}` placeholder="1666" required)
+                    label.error-message
+                .form-group.col-md-6
+                    label.m-0.required(for='category') Locations
+                    input.form-control.form-control-sm(type="text" name="location" id="location" value=`${data ? data.location : ""}`  placeholder="SGBV REPORTED IN BORNO, YOBE ADAMAWA IN 2019" required)
+                    label.error-message
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")
+        h2 DP COMPLAIN ALERT 
+        form(method='post', action='/administrator/dp_complain/alert')
+            .form-row
+                .form-group.col-md-6
+                    label.m-0.required(for='title') Title
+                    input.form-control.form-control-sm(type="text" name="title"  id="title" value=`${data ? data.title : ""}` placeholder="Minor allegedly raped by camp official " required)
+                    label.error-message
+                .form-group.col-md-6
+                    label.m-0.required(for='category') Category
+                    input.form-control.form-control-sm(type="text" name="category" id="category" value=`${data ? data.category : ""}`  placeholder="SGBV" required)
+                    label.error-message
+            .form-row
+                .form-group.col-md-6
+                    label.m-0.required(for='authority') Report to Authority
+                    input.form-control.form-control-sm(type="text" name="authority" id="authority" value=`${data ? data.authority : ""}`  placeholder="Nigeria Police alerted" required)
+                    label.error-message
+                .form-group.col-md-6
+                    label.m-0.required(for='date') Date
+                    input.form-control.form-control-sm(type="date" name="date" id="date" value=`${data ? data.date : ""}`  required)
+                    label.error-message
+            input.btn.btn-md.btn-success.mb-2(name="submit" type="submit" value="save")

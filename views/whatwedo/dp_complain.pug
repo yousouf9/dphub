@@ -1,0 +1,41 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0
+        header.p-0.m-0
+            if(header)
+                each head, i in header
+                    if(head.name=="dpcomplain")
+                        .page-header(style=`background: url(${head.photo})`)
+                            .page-header-title
+                                | DP COMPLAINTS
+        .container.py-4.text-white
+            p Incidences of discrimination, right violations and sexual abuse of displaced persons are on the rise.
+                | Women and girls are the group mostly affected.
+            p Worrisome is the fact that some of these crimes are allegedly perpetrated by camp officials, aid
+                | workers and security operatives who are suppose to be in defense of these Dps.
+            p This platform provides a medium by which victims, individuals or groups can report problems faced
+                | by DPs as well as crimes committed against them. The system will in turn alert authorities concern
+                | for action. 
+        .displacement_statistics
+            .row
+                .col-md-7.d-md-flex.justify-content-end
+                    #mapReport
+                .col-md-4
+                    .d-md-flex.justify-content-center
+                        .container
+                            .row.p-3
+                                if(reports)
+                                    each report, i in reports
+                                        .col-md-6
+                                            .report-case
+                                                span.report-case-bullet 
+                                                span.report-case-head #{report.total_number}
+                                                br
+                                                span.report-case-title #{report.location}
+                                else
+                                    p.text-white.font-weight-bold Empty Reports
+                                    
+                            .d-md-flex.justify-content-around
+                                a.btn.btn-sm.btn-primary.mx-2(href="/whatwedo/dp_complain/form") COMPLAINT 
+                                a.btn.btn-sm.btn-primary(href="/whatwedo/dp_complain/alert") ALART

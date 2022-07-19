@@ -1,0 +1,164 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0(style="background-color:#dbdbdb")
+        .px-md-5
+            .row.no-gutters.p-3
+                .col-sm-6
+                    h2(style='color:#3c88c8; font-weight:bold; font-size:25px ') DP COMPLAIN ALERT
+                .col-sm-6
+                    form(method="get" action="/whatwedo/dp_complain/alert")
+                        .input-group
+                            input.form-control(type='search' name="search" placeholder='SEARCH ALERT' aria-label='Search')
+                            .input-group-append
+                                button.input-group-text.btn.my-2.my-sm-0.bg-dark(type='submit')
+                                    i.fas.fa-search.text-white
+            
+
+            if(search.results.length > 0)
+                .alert-category.p-3
+                    p   
+                        .alert-category-title.bg-danger RESULTS
+                    each result, i in search.results
+                        .alert-section
+                            .d-md-flex
+                                .p-2.flex-grow-1
+                                    span.alert-date #{moment(result.date).format("DD: MM:   YYYY")} 
+                                    span.alert-title #{result.title}
+                                    span.alert-authority #{result.authority}
+                                .p-2
+                                    p.alert-date-word.text-left #{moment(result.date).format('MMMM')}
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/whatwedo/dp_complain/alert" data-page="1"  data-rurl=`/whatwedo/dp_complain/alert?search=${searchKey}&searchPage=1`) 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(search.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?search=${searchKey}&searchPage=${search.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(search.first)
+                        p.paginateRight(class =`${search.first.current ? search.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?search=${searchKey}&searchPage=${search.first.value}` ) #{search.first.value}
+                    if !isObjectEmpty(search.second)
+                        p.paginateRight(class =`${search.second.current ? search.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?search=${searchKey}&searchPage=${search.second.value}`) #{search.second.value}
+                    if !isObjectEmpty(search.third)
+                        p.paginateRight(class =`${search.third.current ? search.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?search=${searchKey}&searchPage=${search.third.value}`) #{search.third.value}
+                    if !isObjectEmpty(search.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?search=${searchKey}&searchPage=${search.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert" data-page=`${search.totalPages}` data-rurl=`/whatwedo/dp_complain/alert?search=${searchKey}&searchPage=${search.totalPages}`)
+                            i.fas.fa-angle-double-right
+            else
+                .alert-category.p-3
+                    p
+                        .alert-category-title
+                            | SGBV
+                    each sgbv, i in sgbvs.results
+                        .alert-section
+                            .d-md-flex
+                                .p-2.flex-grow-1
+                                    span.alert-date #{moment(sgbv.date).format("DD: MM:   YYYY")} 
+                                    span.alert-title #{sgbv.title}
+                                    span.alert-authority #{sgbv.authority}
+                                .p-2
+                                    p.alert-date-word.text-left #{moment(sgbv.date).format('MMMM')}
+                    .d-flex.justify-content-center.pagination
+                        p.paginateLeft
+                            a.paginate(href="" data-submiturl="/whatwedo/dp_complain/alert" data-page="1"  data-rurl=`/whatwedo/dp_complain/alert?sgbvPage=1`) 
+                                i.fas.fa-angle-double-left
+                        if !isObjectEmpty(sgbvs.previous)
+                            p.paginateLeft 
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?sgbvPage=${sgbvs.previous.page}`)
+                                    i.fas.fa-angle-left
+                        if !isObjectEmpty(sgbvs.first)
+                            p.paginateRight(class =`${sgbvs.first.current ? sgbvs.first.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?sgbvPage=${sgbvs.first.value}` ) #{sgbvs.first.value}
+                        if !isObjectEmpty(sgbvs.second)
+                            p.paginateRight(class =`${sgbvs.second.current ? sgbvs.second.current: ""}`) 
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?sgbvPage=${sgbvs.second.value}`) #{sgbvs.second.value}
+                        if !isObjectEmpty(sgbvs.third)
+                            p.paginateRight(class =`${sgbvs.third.current ? sgbvs.third.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?sgbvPage=${sgbvs.third.value}`) #{sgbvs.third.value}
+                        if !isObjectEmpty(sgbvs.next)
+                            p.paginateRight
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?sgbvPage=${sgbvs.next.page}`)
+                                    i.fas.fa-angle-right
+                        p.paginateRight 
+                            a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert" data-page=`${sgbvs.totalPages}` data-rurl=`/whatwedo/dp_complain/alert?sgbvPage=${sgbvs.totalPages}`)
+                                i.fas.fa-angle-double-right
+                    p 
+                        .alert-category-title
+                            | TRAFFICKING
+                    each traffick, i in trafficks.results
+                        .alert-section
+                            .d-md-flex
+                                .p-2.flex-grow-1
+                                    span.alert-date #{moment(traffick.date).format("DD: MM:   YYYY")} 
+                                    span.alert-title #{traffick.title}
+                                    span.alert-authority #{traffick.authority}
+                                .p-2
+                                    p.alert-date-word.text-left #{moment(traffick.date).format('MMMM')}
+                    .d-flex.justify-content-center.pagination
+                        p.paginateLeft
+                            a.paginate(href="" data-submiturl="/whatwedo/dp_complain/alert" data-page="1"  data-rurl=`/whatwedo/dp_complain/alert?traffickPage=1`) 
+                                i.fas.fa-angle-double-left
+                        if !isObjectEmpty(trafficks.previous)
+                            p.paginateLeft 
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?traffickPage=${trafficks.previous.page}`)
+                                    i.fas.fa-angle-left
+                        if !isObjectEmpty(trafficks.first)
+                            p.paginateRight(class =`${trafficks.first.current ? trafficks.first.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?traffickPage=${trafficks.first.value}` ) #{trafficks.first.value}
+                        if !isObjectEmpty(trafficks.second)
+                            p.paginateRight(class =`${trafficks.second.current ? trafficks.second.current: ""}`) 
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?traffickPage=${trafficks.second.value}`) #{trafficks.second.value}
+                        if !isObjectEmpty(trafficks.third)
+                            p.paginateRight(class =`${trafficks.third.current ? trafficks.third.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?traffickPage=${trafficks.third.value}`) #{trafficks.third.value}
+                        if !isObjectEmpty(trafficks.next)
+                            p.paginateRight
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?traffickPage=${trafficks.next.page}`)
+                                    i.fas.fa-angle-right
+                        p.paginateRight 
+                            a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert" data-page=`${trafficks.totalPages}` data-rurl=`/whatwedo/dp_complain/alert?traffickPage=${trafficks.totalPages}`)
+                                i.fas.fa-angle-double-right
+                    p 
+                        .alert-category-title
+                            | OTHER COMPLAIN
+                    each other, i in others.results
+                        .alert-section
+                            .d-md-flex
+                                .p-2.flex-grow-1
+                                    span.alert-date #{moment(other.date).format("DD: MM:   YYYY")} 
+                                    span.alert-title #{other.title}
+                                    span.alert-authority #{other.authority}
+                                .p-2
+                                    p.alert-date-word.text-left #{moment(other.date).format('MMMM')}
+                    .d-flex.justify-content-center.pagination
+                        p.paginateLeft
+                            a.paginate(href="" data-submiturl="/whatwedo/dp_complain/alert" data-page="1"  data-rurl=`/whatwedo/dp_complain/alert?otherPage=1`) 
+                                i.fas.fa-angle-double-left
+                        if !isObjectEmpty(others.previous)
+                            p.paginateLeft 
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?otherPage=${others.previous.page}`)
+                                    i.fas.fa-angle-left
+                        if !isObjectEmpty(others.first)
+                            p.paginateRight(class =`${others.first.current ? others.first.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?otherPage=${others.first.value}` ) #{others.first.value}
+                        if !isObjectEmpty(others.second)
+                            p.paginateRight(class =`${others.second.current ? others.second.current: ""}`) 
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?otherPage=${others.second.value}`) #{others.second.value}
+                        if !isObjectEmpty(others.third)
+                            p.paginateRight(class =`${others.third.current ? others.third.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?otherPage=${others.third.value}`) #{others.third.value}
+                        if !isObjectEmpty(others.next)
+                            p.paginateRight
+                                a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert"  data-rurl=`/whatwedo/dp_complain/alert?otherPage=${others.next.page}`)
+                                    i.fas.fa-angle-right
+                        p.paginateRight 
+                            a.paginate(href=""  data-submiturl="/whatwedo/dp_complain/alert" data-page=`${others.totalPages}` data-rurl=`/whatwedo/dp_complain/alert?otherPage=${others.totalPages}`)
+                                i.fas.fa-angle-double-right

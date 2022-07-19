@@ -1,0 +1,55 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0(style="background:#e6e9ec ")
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section
+                header.p-2.text-white(style="background:#092944")
+                    | LANGUAGE
+                .table-responsive
+                    table.table.table-striped.table-hover
+                        thead
+                            tr
+                                th(scope='col') SN
+                                th(scope='col') Speaking
+                                th(scope='col') Writting
+                                th(scope='col')
+                        tbody
+                            if(languages)
+                                each language, i in languages
+                                        tr
+                                            th(scope='row') #{i+1}
+                                            td #{language.language_speaking}
+                                            td #{language.language_writing}
+                                            td 
+                                                a.btn.btn-sm.btn-danger.remove(href="" data-id=`${language._id}` data-submiturl="/user/language/" data-rurl="/user/register/5") Delete
+                p.text-center.py-4
+                    // Button trigger modal
+                    button.btn.btn-primary(type='button' data-toggle='modal' data-target='#exampleModal')
+                        | Add Language
+                // Modal
+                #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                    .modal-dialog
+                        .modal-content
+                            .modal-header
+                                h5#exampleModalLabel.modal-title LANGUAGE
+                                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                    span(aria-hidden='true') &times;
+                            .modal-body
+                                form.px-md-4(method='post' action="/user/register/5" name="language")
+                                    .form-group
+                                        label.m-0.required(for='language_speaking') English Proficiency (Speaking)
+                                        input.form-control.form-control-sm.required(type='text'  name="language_speaking" value= `${data ? data.language_speaking: ''}` required)
+                                    .form-group
+                                        label.m-0.required(for='language_writing') English Proficiency (Writing)*
+                                        input.form-control.form-control-sm.required(type='text'  name="language_writing" value= `${data ? data.language_writing: ''}` required)
+                                    .d-flex.bd-highlight
+                                        .flex-grow-1.bd-highlight 
+                                            button.btn.btn-danger(type='button' data-dismiss='modal') Cancel
+                                        .bd-highlight
+                                            input.btn.btn-md.btn-primary.px-4(type='submit'  value='save')
+                .d-flex.bd-highlight
+                    .flex-grow-1.bd-highlight 
+                        a.btn.btn-md.btn-primary.px-4(href="/user/register/4") Back
+                    .bd-highlight
+                        a.btn.btn-md.btn-primary.px-4(href="/user/register/6") Next

@@ -1,0 +1,45 @@
+extends layout
+
+block content
+    //Nigeria's displacement statistics
+    .contact_address
+        .p-5.p-md-5.contact_address_inner
+            .px-4.w-100.font-weight-bold.text-center
+                h2.p-0.m-0 Contact
+                p.p-1.m-0 Phone: 08073360300
+                p.p-1.m-0 E-mail: info@dphubng.org
+            .px-4.w-100.font-weight-bold.text-center
+                h2.p-0.m-0 OFFICE
+                p.p-1.m-0 Suite A1, 1st Floor, Churchgate
+                p.p-1.m-0 Towe, Constitution Avenue, Central
+                p.p-1.m-0 Business District, Abuja, Nigeria
+    .container-fluid.py-4.px-4(style="background:#e6e9ec; ")
+        .d-flex.flex-column.px-md-5(style="margin-top:-100px; z-index:150; position: relative ")
+            .px-md-2
+                .container.p-0.m-0.pt-3
+                    .row.row-cols-1.row-cols-md-2
+                        .col.md-6
+                            form.p-4(method='post' action="/contact" name="contactForm")
+                                p(style="color:#3c88c8")
+                                    i.fas.fa-envelope-open-text.pr-3
+                                    | SEND US A MESSAGE
+                                .form-group
+                                    label.m-0.required(for='name' ) Name 
+                                    input.form-control.form-control-sm.required(type='text'  name="name" value= `${data ? data.name: ''}` required)
+                                .form-group
+                                    label.m-0.required(for='email') Email
+                                    input.form-control.form-control-sm.required(type='email' name="email" value= `${data ? data.email: ''}` required)
+                                .form-group
+                                    label.m-0.required(for='subject') Subject
+                                    input.form-control.form-control-sm.required(type='text' name="subject" value= `${data ? data.subject: ''}`  required)
+                                .form-group
+                                    label.required(for='message') Message
+                                    textarea.form-control(name='message' rows='3' value= `${data ? data.message: ''}`)
+                                .text-letf
+                                    input.btn.btn-md.btn-success(type='submit'  value='Send')
+                        .col-md-6
+                                p.pt-3(style="color:#3c88c8")
+                                    i.fas.fa-location-arrow.pr-3
+                                    | GEOGRAPHICAL LOCATION
+                                p 
+                                    iframe(src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.1621390167506!2d7.472948714431176!3d9.048970791168276!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104e0b0c90624bcf%3A0xa1d6460ae41e8149!2sChurchGate%20Tower!5e0!3m2!1sen!2sng!4v1608311633744!5m2!1sen!2sng' width='100%' height='380' frameborder='0' style='border:0;' allowfullscreen='' aria-hidden='false' tabindex='0')

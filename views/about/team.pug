@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0
+        header.p-0.m-0
+            #{header.photo}
+            if(header)
+                each head, i in header
+                    if(head.name=="whyweexist")
+                        .page-header(style=`background: url(${head.photo})`)
+        .container
+            .d-flex.flex-column.py-5.px-md-5
+                .px-md-2
+                    h2.font-weight-bold(style='color:#3c88c8; width: 240px; margin:0 auto; border-bottom: 1px solid #3c88c8') DPHUB'S TEAM
+                    .container.p-0.m-0.pt-3
+                        .row.row-cols-1.row-cols-sm-2.row-cols-md-4
+                                if(teams)
+                                    each team, i in teams
+                                        a.col.mb-4.team-card(href=`/about/team/${team._id}`)
+                                            .card.h-100(style="background-color:#1a4980")
+                                                .card-team-image(style=`background:url(${team.photo})`)
+                                                .card-body.p-2
+                                                    h5.font-weight-bold.text-light.p-1 #{team.name}
+                                                    h3.font-weight-bold.text-light #{team.surname}
+                                                    small.text-white-50.p-1 #{team.position}
+                            
+

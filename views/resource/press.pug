@@ -1,0 +1,159 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0
+        header.p-0.m-0
+            if(header)
+                each head, i in header
+                    if(head.name=="press")
+                        .page-header(style=`background: url(${head.photo})`)
+                            .page-header-title
+                                | DPHUB PRESS RELEASES
+        .container-fluid.px-4(style="background:#e6e9ec ")
+            .row
+                .col-md-9
+                    .container 
+                    if(presses)
+                        each press, i in presses.results
+                            .p-2.my-4.card-section 
+                                .row  
+                                    .col-md-3 
+                                        if(header)
+                                            each head, i in header
+                                                if(head.name=="press")
+                                                    .press-image(style=`background: url(${press.photo})`)
+                                    .col-md-9  
+                                        .press-detail-section.p-1
+                                            h4 #{press.title}
+                                            .d-flex
+                                                .p-1
+                                                    p.mb-0.social-date-chat
+                                                        span.text-muted 
+                                                            i.fas.fa-calendar-alt.px-1
+                                                            span.px-1 #{moment(press.createdAt).format(`DD: MM: YYYY`)}
+                                                .p-1
+                                                    p.mb-0.social-date-chat
+                                                        | DPHUB
+                                                        span 
+                                                            i.fas.fa-comment-alt
+                                                            sub.px-1 #{press.comments.length}
+
+                                                .ml-auto.p-1
+                                                    p.p-1.mb-0.social-team
+                                                        a.facebook(href=`#` )
+                                                            i.fab.fa-facebook-f
+                                                        a.twitter(href=`#`)
+                                                            i.fab.fa-twitter  
+                                                        a.googleplus(href=`#` )                                                
+                                                            i.fab.fa-google-plus-g
+
+                                            p.mb-0 
+                                            !=truncateText(press.articleBody, 200)
+                                            p.mb-0.text-right.read-more.font-weight-bold
+                                                a.btn(href=`/resource/press/${press._id}`) 
+                                                    span React more
+                                                    | >>
+                    .d-flex.justify-content-center.pagination
+                        p.paginateLeft
+                            a.paginate(href="" data-submiturl="/resource/press" data-page="1"  data-rurl="/resource/press?page=1") 
+                                i.fas.fa-angle-double-left
+                        if !isObjectEmpty(presses.previous)
+                            p.paginateLeft 
+                                a.paginate(href=""  data-submiturl="/resource/press"  data-rurl=`/resource/press?page=${presses.previous.page}`)
+                                    i.fas.fa-angle-left
+                        if !isObjectEmpty(presses.first)
+                            p.paginateRight(class =`${presses.first.current ? presses.first.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/resource/press"  data-rurl=`/resource/press?page=${presses.first.value}` ) #{presses.first.value}
+                        if !isObjectEmpty(presses.second)
+                            p.paginateRight(class =`${presses.second.current ? presses.second.current: ""}`) 
+                                a.paginate(href=""  data-submiturl="/resource/press"  data-rurl=`/resource/press?page=${presses.second.value}`) #{presses.second.value}
+                        if !isObjectEmpty(presses.third)
+                            p.paginateRight(class =`${presses.third.current ? presses.third.current: ""}`)
+                                a.paginate(href=""  data-submiturl="/resource/press"  data-rurl=`/resource/press?page=${presses.third.value}`) #{presses.third.value}
+                        if !isObjectEmpty(presses.next)
+                            p.paginateRight
+                                a.paginate(href=""  data-submiturl="/resource/press"  data-rurl=`/resource/press?page=${presses.next.page}`)
+                                    i.fas.fa-angle-right
+                        p.paginateRight 
+                            a.paginate(href=""  data-submiturl="/resource/press" data-page=`${presses.totalPages}` data-rurl=`/resource/press?page=${presses.totalPages}`)
+                                i.fas.fa-angle-double-right
+                .col-6.col-md-3 
+                    form(method="get" action="/resource/press")
+                        .input-group.py-4
+                            input.form-control(type='search' name="search" placeholder='Type and hit enter' aria-label='Search')
+                            .input-group-append
+                                button.input-group-text.btn.my-2.my-sm-0.bg-dark(type='submit')
+                                    i.fas.fa-search.text-white
+                    .press-detail-section
+                        h4 PRESS ENQUIRIES
+                            span
+                        h5.m-0  Michael NWISANE
+                        p.m-0 Communition Officer
+                        p.m-0 
+                            i.fas.fa-mobile-alt
+                            a.px-2.text-dark(href="tel://+2349090000000") (+234)-909-000-0000
+                        p 
+                            i.fas.fa-envelope
+                            a.px-2.text-dark(href="mailto:nwisane@dphubng.org") nwisane@dphubng.org
+                    .press-detail-section.py-3
+                        h4 BE IN THE KNOW
+                            span
+                        form(method='post' action="/subscription" name="subscribeFform")
+                            .form-group
+                                span.m-0(for='email') Subscribe to our email list
+                                input.form-control.form-control-sm.required(type='text'  name="email" placeholder="enter your email address" required)
+                            .form-row.pl-4
+                                .form-check.col-md-6
+                                    input.form-check-input(type='checkbox' name="press_release" value="")
+                                    span.form-check-label
+                                        | Press Release
+                                .form-check.col-md-6
+                                    input.form-check-input(type='checkbox' name="event" value="")
+                                    span.form-check-label
+                                        | Event
+                            .form-row.pl-4
+                                .form-check.col-md-6
+                                    input.form-check-input(type='checkbox' name="publication" value="")
+                                    span.form-check-label
+                                        | Publication
+                                .form-check.col-md-6
+                                    input.form-check-input(type='checkbox' name="blogs" value="")
+                                    span.form-check-label
+                                        | Blogs
+                            .form-row.pl-4
+                                .form-check.col-md-6
+                                    input.form-check-input(type='checkbox' name="multimedia" value="")
+                                    span.form-check-label
+                                        | Multimedia
+                                .form-check.col-md-6
+                                    input.form-check-input(type='checkbox' name="jobs" value="")
+                                    span.form-check-label
+                                        | Jobs
+                            input.form-check-input(type='hidden' name="urlpath" value='/resource/press')
+                            input.btn.btn-sm.btn-primary.my-1(type="submit" value="Signup")
+                    .press-detail-section
+                        h4 EVENTS
+                            span
+                        .row.pl-2
+                            .cols.p-2.mr-1
+                                a.btn.btn-block.btn-primary.paginate(href=""  data-submiturl="/resource/report"  data-rurl=`/resource/report?epage=1`) Upcoming
+                            .cols.p-2
+                                if !isObjectEmpty(events.next)
+                                    a.btn.btn-block.btn-outline-primary.paginate(href=""  data-submiturl="/resource/report"  data-rurl=`/resource/report?epage=${events.next.page}`) Previous
+                        #counterDiv
+                            if(events)
+                                each event, i in events.results
+                                    small.inline-block #{event.title}          
+                                        .d-flex.justify-content-start.text-center
+                                            .px-1
+                                                h6.p-0.m-0.text-danger.update-counter #{dateCounter(event).days}
+                                                small.font-weight-bold.p-0.m-0 Days
+                                            .px-1
+                                                h6.p-0.m-0.text-danger.update-counter #{dateCounter(event).hours}
+                                                small.font-weight-bold.p-0.m-0 Hours
+                                            .px-1
+                                                h6.p-0.m-0.text-danger.update-counter #{dateCounter(event).minutes}
+                                                small.font-weight-bold.p-0.m-0 Minutes
+                                            .px-1
+                                                h6.p-0.m-0.text-danger.update-counter #{dateCounter(event).seconds}
+                                                small.font-weight-bold.p-0.m-0 Seconds

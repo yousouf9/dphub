@@ -1,0 +1,28 @@
+extends ../admin_layout
+
+block content
+    .container-fluid.shadow-sm.p-3.mb-5.bg-white.rounded.p-0
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | HIRE REQUEST
+            .table-responsive
+                table.table.table-striped.table-hover
+                    thead
+                        tr
+                            th(scope='col') SN
+                            th(scope='col') Name
+                            th(scope='col') Required Skills
+                            th(scope='col') Email
+                            th(scope='col') Phone
+                            th(scope='col')
+                    tbody
+                        if(hires)
+                            each hire, i in hires
+                                    tr
+                                        th(scope='row') #{i+1}
+                                        td #{hire.name}
+                                        td #{hire.skill}
+                                        td  #{hire.email}
+                                        td  #{hire.phone}
+                                        td 
+                                            a.btn.btn-sm.btn-danger.remove(href="" data-id=`${hire._id}` data-submiturl="/user/hire/" data-rurl="/user/register/4") Delete

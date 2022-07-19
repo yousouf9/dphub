@@ -1,0 +1,33 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0(style="background:#e6e9ec ")
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section
+                form.p-4(method='post' name="userUpload" action="/user/register/7" enctype='multipart/form-data')
+                    header.p-2.text-white(style="background:#092944")
+                        | GENERAL COMMENT/UPLOADS
+                    .form-group.pt-1
+                        label(for='comment') Any Other Comment
+                        textarea.form-control(name='comment' rows='3' value= `${data ? data.comment: (upload ? upload.comment: '')}` id="comment")
+                    .form-group
+                        label.m-0(for='source') Source of Information
+                        input.form-control.form-control-sm(type='text'  name="source" value= `${data ? data.source: (upload ? upload.source: '')}` id="source")
+                    .form-group
+                        label.m-0(for='cv') Attach CV
+                        .input-group.mb-3
+                            .custom-file
+                                input#cv.custom-file-input(type='file' name="cv" accept=".pdf,.doc")
+                                label.custom-file-label(for='cv' aria-describedby='inputGroupFileAddon02') Choose file
+                    .form-group
+                        label.m-0(for='other') Other Attachment
+                        .input-group.mb-3
+                            .custom-file
+                                input#other.custom-file-input(type='file' name="other" accept=".pdf,.doc")
+                                label.custom-file-label(for='other' aria-describedby='inputGroupFileAddon02') Choose file
+                    .d-flex.bd-highlight
+                        .flex-grow-1.bd-highlight 
+                            a.btn.btn-md.btn-primary.px-4(href="/user/register/6") Back
+                        .bd-highlight
+                            input.btn.btn-md.btn-success.px-4(type='submit'  value='Submit')
+

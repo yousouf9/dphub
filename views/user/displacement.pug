@@ -1,0 +1,46 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0(style="background:#e6e9ec ")
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section
+                form.p-4(method='post' name="userDisplacement" id="userDisplacement")
+                    header.p-2.text-white(style="background:#092944")
+                        | DISPLACEMENT INFORMATION
+                    .form-group
+                        label.m-0.required(for='yod') Year of Displacement
+                        input.form-control.form-control-sm(type='date'  name="yod" value= `${data ? data.yod: (displacement ? displacement.yod.value: '')}` id="yod" required)
+                        label.error-message
+                    .form-group.m-0
+                        label.m-0.required Cause of Displacement
+                    .form-check.form-check-inline
+                        label.form-check-label.pr-2(for='boko_haram') Boko Haram
+                        input#boko_haram.cause_of_displacement.form-check-input(type='checkbox' name="boko_haram" value= `${(data ?  data.boko_haram : (!isObjectEmpty(displacement.boko_haram) ? displacement.boko_haram: ''))}`)
+                    .form-check.form-check-inline
+                        label.form-check-label.pr-2(for='inlineCheckbox1') Bandit
+                        input#bandit.cause_of_displacement.form-check-input(type='checkbox' name="bandit" value= `${(data ?  data.bandit  : (!isObjectEmpty(displacement.bandit) ? displacement.bandit: ''))}`)
+                    .form-check.form-check-inline
+                        label.form-check-label.pr-2(for='flood') Flood
+                        input#flood.cause_of_displacement.form-check-input(type='checkbox' name="flood" value=`${(data ? data.flood:(!isObjectEmpty(displacement.flood) ? displacement.flood: ''))}`)
+                    .form-check.form-check-inline
+                        label.form-check-label.pr-2(for='communal_crisis') Communal Crisis
+                        input#communal_crisis.cause_of_displacement.form-check-input(type='checkbox' name="communal_crisis" value=`${(data ? data.communal_crisis: (!isObjectEmpty(displacement.communal_crisis) ? displacement.communal_crisis: ''))}`)
+                    .form-check.form-check-inline
+                        label.form-check-label.pr-2(for='other') Other
+                        input#other.cause_of_displacement.form-check-input(type='checkbox' name="other" value=`${(data ? data.other: (!isObjectEmpty(displacement.other) ? displacement.other: ''))}`)
+                        label.error-message
+                    .form-group.mt-2
+                        label.m-0.required(for='state') State of Residence
+                        select.form-control.form-control-sm(name="state"  value= `${data ? data.state: (displacement ? displacement.state: '')}` id="state" required)
+                            option select state
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='place_residence') Place/Camp of Residence
+                        input.form-control.form-control-sm(type='text' name="place_residence"  id="place_residence" value=`${data ? data.place_residence: (displacement ? displacement.place_residence.value: '')}` required)
+                        label.error-message
+                    .d-flex.bd-highlight
+                        .flex-grow-1.bd-highlight 
+                            a.btn.btn-md.btn-primary.px-4(href="/user/register/1") Back
+                        .bd-highlight
+                            input.btn.btn-md.btn-primary.px-4(type='submit'  value='Next')
+

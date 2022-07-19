@@ -1,0 +1,42 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0(style="background:#e6e9ec ")
+        .px-md-5.pt-4
+            .row
+                .col-md-6
+                    .container.px-md-5.pb-md-5
+                        h5.font-weight-light.pt-2(style='color:#3c88c8;') Welcome to DPHUB’s Skills/Talent Catalog
+                        p In keeping with our vision of promoting self-reliance
+                            | among skilled and talented displaced persons, we have
+                            | created this platform to aord all willing displaced persons
+                            | the opportunity to create a profile that will capture their
+                            | skills and talents as well as portfolio thereby increasing the
+                            | chances of rebuilding a new life and career. We seek to
+                            | reduce over dependence of DPs on aid and donation thus;
+                            | this platform complements training investment of humanitarian actors through the spot lightening of obscured DPs
+                            | skills and talents. Registration on this platform is free without any charge and all skilled and talented DPs; whether
+                            | Internally Displaced Persons (IDPs) or refugees are encouraged to register. We do not discriminate as we value and
+                            | respect human diversity
+                .col-md-6
+                    .container.px-md-5.py-md-5
+                        form.p-4.bg-white(method='post' action="/user/login" id="userlogin" name="userlogin")
+                            .form-group
+                                label.m-0(for='username') username
+                                input.form-control.form-control-sm.required(type='text'  name="username" id="username" required)
+                                label.error-message
+                            .form-group
+                                label.m-0(for='password') Password
+                                input.form-control.form-control-sm.required(type='password' name="password" id="password"  required)
+                                label.error-message
+                            .container.px-md-5.text-center
+                                input.btn.btn-sm.btn-block.btn-outline-secondary(type='submit' name="login" value='Login' )
+                                a.btn.text-primary(href="/user/verify_email") Forgot Password
+                            .container.px-md-5.text-center.border-top.py-2
+                                a.btn.btn-sm.btn-block.btn-outline-secondary(href="/user/register") Register
+    .container-fluid.px-5(style="background:#3c88c8")
+        .container.px-md-4.py-md-3.text-white
+            p   Register now to build your profile. Information provided will be used to identify employment opportunity match and we will share your skills and or talent profile with interested employers, sponsors
+                | and promoters. Note; no information will be shared without your consent. 
+            p.text-center
+                a.btn.btn-sm.btn-primary.my-3.px-5(href="/user/register") Register

@@ -1,0 +1,153 @@
+extends ../admin_layout
+
+block content
+    .container-fluid
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | Internship Applications
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Name
+                            th(scope='col') Contact
+                            th(scope='col') sex
+                            th(scope='col') State
+                            th(scope='col') CV
+                            th(scope='col') Specialization
+                            th(scope='col') Institution
+                            th(scope='col') Duration
+                            th(scope='col') Graduation Year
+                            th(scope='col') Interest Areas
+                            th(scope='col') 
+                    tbody
+                        if(internships)
+                            each intern, i in internships.results
+                                tr
+                                    td 
+                                        small #{intern.name}
+                                    td
+                                        small  #{intern.address}
+                                        br
+                                        small #{intern.email}
+                                        br
+                                        small #{intern.phone}
+                                    td 
+                                        small #{intern.sex}
+                                    td 
+                                        small #{intern.state}
+                                    td
+                                        // Button trigger modal
+                                        button.btn.btn-sm.btn-primary(type='button' data-toggle='modal' data-target=`#intern${i}`)
+                                            | View
+                                        // Modal
+                                        .modal.fade(tabindex='-1' role='dialog' id=`intern${i}` aria-labelledby='exampleModalCenterTitle' aria-hidden='true')
+                                            .modal-dialog.modal-dialog-centered.modal-xl(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                                            span(aria-hidden='true') &times;
+                                                    .modal-body
+                                                        if(intern.cv)
+                                                            object(data=`${intern.cv}` type='application/pdf' width='100%' height='500')
+                                                                iframe(src=`${intern.cv}` width='100%' height='500' style='border: none;')
+                                                                    | This browser does not support PDFs. Please download the PDF to view it: 
+                                                                    a(href=`${intern.cv}`) Download PDF
+                                                        .border-top.text-mutted
+                                    td 
+                                        small #{intern.specialization}
+                                    td 
+                                        small #{intern.institution}
+                                    td 
+                                        small #{intern.duration}
+                                    td 
+                                        small #{intern.yog? moment(intern.yog).format("MM-YYYY") : ""}
+                                    td 
+                                        small #{intern.interesArea.human_right} #{intern.interesArea.skill} #{intern.interesArea.advocacy} #{intern.interesArea.wash}
+                                            | #{intern.interesArea.dc} #{intern.interesArea.hr} #{intern.interesArea.policy} #{intern.interesArea.me}
+                                            | #{intern.interesArea.cr} 
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${intern._id}` data-submiturl="/internship/" data-rurl="/administrator/get_involved") Remove
+            if(internships)
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/administrator/get_involved" data-page="1"  data-rurl="/administrator/get_involved?ipage=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(internships.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/administrator/get_involved"  data-rurl=`/administrator/get_involved?ipage=${internships.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(internships.first)
+                        p.paginateRight(class =`${internships.first.current ? internships.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/get_involved"  data-rurl=`/administrator/get_involved?ipage=${internships.first.value}` ) #{internships.first.value}
+                    if !isObjectEmpty(internships.second)
+                        p.paginateRight(class =`${internships.second.current ? internships.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/administrator/get_involved"  data-rurl=`/administrator/get_involved?ipage=${internships.second.value}`) #{internships.second.value}
+                    if !isObjectEmpty(internships.third)
+                        p.paginateRight(class =`${internships.third.current ? internships.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/get_involved"  data-rurl=`/administrator/get_involved?ipage=${internships.third.value}`) #{internships.third.value}
+                    if !isObjectEmpty(internships.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/administrator/get_involved"  data-rurl=`/administrator/get_involved?ipage=${internships.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/administrator/get_involved" data-page=`${internships.totalPages}` data-rurl=`/administrator/get_involved?ipage=${internships.totalPages}`)
+                            i.fas.fa-angle-double-right
+        .form-section
+            header.p-2.text-white(style="background:#092944")
+                | Sponsorship Applications
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Name
+                            th(scope='col') Contact
+                            th(scope='col') sex
+                            th(scope='col') Interest
+                            th(scope='col') Contact Person
+                            th(scope='col') 
+                    tbody
+                        if(sponsors)
+                            each sponsor, i in sponsors.results
+                                tr
+                                    td 
+                                        small #{sponsor.name}
+                                    td
+                                        small  #{sponsor.address}
+                                        br
+                                        small #{sponsor.email}
+                                        br
+                                        small #{sponsor.phone}
+                                    td 
+                                        small #{sponsor.sex}
+                                    td 
+                                        small #{sponsor.interest}
+                                    td 
+                                        small #{sponsor.c_person}
+                                    td
+                                        a.btn.btn-sm.btn-danger.remove(href="" data-id=`${sponsor._id}` data-submiturl="/sponsor/" data-rurl="/administrator/get_involved") Remove
+            if(sponsors)
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/administrator/get_involved" data-page="1"  data-rurl="/administrator/get_involved?spage=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(sponsors.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/administrator/get_involved"  data-rurl=`/administrator/get_involved?spage=${sponsors.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(sponsors.first)
+                        p.paginateRight(class =`${sponsors.first.current ? sponsors.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/get_involved"  data-rurl=`/administrator/get_involved?spage=${sponsors.first.value}` ) #{sponsors.first.value}
+                    if !isObjectEmpty(sponsors.second)
+                        p.paginateRight(class =`${sponsors.second.current ? sponsors.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/administrator/get_involved"  data-rurl=`/administrator/get_involved?spage=${sponsors.second.value}`) #{sponsors.second.value}
+                    if !isObjectEmpty(sponsors.third)
+                        p.paginateRight(class =`${sponsors.third.current ? sponsors.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/get_involved"  data-rurl=`/administrator/get_involved?spage=${sponsors.third.value}`) #{sponsors.third.value}
+                    if !isObjectEmpty(sponsors.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/administrator/get_involved"  data-rurl=`/administrator/get_involved?spage=${sponsors.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/administrator/get_involved" data-page=`${sponsors.totalPages}` data-rurl=`/administrator/get_involved?spage=${sponsors.totalPages}`)
+                            i.fas.fa-angle-double-right

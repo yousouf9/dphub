@@ -1,0 +1,72 @@
+extends ../admin_layout
+
+block content
+    .container
+        .shadow-sm.p-5.mb-5.bg-white.rounded
+            form(method='post' action="/administrator/add" name="userRegister" )
+                header.p-2.text-white(style="background:#092944")
+                    | CREATE ADMIN
+                .form-group
+                    label.m-0.required(for='username' ) username
+                    input.form-control.form-control-sm(type='text'  name="username" id="username" value= `${data ? data.username: ''}` required)
+                    label.error-message
+                .form-group
+                    label.m-0.required(for='name' ) Name (surname first)
+                    input.form-control.form-control-sm(type='text'  name="name" id="name" value= `${data ? data.name: ''}` required)
+                    label.error-message
+                .form-group
+                    label.m-0.required(for='email') Email
+                    input.form-control.form-control-sm(type='email' name="email" id="email" value= `${data ? data.email: ''}` required)
+                    label.error-message
+                .form-group
+                    label.m-0.required(for='password') Password (Atleast 6 characters)
+                    input.form-control.form-control-sm(type='password' name="password" id="password"  required)
+                    label.error-message
+                .text-left.mb-4
+                    input.btn.btn-md.btn-primary(type='submit'  value='ADD ADMIN' )
+            header.p-2.text-white(style="background:#092944")
+                | ADMIN USERS
+            .table-responsive
+                table.table.table-hover
+                    thead
+                        tr
+                            th(scope='col') Name
+                            th(scope='col') Email
+                            th(scope='col') 
+                    tbody
+                        if(users)
+                            each user, i in users.results
+                                if(user.admin)
+                                    tr
+                                        td 
+                                            | #{user.name}
+                                        td
+                                            | #{user.email}
+                                        td
+                                            a.btn.btn-sm.btn-danger.remove(href="" data-id=`${user._id}` data-submiturl="/administrator/" data-rurl="/administrator/manage") Remove
+
+            if(users)
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/administrator/manage" data-page="1"  data-rurl="/administrator/manage?page=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(users.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/administrator/manage"  data-rurl=`/administrator/manage?page=${users.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(users.first)
+                        p.paginateRight(class =`${users.first.current ? users.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/manage"  data-rurl=`/administrator/manage?page=${users.first.value}` ) #{users.first.value}
+                    if !isObjectEmpty(users.second)
+                        p.paginateRight(class =`${users.second.current ? users.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/administrator/manage"  data-rurl=`/administrator/manage?page=${users.second.value}`) #{users.second.value}
+                    if !isObjectEmpty(users.third)
+                        p.paginateRight(class =`${users.third.current ? users.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/administrator/manage"  data-rurl=`/administrator/manage?page=${users.third.value}`) #{users.third.value}
+                    if !isObjectEmpty(users.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/administrator/users"  data-rurl=`/administrator/users?page=${users.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/administrator/users" data-page=`${users.totalPages}` data-rurl=`/administrator/users?page=${users.totalPages}`)
+                            i.fas.fa-angle-double-right

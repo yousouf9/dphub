@@ -1,0 +1,37 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0
+        header.p-0.m-0
+            #{header.photo}
+            if(header)
+                each head, i in header
+                    if(head.name=="whyweexist")
+                        .page-header(style=`background: url(${head.photo})`)
+        .container-fluid.px-4(style="background:#e6e9ec ")
+            .d-flex.flex-column.py-5.px-md-5
+                .px-md-2
+                    .container.p-0.m-0.pt-3
+                        .row.row-cols-1.row-cols-md-4
+                                if(team)
+                                    .col.mb-4.team-card
+                                        .card.h-100(style="background-color:#1a4980")
+                                            .card-team-image(style=`background:url(${team.photo})`)
+                                            .card-body.p-2
+                                                h5.font-weight-bold.text-light.p-1 #{team.name}
+                                                h3.font-weight-bold.text-light #{team.surname}
+                                                small.text-white-50.p-1 #{team.position}
+                                        p.p-1.social-team
+                                            a.facebook(href=`${team.social.facebook ? team.social.facebook : '#'}` )
+                                                i.fab.fa-facebook-f
+                                            a.twitter(href=`${team.social.twitter ? team.social.twitter: '#'}`)
+                                                i.fab.fa-twitter
+                                                
+                                            a.linkedin(href=`${team.social.linkin ? team.social.linkin : '#'}` )                                                
+                                                i.fab.fa-linkedin-in
+                                            a.googleplus(href=`${team.social.google ? team.social.google :'#'}` )                                                
+                                                i.fab.fa-google-plus-g
+                                            span.d-inline-block
+                                    .col-md-8.mb-4
+                                        .container.py-4.h-100
+                                            div!= team.body

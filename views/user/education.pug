@@ -1,0 +1,73 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0(style="background:#e6e9ec ")
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section
+                header.p-2.text-white(style="background:#092944")
+                    | EDUCATION
+                .table-responsive
+                    table.table.table-striped.table-hover
+                        thead
+                            tr
+                                th(scope='col') SN
+                                th(scope='col') Level of Education
+                                th(scope='col') Specialization
+                                th(scope='col') Duration
+                                th(scope='col') Graduated
+                                th(scope='col')
+                        tbody
+                            if(educations)
+                                each education, i in educations
+                                        tr
+                                            th(scope='row') #{i+1}
+                                            td #{education.highest_education}
+                                            td #{education.specialization}
+                                            td  #{education.duration}
+                                            td  #{moment(education.yog).format('YYYY')}
+                                            td 
+                                                a.btn.btn-sm.btn-danger.remove(href="" data-id=`${education._id}` data-submiturl="/user/education/" data-rurl="/user/register/4") Delete
+                p.text-center.py-4
+                    // Button trigger modal
+                    button.btn.btn-primary(type='button' data-toggle='modal' data-target='#exampleModal')
+                        | Add Education
+                // Modal
+                #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+                    .modal-dialog
+                        .modal-content
+                            .modal-header
+                                h5#exampleModalLabel.modal-title EDUCATION
+                                button.close(type='button' data-dismiss='modal' aria-label='Close')
+                                    span(aria-hidden='true') &times;
+                            .modal-body
+                                form.px-md-4(method='post' action="/user/register/4" name="education")
+                                    .form-group
+                                        label.m-0.required(for='highest_education') Highest level of education
+                                        input.form-control.form-control-sm(type='text'  name="highest_education" id="highest_education" value= `${data ? data.highest_education: ''}` required)
+                                        label.error-message
+                                    .form-row
+                                        .form-group.col-md-6
+                                            label.required(for='specialization') Specialization
+                                            input.form-control.form-control-sm(type='text' name="specialization" id="specialization" value= `${data ? data.specialization: ''}`)
+                                            label.error-message
+                                        .form-group.col-md-6
+                                            label(for='institution') Institutions
+                                            input.form-control.form-control-sm(type='text' name="institution" id="institution" value= `${data ? data.institution: ''}`)
+                                            label.error-message
+                                    .form-row
+                                        .form-group.col-md-6
+                                            label(for='duration') Duration
+                                            input.form-control.form-control-sm(type='number' name="duration" id="duration" value= `${data ? data.duration: ''}`)
+                                        .form-group.col-md-6
+                                            label(for='yog') Year of Graduation
+                                            input.form-control.form-control-sm(type='date' name="yog" id="yog" value= `${data ? data.yog: ''}`)
+                                    .d-flex.bd-highlight
+                                        .flex-grow-1.bd-highlight 
+                                            button.btn.btn-danger(type='button' data-dismiss='modal') Cancel
+                                        .bd-highlight
+                                            input.btn.btn-md.btn-primary.px-4(type='submit'  value='save')
+                .d-flex.bd-highlight
+                    .flex-grow-1.bd-highlight 
+                        a.btn.btn-md.btn-primary.px-4(href="/user/register/3") Back
+                    .bd-highlight
+                        a.btn.btn-md.btn-primary.px-4(href="/user/register/5") Next

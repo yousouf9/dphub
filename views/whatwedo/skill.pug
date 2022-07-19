@@ -1,0 +1,71 @@
+extends ../layout
+
+block content
+    .container-fluid.p-0.skill_profile_section
+        .px-md-5.pt-4
+            .row
+                .col-md-8.text-white
+                    h4.font-weight-bold SKILL PROFILING
+                    p
+                        | Displaced persons have crazy creative skills that should be harness for
+                        | economic development. You too can help reduce the number of DP wait for
+                        | aid and donations. Checkout their profile and support their hustle – one at
+                        | a time
+                .col-md-4
+                    .d-flex.justify-content-center.align-items-center
+                        a.skill_register(href="/user/register") REGISTER SKILLS
+            .container
+                .skill_profile_search
+                    .row.no-gutters.my-2
+                        .col-sm-4 
+                            form.m-0.p-0(method="get" action="/whatwedo/skill_profile")
+                                .input-group.m-0.p-0
+                                    input.form-control(type='search' name="search" placeholder='SEARCH BY SKILL' aria-label='Search')
+                                    .input-group-append
+                                        button.input-group-text(type='submit') 
+                                            i.fas.fa-search
+                        .col-sm-8
+                            .d-flex.flex-wrap.search-text.pt-1
+                                span FASHION DESIGNER
+                                span GRAPHIC DESIGNER
+                                span NEETING
+                                span CATERER
+                                span DRIVER
+                                span PAINTER
+                                span MECHANIC
+            .container
+                .row.row-cols-1.row-cols-md-4
+                        if(skills)
+                            each skill, i in skills.results
+                                a.col.mb-4.team-card(href=`/user/about/${skill.user._id}`)
+                                    .card.h-100(style="background-color:#29ABE2")
+                                        img.card-img-top(src=`${skill.user.profile_image === "noimage.png" ? `/images/users/${skill.user.profile_image}`: `${skill.user.profile_image}`}` alt=`${skill.skill}`   height="75%")
+                                        .card-body.p-2
+                                            -let profilename =  skill.user.name.split(" ")
+                                            h5.text-light.p-1 #{profilename[0] ?profilename[0]: "" }
+                                            h3.text-light #{profilename[1] ?  profilename[1].toUpperCase() : "" }
+                                            small.text-dark.p-1 #{skill.skill.toUpperCase()}
+                .d-flex.justify-content-center.pagination
+                    p.paginateLeft
+                        a.paginate(href="" data-submiturl="/whatwedo/skill_profile" data-page="1"  data-rurl="/whatwedo/skill_profile?page=1") 
+                            i.fas.fa-angle-double-left
+                    if !isObjectEmpty(skills.previous)
+                        p.paginateLeft 
+                            a.paginate(href=""  data-submiturl="/whatwedo/skill_profile"  data-rurl=`/whatwedo/skill_profile?page=${skills.previous.page}`)
+                                i.fas.fa-angle-left
+                    if !isObjectEmpty(skills.first)
+                        p.paginateRight(class =`${skills.first.current ? skills.first.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/whatwedo/skill_profile"  data-rurl=`/whatwedo/skill_profile?page=${skills.first.value}` ) #{skills.first.value}
+                    if !isObjectEmpty(skills.second)
+                        p.paginateRight(class =`${skills.second.current ? skills.second.current: ""}`) 
+                            a.paginate(href=""  data-submiturl="/whatwedo/skill_profile"  data-rurl=`/whatwedo/skill_profile?page=${skills.second.value}`) #{skills.second.value}
+                    if !isObjectEmpty(skills.third)
+                        p.paginateRight(class =`${skills.third.current ? skills.third.current: ""}`)
+                            a.paginate(href=""  data-submiturl="/whatwedo/skill_profile"  data-rurl=`/whatwedo/skill_profile?page=${skills.third.value}`) #{skills.third.value}
+                    if !isObjectEmpty(skills.next)
+                        p.paginateRight
+                            a.paginate(href=""  data-submiturl="/whatwedo/skill_profile"  data-rurl=`/whatwedo/skill_profile?page=${skills.next.page}`)
+                                i.fas.fa-angle-right
+                    p.paginateRight 
+                        a.paginate(href=""  data-submiturl="/whatwedo/skill_profile" data-page=`${skills.totalPages}` data-rurl=`/whatwedo/skill_profile?page=${skills.totalPages}`)
+                            i.fas.fa-angle-double-right

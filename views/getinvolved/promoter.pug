@@ -1,0 +1,83 @@
+extends ../layout
+
+block content
+    .container-fluid.p-4
+        .px-md-5.pt-4
+            .container.px-md-5.pb-md-5.form-section(style='background-color:#eef2f9;')
+                h5.font-weight-light.pt-3(style='color:#3c88c8; width: 400px; margin:0 auto;') PROMOTION/SPONSORSHIP INTEREST FORM
+                .d-flex.justify-content-center.px-md-4
+                    .bd-highlight.p-md-4
+                        .form-check
+                            label.form-check-label.pr-4(for='organisation') Organisation
+                            input.form-check-input(type='checkbox' name="organisation" id="organisation" checked)
+                    .bd-highlight.p-md-4
+                        .form-check
+                            label.form-check-label.pr-4(for='policy') Individual
+                            input.form-check-input(type='checkbox' name="individual" id="individual")
+                form.px-md-4.pt-3.border-top.d-block(method='post' action="/application/sponsor"  id="organisationForm")
+                    .form-group
+                        label.m-0.required(for='name') Name of Organisation
+                        input.form-control.form-control-sm.required(type='text'  name="name" id="oname" value =`${data ? data.name: ''}` required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='c_person') Name of Contact Person
+                        input.form-control.form-control-sm.required(type='text'  name="c_person" id="oc_person" value =`${data ? data.c_person: ''}` required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='phone') Phone
+                        input.form-control.form-control-sm.required(type='text' name="phone" id="ophone" value =`${data ? data.phone: ''}` required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='email') Email
+                        input.form-control.form-control-sm.required(type='email' name="email" id="oemail" value =`${data ? data.email: ''}`  required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='address') Contact Address
+                        input.form-control.form-control-sm.required(type='text' name="address" id="oaddress"  value =`${data ? data.address: ''}` required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='interest') Interest
+                        input.form-control.form-control-sm.required(type='text' name="interest" id="ointerest" value =`${data ? data.interest: ''}` placeholder="Skills or talent"  required)
+                        label.error-message
+                    .form-check
+                        input.form-check-input(type='checkbox' name="confirm" id="oconfirm" value=""   required)
+                        label.form-check-label.text-dark(for='confirm') I confirm that our organisation be contacted on our interest to promote and or sponsor
+                                |  DPs skills and talent.
+                        label.error-message
+                    p.text-center
+                        input.btn.btn-md.btn-success.my-3(type='submit' id="o_submit" value='submit' )
+
+                form.px-md-4.pt-3.border-top.d-none(method='post' action="/application/sponsor"  id="individualForm")
+                    .form-group
+                        label.m-0.required(for='name') Name (surname first)
+                        input.form-control.form-control-sm.required(type='text'  name="name" id="name" value=`${data ? data.name: ''}` required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='phone') Phone
+                        input.form-control.form-control-sm.required(type='text' name="phone" id="phone" value =`${data ? data.phone: ''}` required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='email') Email
+                        input.form-control.form-control-sm.required(type='email' name="email" id="email" value =`${data ? data.email: ''}`  required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='sex') Sex
+                        select.form-control.form-control-sm.required(name="sex" required value =`${data ? data.sex: ''}`)
+                            option Male
+                            option Female
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='address') Contact Address
+                        input.form-control.form-control-sm.required(type='text' name="address" id="address" value =`${data ? data.address: ''}`  required)
+                        label.error-message
+                    .form-group
+                        label.m-0.required(for='interest') Interest
+                        input.form-control.form-control-sm.required(type='text' name="interest" id="interest" value =`${data ? data.interest: ''}` placeholder="Skills or talent"  required)
+                        label.error-message
+                    .form-check
+                        input.form-check-input(type='checkbox' name="confirm" id="confirm" value=""  required)
+                        label.form-check-label.text-dark(for='confirm') I confirm that our organisation be contacted on our interest to promote and or sponsor
+                                |  DPs skills and talent.
+                        label.error-message
+                    p.text-center
+                        input.btn.btn-md.btn-success.my-3(type='submit' id="i_submit" value='submit' )
